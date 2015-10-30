@@ -49,7 +49,6 @@ import com.moor.im.http.HttpManager;
 import com.moor.im.model.entity.FromToMessage;
 import com.moor.im.utils.AnimatedGifDrawable;
 import com.moor.im.utils.AnimatedImageSpan;
-import com.moor.im.utils.LogUtil;
 import com.moor.im.utils.TimeUtil;
 
 import org.apache.http.Header;

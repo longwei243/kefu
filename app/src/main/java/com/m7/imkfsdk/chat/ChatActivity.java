@@ -57,7 +57,6 @@ import com.moor.im.OnConvertManualListener;
 import com.moor.im.model.entity.ChatEmoji;
 import com.moor.im.model.entity.ChatMore;
 import com.moor.im.model.entity.FromToMessage;
-import com.moor.im.utils.LogUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -113,6 +112,9 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 
 	MsgReceiver msgReceiver;
 
+	//是否是机器人对话
+	private boolean isRobot = false;
+
 	private Handler handler = new Handler() {
 
 		@Override
@@ -145,6 +147,11 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_chat);
+
+		isRobot = getIntent().getBooleanExtra("isRobot", false);
+		if(isRobot) {
+			Toast.makeText(ChatActivity.this, "当前是机器人为你服务", Toast.LENGTH_SHORT).show();
+		}
 
 		IntentFilter intentFilter = new IntentFilter("com.m7.imkfsdk.msgreceiver");
 		msgReceiver = new MsgReceiver();
@@ -269,7 +276,13 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 		mChatSetModeKeyboard = (Button) this
 				.findViewById(R.id.chat_set_mode_keyboard);
 
+		//转人工服务按钮，判断是否需要显示
 		chat_btn_convert = (Button) this.findViewById(R.id.chat_btn_convert);
+		if(isRobot) {
+			chat_btn_convert.setVisibility(View.VISIBLE);
+		}else {
+			chat_btn_convert.setVisibility(View.GONE);
+		}
 
 
 		mOtherName = (TextView) this.findViewById(R.id.other_name);
@@ -440,9 +453,8 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 
 				@Override
 				public void offLine() {
-					//当前没有客服在线，弹出离线留言框
-					OfflineMessageDialog dialog = new OfflineMessageDialog();
-					dialog.show(getFragmentManager(), "OfflineMessageDialog");
+					//当前没有客服在线
+					Toast.makeText(ChatActivity.this, "转人工服务失败", Toast.LENGTH_SHORT).show();
 				}
 			});
 			break;
@@ -463,14 +475,14 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 				@Override
 				public void onSuccess() {
 					//消息发送成功
-					LogUtil.d("ChatActivity", "文本消息发送成功");
+					Log.d("ChatActivity", "文本消息发送成功");
 					updateMessage();
 				}
 
 				@Override
 				public void onFailed() {
 					//消息发送失败
-					LogUtil.d("ChatActivity", "文本消息发送失败");
+					Log.d("ChatActivity", "文本消息发送失败");
 					updateMessage();
 				}
 
@@ -892,7 +904,7 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
 			if (resultCode == RESULT_OK) {
-				LogUtil.d("拍照发送图片", "获取图片成功，本地路径是：" + picFileFullName);
+				Log.d("拍照发送图片", "获取图片成功，本地路径是：" + picFileFullName);
 				//发送图片
 				FromToMessage fromToMessage = IMMessage.createImageMessage(picFileFullName);
 				ArrayList fromTomsgs = new ArrayList<FromToMessage>();
@@ -930,7 +942,7 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 				if (uri != null) {
 					String realPath = getRealPathFromURI(uri);
 					picFileFullName = realPath;
-					LogUtil.d("发送图片消息了", "图片的本地路径是：" + picFileFullName);
+					Log.d("发送图片消息了", "图片的本地路径是：" + picFileFullName);
 					//准备发送图片消息
 					FromToMessage fromToMessage = IMMessage.createImageMessage(picFileFullName);
 					ArrayList fromTomsgs = new ArrayList<FromToMessage>();

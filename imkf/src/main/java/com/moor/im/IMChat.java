@@ -233,9 +233,9 @@ public class IMChat {
         String sessionId = "";
         if(accessId != null && !"".equals(accessId)) {
             if(userId != null && !"".equals(userId)) {
-                sessionId = accessId + "@"+deviceId + "@" + userId;
+                sessionId = deviceId + "@" + userId + "@android";
             }else {
-                sessionId = accessId + "@" + deviceId;
+                sessionId = deviceId + "@android";
             }
         }
 
@@ -277,7 +277,6 @@ public class IMChat {
             MessageDao.getInstance().updateMsgToDao(fromToMessage);
 
             //获取7牛token
-//		    System.out.println("从服务器获取七牛的token");
             HttpManager.getQiNiuToken(InfoDao.getInstance().getConnectionId(),
                     fromToMessage.filePath, new UploadFileResponseHandler("ly", fromToMessage, chatListener));
         }else if(fromToMessage.msgType.equals(FromToMessage.MSG_TYPE_IMAGE)) {
@@ -285,7 +284,6 @@ public class IMChat {
             MessageDao.getInstance().updateMsgToDao(fromToMessage);
 
             //获取7牛token
-//		    System.out.println("从服务器获取七牛的token");
             HttpManager.getQiNiuToken(InfoDao.getInstance().getConnectionId(),
                     fromToMessage.filePath, new UploadFileResponseHandler("img", fromToMessage, chatListener));
 

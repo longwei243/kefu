@@ -49,7 +49,6 @@ public class HeartBeatManager {
         context.registerReceiver(imReceiver, intentFilter);
         //获取AlarmManager系统服务
         scheduleHeartbeat(heartInterval);
-        System.out.println("开始发送心跳");
     }
     
     /**

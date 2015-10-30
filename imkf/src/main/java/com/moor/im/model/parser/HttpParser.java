@@ -48,7 +48,19 @@ public class HttpParser {
 				e.printStackTrace();
 			}
 			return succeed;
+	}
+
+	public static String getRobotEnable(String responseString) {
+		String succeed = "";
+		try {
+			JSONObject o = new JSONObject(responseString);
+			succeed = o.getString("RobotEnable");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		return succeed;
+	}
 
 	/**
 	 * 获取返回消息

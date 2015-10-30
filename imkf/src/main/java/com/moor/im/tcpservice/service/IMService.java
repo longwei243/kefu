@@ -140,7 +140,6 @@ public class IMService extends Service{
 	 */
 	private void onNewMessageReceived() {
 		//获取服务器的新消息
-		System.out.println("为什么不打印，接收到100，发送http请求获取新消息"+InfoDao.getInstance().getConnectionId());
 		ArrayList<String> array = MessageDao.getInstance()
 				.getUnReadDao();
 		HttpManager.getMsg(InfoDao.getInstance().getConnectionId(), array,

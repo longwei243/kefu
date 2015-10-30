@@ -6,6 +6,8 @@ package com.moor.im;
  */
 public interface OnSessionBeginListener {
 
-    void onSuccess();
+    void onLeaveMessage();
+    void onRobot();
+    void onPeople();
     void onFailed();
 }

@@ -62,11 +62,11 @@ public class LoginManager {
 
 			JSONObject jb = new JSONObject();
 			try {
-//				String username = new String(name.getBytes("utf-8"), "iso-8859-1");
 				String username = URLEncoder.encode(name, "utf-8");
+				String id = URLEncoder.encode(userId, "utf-8");
 				jb.put("Action", "sdkLogin");
 				jb.put("UserName", username);
-				jb.put("UserId", userId);
+				jb.put("UserId", id);
 				jb.put("AccessId", accessId);
 				jb.put("Platform", "android");
 				jb.put("DeviceId", getDeviceId());
@@ -79,7 +79,6 @@ public class LoginManager {
 
 			socketManager.sendData(str);
 			SocketManager.getInstance(IMChatManager.getInstance().getAppContext()).setStatus(SocketManagerStatus.WAIT_LOGIN);
-			System.out.println("发送了tcp登录请求:"+str);
 			isKickout = false;
 			isLoginOff = false;
 			isStoreUsernamePasswordRight = false;

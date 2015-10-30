@@ -26,17 +26,31 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
 
                 IMChatManager.getInstance().beginSession(new OnSessionBeginListener() {
-                    @Override
-                    public void onSuccess() {
-                        //联系客服
-                        Intent chatIntent = new Intent(MainActivity.this, ChatActivity.class);
-                        startActivity(chatIntent);
 
+                    @Override
+                    public void onLeaveMessage() {
+                        //提交离线留言
+                        OfflineMessageDialog dialog = new OfflineMessageDialog();
+                        dialog.show(getFragmentManager(), "OfflineMessageDialog");
+                    }
+
+                    @Override
+                    public void onRobot() {
+                        Intent chatIntent = new Intent(MainActivity.this, ChatActivity.class);
+                        chatIntent.putExtra("isRobot", true);
+                        startActivity(chatIntent);
+                    }
+
+                    @Override
+                    public void onPeople() {
+                        Intent chatIntent = new Intent(MainActivity.this, ChatActivity.class);
+                        chatIntent.putExtra("isRobot", false);
+                        startActivity(chatIntent);
                     }
 
                     @Override
                     public void onFailed() {
-                        Toast.makeText(MainActivity.this, "会话开始失败", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "由于网络原因等会话开始失败", Toast.LENGTH_SHORT).show();
                     }
                 });
             }

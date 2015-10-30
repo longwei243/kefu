@@ -62,7 +62,7 @@ public class InvestigateDialog extends DialogFragment {
 
                     @Override
                     public void onFailed() {
-                        System.out.println("评价提交失败");
+                        Toast.makeText(getActivity(), "评价提交失败", Toast.LENGTH_SHORT).show();
                         dismiss();
                     }
                 });

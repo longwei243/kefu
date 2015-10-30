@@ -196,6 +196,7 @@ public class IMChatManager {
      * 开始会话
      */
     public void beginSession(OnSessionBeginListener listener) {
+        System.out.println("connectionId是:"+InfoDao.getInstance().getConnectionId());
         HttpManager.beginNewChatSession(InfoDao.getInstance().getConnectionId(), new BeginSessionResponse(listener));
     }
 
@@ -218,10 +219,30 @@ public class IMChatManager {
         public void onSuccess(int statusCode, Header[] headers,
                               String responseString) {
             String succeed = HttpParser.getSucceed(responseString);
+            System.out.println("IMChatManager, 会话开始返回数据为:"+responseString);
             if ("true".equals(succeed)) {
-                if(listener != null) {
-                    listener.onSuccess();
+
+                String leaveMessage = HttpParser.getLeaveMessage(responseString);
+                if("true".equals(leaveMessage)) {
+                    //弹出留言界面
+                    if (listener != null) {
+                        listener.onLeaveMessage();
+                    }
+                }else if("false".equals(leaveMessage)) {
+                    String robot = HttpParser.getRobotEnable(responseString);
+                    if("true".equals(robot)) {
+                        //目前是机器人，需显示转人工按钮
+                        if (listener != null) {
+                            listener.onRobot();
+                        }
+                    }else if("false".equals(robot)) {
+                        //已经是人工服务了，不用显示转人工按钮
+                        if (listener != null) {
+                            listener.onPeople();
+                        }
+                    }
                 }
+
 
             } else {
                 if (listener != null) {
@@ -234,10 +255,21 @@ public class IMChatManager {
     /**
      * 提交离线留言
      * @param content 留言内容
+     * @param phone 电话
+     * @param email 邮箱
      * @param listener
      */
-    public void submitOfflineMessage(String content, OnSubmitOfflineMessageListener listener) {
-        HttpManager.submitOfflineMessage(InfoDao.getInstance().getConnectionId(), content, new SubmitOfflineMsgResponse(listener));
+    public void submitOfflineMessage(String content, String phone, String email, OnSubmitOfflineMessageListener listener) {
+       if(content == null) {
+           content = "";
+       }
+        if(phone == null) {
+            phone = "";
+        }
+        if(email == null) {
+            email = "";
+        }
+        HttpManager.submitOfflineMessage(InfoDao.getInstance().getConnectionId(), content, phone, email, new SubmitOfflineMsgResponse(listener));
     }
 
     private class SubmitOfflineMsgResponse extends TextHttpResponseHandler {
@@ -327,6 +359,7 @@ public class IMChatManager {
         public void onSuccess(int statusCode, Header[] headers,
                               String responseString) {
             String succeed = HttpParser.getSucceed(responseString);
+            System.out.println("IMChatManager, 转人工返回数据:"+responseString);
             if ("true".equals(succeed)) {
                 if(listener != null) {
                     listener.onLine();

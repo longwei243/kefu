@@ -18,7 +18,36 @@
             android:layout_centerInParent="true"
             />
     </RelativeLayout>
-
+    <EditText
+        android:id="@+id/id_et_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/offlinedialog_et_bg"
+        android:inputType="phone"
+        android:minLines="1"
+        android:maxLines="1"
+        android:paddingLeft="4dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginTop="4dp"
+        android:hint="输入手机号"
+        />
+    <EditText
+        android:id="@+id/id_et_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/offlinedialog_et_bg"
+        android:inputType="textEmailAddress"
+        android:minLines="1"
+        android:maxLines="1"
+        android:paddingLeft="4dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginTop="4dp"
+        android:hint="输入邮箱号"
+        />
     <EditText
         android:id="@+id/id_et_content"
         android:layout_width="match_parent"

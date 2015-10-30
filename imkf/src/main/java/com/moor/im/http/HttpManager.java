@@ -195,12 +195,14 @@ public class HttpManager {
 	/**
 	 * 提交离线消息
 	 */
-	public static void submitOfflineMessage(String connectionId, String content, ResponseHandlerInterface responseHandler) {
+	public static void submitOfflineMessage(String connectionId, String content, String phone, String email, ResponseHandlerInterface responseHandler) {
 		AsyncHttpClient httpclient = hc;
 		JSONObject json = new JSONObject();
 		try {
 			json.put("ConnectionId", Utils.replaceBlank(connectionId));
 			json.put("Message", content);
+			json.put("Phone", phone);
+			json.put("Email", email);
 			json.put("Action", "sdkSubmitLeaveMessage");
 
 		} catch (JSONException e) {

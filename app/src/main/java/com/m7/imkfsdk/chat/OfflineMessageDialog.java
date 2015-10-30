@@ -26,7 +26,7 @@ import com.moor.im.OnSubmitOfflineMessageListener;
  */
 public class OfflineMessageDialog extends DialogFragment {
 
-    EditText id_et_content;
+    EditText id_et_content, id_et_phone, id_et_email;
     Button btn_cancel, btn_submit;
     @NonNull
     @Override
@@ -36,6 +36,8 @@ public class OfflineMessageDialog extends DialogFragment {
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
         View view = inflater.inflate(R.layout.dialog_offline, null);
         id_et_content = (EditText) view.findViewById(R.id.id_et_content);
+        id_et_phone = (EditText) view.findViewById(R.id.id_et_phone);
+        id_et_email = (EditText) view.findViewById(R.id.id_et_email);
 
         btn_submit = (Button) view.findViewById(R.id.id_btn_submit);
         btn_cancel = (Button) view.findViewById(R.id.id_btn_cancel);
@@ -44,21 +46,25 @@ public class OfflineMessageDialog extends DialogFragment {
             @Override
             public void onClick(View v) {
                 String content = id_et_content.getText().toString().trim();
+                String phone = id_et_phone.getText().toString().trim();
+                String email = id_et_email.getText().toString().trim();
                 if(!"".equals(content)) {
-                    IMChatManager.getInstance().submitOfflineMessage(content, new OnSubmitOfflineMessageListener() {
-                        @Override
-                        public void onSuccess() {
-                            dismiss();
-                            Toast.makeText(getActivity(), "提交留言成功", Toast.LENGTH_SHORT).show();
+                    if(!"".equals(phone) || !"".equals(email)) {
+                        IMChatManager.getInstance().submitOfflineMessage(content, phone, email, new OnSubmitOfflineMessageListener() {
+                            @Override
+                            public void onSuccess() {
+                                dismiss();
+                                Toast.makeText(getActivity(), "提交留言成功", Toast.LENGTH_SHORT).show();
 
-                        }
+                            }
 
-                        @Override
-                        public void onFailed() {
-                            dismiss();
-                            Toast.makeText(getActivity(), "提交留言失败", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                            @Override
+                            public void onFailed() {
+                                dismiss();
+                                Toast.makeText(getActivity(), "提交留言失败", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
                 }else {
                     Toast.makeText(getActivity(), "请输入内容", Toast.LENGTH_SHORT).show();
                 }
