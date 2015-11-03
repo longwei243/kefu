@@ -31,7 +31,7 @@ public class IMChatManager {
     /**
      * 接收新消息的action
      */
-    public static final String NEW_MSG_ACTION = "com.moor.im.NEW_MSG";
+    public static final String NEW_MSG_ACTION = "com.moor.im.KEFU_NEW_MSG";
 
     private Context appContext;
 

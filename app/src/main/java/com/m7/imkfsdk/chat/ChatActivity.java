@@ -447,7 +447,8 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 			IMChatManager.getInstance().convertManual(new OnConvertManualListener() {
 				@Override
 				public void onLine() {
-					//有客服在线
+					//有客服在线,隐藏转人工按钮
+					chat_btn_convert.setVisibility(View.GONE);
 					Toast.makeText(ChatActivity.this, "转人工服务成功", Toast.LENGTH_SHORT).show();
 				}
 
