@@ -1,27 +1,20 @@
 package com.m7.imkfsdk.chat;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Environment;
 import android.os.Handler;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
-import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
-import android.text.style.ClickableSpan;
 import android.text.style.ImageSpan;
-import android.text.style.URLSpan;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,35 +27,26 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.m7.imkfsdk.R;
 import com.m7.imkfsdk.recordbutton.MediaManager;
 import com.m7.imkfsdk.utils.FaceConversionUtil;
-import com.moor.im.ChatListener;
-import com.moor.im.IMChat;
-import com.moor.im.IMChatManager;
-import com.moor.im.http.HttpManager;
-import com.moor.im.model.entity.FromToMessage;
-import com.moor.im.utils.AnimatedGifDrawable;
-import com.moor.im.utils.AnimatedImageSpan;
-import com.moor.im.utils.TimeUtil;
+import com.moor.imkf.ChatListener;
+import com.moor.imkf.IMChat;
+import com.moor.imkf.model.entity.FromToMessage;
+import com.moor.imkf.utils.AnimatedGifDrawable;
+import com.moor.imkf.utils.AnimatedImageSpan;
+import com.moor.imkf.utils.TimeUtil;
 
-import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
-import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -109,7 +93,7 @@ public class ChatAdapter extends MyBaseAdapter {
 		if (convertView == null) {
 			holder = new ViewHolder();
 			convertView = LayoutInflater.from(context).inflate(
-					R.layout.list_chat, null);
+					R.layout.list_chat_kf, null);
 
 			// 两侧的头像
 			holder.fromIcon = (RoundImageView) convertView

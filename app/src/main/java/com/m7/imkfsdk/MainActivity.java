@@ -9,8 +9,8 @@ import android.widget.Toast;
 
 import com.m7.imkfsdk.chat.ChatActivity;
 import com.m7.imkfsdk.chat.OfflineMessageDialog;
-import com.moor.im.IMChatManager;
-import com.moor.im.OnSessionBeginListener;
+import com.moor.imkf.IMChatManager;
+import com.moor.imkf.OnSessionBeginListener;
 
 
 public class MainActivity extends Activity {

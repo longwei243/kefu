@@ -1,12 +1,7 @@
 package com.m7.imkfsdk.chat;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,8 +12,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.m7.imkfsdk.R;
-import com.moor.im.IMChatManager;
-import com.moor.im.OnSubmitOfflineMessageListener;
+import com.moor.imkf.IMChatManager;
+import com.moor.imkf.OnSubmitOfflineMessageListener;
 
 /**
  * 离线留言对话框

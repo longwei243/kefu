@@ -10,8 +10,8 @@ import android.text.style.ImageSpan;
 import android.util.Log;
 
 import com.m7.imkfsdk.R;
-import com.moor.im.model.entity.ChatEmoji;
-import com.moor.im.utils.Utils;
+import com.moor.imkf.model.entity.ChatEmoji;
+import com.moor.imkf.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;

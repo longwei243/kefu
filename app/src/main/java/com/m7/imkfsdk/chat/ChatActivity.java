@@ -49,14 +49,14 @@ import com.m7.imkfsdk.recordbutton.AudioRecorderButton;
 import com.m7.imkfsdk.recordbutton.MediaManager;
 import com.m7.imkfsdk.utils.FaceConversionUtil;
 import com.m7.imkfsdk.view.ChatListView;
-import com.moor.im.ChatListener;
-import com.moor.im.IMChat;
-import com.moor.im.IMChatManager;
-import com.moor.im.IMMessage;
-import com.moor.im.OnConvertManualListener;
-import com.moor.im.model.entity.ChatEmoji;
-import com.moor.im.model.entity.ChatMore;
-import com.moor.im.model.entity.FromToMessage;
+import com.moor.imkf.ChatListener;
+import com.moor.imkf.IMChat;
+import com.moor.imkf.IMChatManager;
+import com.moor.imkf.IMMessage;
+import com.moor.imkf.OnConvertManualListener;
+import com.moor.imkf.model.entity.ChatEmoji;
+import com.moor.imkf.model.entity.ChatMore;
+import com.moor.imkf.model.entity.FromToMessage;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -146,7 +146,7 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.activity_chat);
+		setContentView(R.layout.activity_chat_kf);
 
 		isRobot = getIntent().getBooleanExtra("isRobot", false);
 		if(isRobot) {

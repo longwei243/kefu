@@ -9,7 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.m7.imkfsdk.R;
-import com.moor.im.model.entity.ChatEmoji;
+import com.moor.imkf.model.entity.ChatEmoji;
 
 import java.util.List;
 

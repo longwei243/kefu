@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.m7.imkfsdk.R;
-import com.moor.im.model.entity.ChatMore;
+import com.moor.imkf.model.entity.ChatMore;
 
 import java.util.List;
 

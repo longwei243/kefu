@@ -8,12 +8,10 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Message;
 
-import com.m7.imkfsdk.MobileApplication;
 import com.m7.imkfsdk.R;
 import com.m7.imkfsdk.chat.ChatActivity;
-import com.moor.im.IMChatManager;
+import com.moor.imkf.IMChatManager;
 
 import java.util.List;
 
