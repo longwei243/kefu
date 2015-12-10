@@ -7,7 +7,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
 
-import com.moor.imkf.event.SocketEvent;
+import com.moor.imkf.event.KFSocketEvent;
 import com.moor.imkf.utils.LogUtil;
 
 import de.greenrobot.event.EventBus;
@@ -64,13 +64,13 @@ public class NetWorkReceiver extends BroadcastReceiver{
 				//重新连接网络后启动断线重连
 				LogUtil.d("NetWorkReceiver", "网络重新连接上启动断线重连，发送了启动断线重连的事件");
 
-				EventBus.getDefault().postSticky(SocketEvent.NETWORK_OK);
+				EventBus.getDefault().postSticky(KFSocketEvent.NETWORK_OK);
 			}
 			
 		}else {
 			//网络断了
 			isNetConnected = false;
-			EventBus.getDefault().postSticky(SocketEvent.NETWORK_DOWN);
+			EventBus.getDefault().postSticky(KFSocketEvent.NETWORK_DOWN);
 		}
 	}
 

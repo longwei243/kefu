@@ -1,6 +1,6 @@
 package com.moor.imkf.event;
 
-public enum SocketEvent {
+public enum KFSocketEvent {
 
 	/**
 	 * 什么都没干

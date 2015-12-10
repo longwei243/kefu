@@ -12,7 +12,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import com.moor.imkf.IMChatManager;
 import com.moor.imkf.db.dao.InfoDao;
 import com.moor.imkf.db.dao.MessageDao;
-import com.moor.imkf.event.LoginEvent;
+import com.moor.imkf.event.KFLoginEvent;
 import com.moor.imkf.http.HttpManager;
 import com.moor.imkf.model.entity.FromToMessage;
 import com.moor.imkf.model.parser.HttpParser;
@@ -109,9 +109,9 @@ public class IMService extends Service{
 	private String largeMsgId;
 
 	// EventBus 登录事件驱动,接收到事件后调用manager中的方法进行具体处理
-    public void onEventMainThread(LoginEvent loginEvent){
+    public void onEventMainThread(KFLoginEvent KFLoginEvent){
 		LogUtil.d("IMService", "进入了登录事件驱动的方法中，进行相应的处理");
-       switch (loginEvent){
+       switch (KFLoginEvent){
            case LOGIN_SUCCESS:
                onLoginSuccess();
                break;

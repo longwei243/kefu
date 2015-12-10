@@ -4,7 +4,7 @@ package com.moor.imkf.event;
  * @author LongWei
  *
  */
-public enum LoginEvent {
+public enum KFLoginEvent {
 	NONE,
 	/**
 	 * 正在登录

@@ -8,13 +8,14 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import com.moor.imkf.db.dao.InfoDao;
 import com.moor.imkf.db.dao.InvestigateDao;
 import com.moor.imkf.db.dao.MessageDao;
-import com.moor.imkf.event.LoginEvent;
+import com.moor.imkf.event.KFLoginEvent;
 import com.moor.imkf.http.HttpManager;
 import com.moor.imkf.model.entity.FromToMessage;
 import com.moor.imkf.model.entity.Info;
 import com.moor.imkf.model.entity.Investigate;
 import com.moor.imkf.model.parser.HttpParser;
 import com.moor.imkf.tcpservice.service.IMService;
+import com.moor.imkf.utils.LogUtil;
 
 import org.apache.http.Header;
 
@@ -32,6 +33,18 @@ public class IMChatManager {
      * 接收新消息的action
      */
     public static String NEW_MSG_ACTION = "";
+    /**
+     * 接收是否是机器人的action
+     */
+    public static final String ROBOT_ACTION = "action_robot";
+    /**
+     * 接收客服在线的action
+     */
+    public static final String ONLINE_ACTION = "action_online";
+    /**
+     * 接收客服不在线的action
+     */
+    public static final String OFFLINE_ACTION = "action_offline";
 
     private Context appContext;
 
@@ -96,8 +109,8 @@ public class IMChatManager {
 
     }
 
-    public void onEventMainThread(LoginEvent loginEvent){
-        switch (loginEvent){
+    public void onEventMainThread(KFLoginEvent KFLoginEvent){
+        switch (KFLoginEvent){
             case LOGIN_SUCCESS:
                 HttpManager.getInvestigateList(InfoDao.getInstance().getConnectionId(), new GetInvestigateResponseHandler());
                 if(initListener != null) {
@@ -217,7 +230,6 @@ public class IMChatManager {
      * 开始会话
      */
     public void beginSession(OnSessionBeginListener listener) {
-        System.out.println("connectionId是:"+InfoDao.getInstance().getConnectionId());
         HttpManager.beginNewChatSession(InfoDao.getInstance().getConnectionId(), getIsNewVisitor(), new BeginSessionResponse(listener));
     }
 
@@ -240,30 +252,12 @@ public class IMChatManager {
         public void onSuccess(int statusCode, Header[] headers,
                               String responseString) {
             String succeed = HttpParser.getSucceed(responseString);
-            System.out.println("IMChatManager, 会话开始返回数据为:"+responseString);
+            LogUtil.d("IMChatManger", "biginSession:"+responseString);
             if ("true".equals(succeed)) {
 
-                String leaveMessage = HttpParser.getLeaveMessage(responseString);
-                if("true".equals(leaveMessage)) {
-                    //弹出留言界面
-                    if (listener != null) {
-                        listener.onLeaveMessage();
-                    }
-                }else if("false".equals(leaveMessage)) {
-                    String robot = HttpParser.getRobotEnable(responseString);
-                    if("true".equals(robot)) {
-                        //目前是机器人，需显示转人工按钮
-                        if (listener != null) {
-                            listener.onRobot();
-                        }
-                    }else if("false".equals(robot)) {
-                        //已经是人工服务了，不用显示转人工按钮
-                        if (listener != null) {
-                            listener.onPeople();
-                        }
-                    }
+                if(listener != null) {
+                    listener.onSuccess();
                 }
-
 
             } else {
                 if (listener != null) {
@@ -380,7 +374,7 @@ public class IMChatManager {
         public void onSuccess(int statusCode, Header[] headers,
                               String responseString) {
             String succeed = HttpParser.getSucceed(responseString);
-            System.out.println("IMChatManager, 转人工返回数据:"+responseString);
+            LogUtil.d("IMChatManger", "ConvertManualResponse:"+responseString);
             if ("true".equals(succeed)) {
                 if(listener != null) {
                     listener.onLine();

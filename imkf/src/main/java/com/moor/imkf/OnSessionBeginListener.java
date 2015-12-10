@@ -6,8 +6,6 @@ package com.moor.imkf;
  */
 public interface OnSessionBeginListener {
 
-    void onLeaveMessage();
-    void onRobot();
-    void onPeople();
+    void onSuccess();
     void onFailed();
 }

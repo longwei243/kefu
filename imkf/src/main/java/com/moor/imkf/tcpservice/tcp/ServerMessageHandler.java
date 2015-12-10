@@ -1,11 +1,12 @@
 package com.moor.imkf.tcpservice.tcp;
 
 import android.content.Context;
+import android.content.Intent;
 
 import com.moor.imkf.IMChatManager;
 import com.moor.imkf.db.dao.InfoDao;
-import com.moor.imkf.event.LoginEvent;
-import com.moor.imkf.event.SocketEvent;
+import com.moor.imkf.event.KFLoginEvent;
+import com.moor.imkf.event.KFSocketEvent;
 import com.moor.imkf.tcpservice.manager.LoginManager;
 import com.moor.imkf.tcpservice.manager.SocketManager;
 import com.moor.imkf.utils.LogUtil;
@@ -63,7 +64,7 @@ public class ServerMessageHandler extends IdleStateAwareChannelHandler {
 			if(ctx.getChannel().getId().equals(SocketManager.getInstance(IMChatManager.getInstance().getAppContext()).getSocketThread().getChannel().getId())){
 //				MobileApplication.logger.debug(TimeUtil.getCurrentTime() + "tcp1 开始连：");
 				//发送tcp服务器连接断开的事件
-				EventBus.getDefault().postSticky(SocketEvent.MSG_SERVER_DISCONNECTED);
+				EventBus.getDefault().postSticky(KFSocketEvent.MSG_SERVER_DISCONNECTED);
 				LogUtil.d("ServerMessageHandler", "发送tcp服务器连接断开的事件");
 			}else{
 				System.out.println("发现了 old tcp channel 断开");
@@ -72,7 +73,7 @@ public class ServerMessageHandler extends IdleStateAwareChannelHandler {
 
 //			MobileApplication.logger.debug(TimeUtil.getCurrentTime() + "tcp2 开始连：");
 			//发送tcp服务器连接断开的事件
-			EventBus.getDefault().postSticky(SocketEvent.MSG_SERVER_DISCONNECTED);
+			EventBus.getDefault().postSticky(KFSocketEvent.MSG_SERVER_DISCONNECTED);
 			LogUtil.d("ServerMessageHandler", "发送tcp服务器连接断开的事件");
 		}
 	}
@@ -90,24 +91,34 @@ public class ServerMessageHandler extends IdleStateAwareChannelHandler {
 		} else if ("4".equals(result)) {
 			//被踢了
 			//发送被踢了的事件
-			EventBus.getDefault().postSticky(LoginEvent.LOGIN_KICKED);
+			EventBus.getDefault().postSticky(KFLoginEvent.LOGIN_KICKED);
 			SocketManager.getInstance(IMChatManager.getInstance().getAppContext()).setStatus(SocketManagerStatus.BREAK);
 		}else if ("100".equals(result)) {
 			//有新消息之后的处理
-			EventBus.getDefault().postSticky(LoginEvent.NEW_MSG);
+			EventBus.getDefault().postSticky(KFLoginEvent.NEW_MSG);
 		} else if ("400".equals(result)) {
 			//登录失败，用户名或密码错误
 			//发送登录失败的事件
 			LoginManager.getInstance(IMChatManager.getInstance().getAppContext()).setIsStoreUsernamePasswordRight(false);
-			EventBus.getDefault().postSticky(LoginEvent.LOGIN_FAILED);
+			EventBus.getDefault().postSticky(KFLoginEvent.LOGIN_FAILED);
 			SocketManager.getInstance(IMChatManager.getInstance().getAppContext()).setStatus(SocketManagerStatus.CONNECTED);
 		} else if(result.startsWith("200")) {
 			String connectionid = result.replace("200", "");
 			InfoDao.getInstance().saveConnectionId(connectionid);
 			//发送登录成功的事件
-			EventBus.getDefault().postSticky(LoginEvent.LOGIN_SUCCESS);
+			EventBus.getDefault().postSticky(KFLoginEvent.LOGIN_SUCCESS);
 			SocketManager.getInstance(IMChatManager.getInstance().getAppContext()).setStatus(SocketManagerStatus.LOGINED);
-		} else {
+		} else if("robot".equals(result)){
+			Intent robotIntent = new Intent(IMChatManager.ROBOT_ACTION);
+			context.sendBroadcast(robotIntent);
+		}else if("online".equals(result) || "claim".equals(result)){
+			Intent onlineIntent = new Intent(IMChatManager.ONLINE_ACTION);
+			context.sendBroadcast(onlineIntent);
+		}else if("offline".equals(result)){
+			Intent offlineIntent = new Intent(IMChatManager.OFFLINE_ACTION);
+			context.sendBroadcast(offlineIntent);
+		}else {
+
 		}
 	}
 
@@ -119,7 +130,7 @@ public class ServerMessageHandler extends IdleStateAwareChannelHandler {
 //        super.exceptionCaught(ctx, e);
         LogUtil.d("ServerMessageHandler", "exceptionCaught被调用了，直接断开连接");
         //有异常时直接断开连接
-		EventBus.getDefault().postSticky(SocketEvent.MSG_SERVER_DISCONNECTED);
+		EventBus.getDefault().postSticky(KFSocketEvent.MSG_SERVER_DISCONNECTED);
 		//关闭channel
 		Channel ch = e.getChannel();
 		ch.close();
@@ -133,7 +144,7 @@ public class ServerMessageHandler extends IdleStateAwareChannelHandler {
 		switch (e.getState()) {
 			case READER_IDLE:
 				LogUtil.d("ServerMessageHandler", "读取通道空闲了");
-				EventBus.getDefault().postSticky(SocketEvent.MSG_SERVER_DISCONNECTED);
+				EventBus.getDefault().postSticky(KFSocketEvent.MSG_SERVER_DISCONNECTED);
 				Channel ch = e.getChannel();
 				ch.close();
 				break;

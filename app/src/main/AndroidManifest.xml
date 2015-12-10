@@ -83,12 +83,6 @@
                 <action android:name="com.moor.im.KEFU_NEW_MSG" />
             </intent-filter>
         </receiver>
-        <receiver
-            android:name="com.moor.imkf.receiver.AlarmManagerReceiver"
-            android:enabled="true"
-
-            >
-        </receiver>
 
     </application>
 

@@ -6,7 +6,7 @@ import android.net.NetworkInfo;
 
 import com.moor.imkf.IMChatManager;
 import com.moor.imkf.requesturl.RequestUrl;
-import com.moor.imkf.event.SocketEvent;
+import com.moor.imkf.event.KFSocketEvent;
 import com.moor.imkf.tcpservice.tcp.ServerMessageHandler;
 import com.moor.imkf.tcpservice.tcp.SocketManagerStatus;
 import com.moor.imkf.tcpservice.tcp.SocketThread;
@@ -105,9 +105,9 @@ public class SocketManager {
         return true;
     }
 
-	public void onEvent(SocketEvent socketEvent){
+	public void onEvent(KFSocketEvent KFSocketEvent){
     	LogUtil.d("IMService", "进入了socket事件驱动的方法中");
-    	switch (socketEvent){
+    	switch (KFSocketEvent){
     	case NONE:
     		//什么也没干呢
     		break;
