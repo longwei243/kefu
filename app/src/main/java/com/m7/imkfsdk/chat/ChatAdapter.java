@@ -1,6 +1,7 @@
 package com.m7.imkfsdk.chat;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.AnimationDrawable;
@@ -37,6 +38,7 @@ import com.moor.imkf.IMChat;
 import com.moor.imkf.model.entity.FromToMessage;
 import com.moor.imkf.utils.AnimatedGifDrawable;
 import com.moor.imkf.utils.AnimatedImageSpan;
+import com.moor.imkf.utils.LogUtil;
 import com.moor.imkf.utils.TimeUtil;
 
 import org.apache.http.HttpResponse;
@@ -356,7 +358,28 @@ public class ChatAdapter extends MyBaseAdapter {
 
 			} else if (FromToMessage.MSG_TYPE_IMAGE.equals(message.msgType)) {
 				//接受到图片
+				holder.fromContent.setVisibility(View.GONE);
+				holder.chat_from_recorder_length.setVisibility(View.GONE);
 
+				holder.chat_from_layout_img.setVisibility(View.VISIBLE);
+
+				LogUtil.d("ChatAdapter", "加载网络图片URL是:" + message.message + "?imageView2/0/w/200/h/140");
+				Glide.with(context).load(message.message+"?imageView2/0/w/200/h/140")
+						.centerCrop()
+						.crossFade()
+						.placeholder(R.drawable.pic_thumb_bg)
+						.error(R.drawable.image_download_fail_icon)
+						.into(holder.chat_from_iv_img);
+
+				holder.chat_from_layout_img.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						//点击查看原图
+						Intent intent = new Intent(context, ImageViewLookActivity.class);
+						intent.putExtra("imagePath", message.message);
+						context.startActivity(intent);
+					}
+				});
 			}
 		}
 

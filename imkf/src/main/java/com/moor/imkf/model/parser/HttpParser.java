@@ -162,6 +162,8 @@ public class HttpParser {
 					msgType = jb.getString("contentType");
 					if("text".equals(msgType)) {
 						msgType = "0";
+					}else if("image".equals(msgType)) {
+						msgType = "1";
 					}
 				}
 				boolean showHtml = jb.getBoolean("showHtml");
