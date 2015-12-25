@@ -33,7 +33,7 @@ import java.util.List;
 import de.greenrobot.event.EventBus;
 
 /**
- * imæœåŠ¡,è¿›è¡Œtcpçš„è¿æ¥çš„ç®¡ç†
+ * im·şÎñ,½øĞĞtcpµÄÁ¬½ÓµÄ¹ÜÀí
  * @author LongWei
  *
  */
@@ -45,53 +45,39 @@ public class IMService extends Service{
 	private LoginManager loginMgr;
 	private HeartBeatManager heartBeatMgr;
 
-	
+
 	@Override
 	public void onCreate() {
 		super.onCreate();
 
 		EventBus.getDefault().register(this);
-		LogUtil.d("IMService", "è¿›å…¥äº†onCreateæ–¹æ³•");
+		LogUtil.d("IMService", "½øÈëÁËonCreate·½·¨");
 
-		//start AlarmManager
-		Intent amintent = new Intent(IMService.this,
-				AlarmManagerReceiver.class);
-		PendingIntent sender = PendingIntent.getBroadcast(
-				IMChatManager.getInstance().getAppContext(), 0, amintent, 0);
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTimeInMillis(System.currentTimeMillis());
-		calendar.add(Calendar.SECOND, 5 * 60);
-		// Schedule the alarm!
-		AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
-		am.setRepeating(AlarmManager.RTC_WAKEUP,
-				calendar.getTimeInMillis(), 5 * 60 * 1000, sender);
 	}
-	
+
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		context = getApplicationContext();
-		//è¿›è¡Œç®¡ç†ç±»çš„åˆå§‹åŒ–
+		//½øĞĞ¹ÜÀíÀàµÄ³õÊ¼»¯
 		socketMgr = SocketManager.getInstance(context);
 		loginMgr = LoginManager.getInstance(context);
 		heartBeatMgr = HeartBeatManager.getInstance(context);
 
-		if(socketMgr.getStatus().equals(SocketManagerStatus.BREAK) && NetUtils.hasDataConnection(context)){
-			//æœåŠ¡è¢«å¯åŠ¨äº†å°±è¿›è¡Œç™»å½•
+		if(socketMgr.getStatus().equals(SocketManagerStatus.BREAK) && NetUtils.hasDataConnection(context) && IMChatManager.getInstance().getAppContext() != null){
 			socketMgr.login();
 		}
-		//å†…å­˜ä¸è¶³è¢«æ€æ­»ï¼Œå½“å†…å­˜åˆæœ‰çš„æ—¶å€™ï¼Œserviceåˆè¢«é‡æ–°åˆ›å»ºï¼Œä½†æ˜¯ä¸ä¿è¯æ¯æ¬¡éƒ½è¢«åˆ›å»º
-		flags = START_STICKY;
+
 		return super.onStartCommand(intent, flags, startId);
 	}
-	
+
 	@Override
 	public void onDestroy() {
 		Intent intent = new Intent("com.moor.im.IMServiceDown");
 		sendBroadcast(intent);
 
 		EventBus.getDefault().unregister(this);
-        heartBeatMgr.reset();
-        LogUtil.d("IMService", "è¿›å…¥äº†onDestroyæ–¹æ³•ï¼Œ é‡ç½®äº†ç®¡ç†ç±»");
+		heartBeatMgr.reset();
+		LogUtil.d("IMService", "½øÈëÁËonDestroy·½·¨£¬ ÖØÖÃÁË¹ÜÀíÀà");
 
 		Intent imserviceIntent = new Intent(context, IMService.class);
 		context.startService(imserviceIntent);
@@ -108,32 +94,32 @@ public class IMService extends Service{
 	private List<FromToMessage> fromToMessage;
 	private String largeMsgId;
 
-	// EventBus ç™»å½•äº‹ä»¶é©±åŠ¨,æ¥æ”¶åˆ°äº‹ä»¶åè°ƒç”¨managerä¸­çš„æ–¹æ³•è¿›è¡Œå…·ä½“å¤„ç†
-    public void onEventMainThread(KFLoginEvent KFLoginEvent){
-		LogUtil.d("IMService", "è¿›å…¥äº†ç™»å½•äº‹ä»¶é©±åŠ¨çš„æ–¹æ³•ä¸­ï¼Œè¿›è¡Œç›¸åº”çš„å¤„ç†");
-       switch (KFLoginEvent){
-           case LOGIN_SUCCESS:
-               onLoginSuccess();
-               break;
-           case LOGIN_FAILED:
-               onLoginFailed();
-               break;
-           case  LOGIN_KICKED:
-               onLoginKicked();
-               break;
-		   case  NEW_MSG:
-			   onNewMessageReceived();
-			   break;
-           default:
-        	   break;
-       }
-    }
+	// EventBus µÇÂ¼ÊÂ¼şÇı¶¯,½ÓÊÕµ½ÊÂ¼şºóµ÷ÓÃmanagerÖĞµÄ·½·¨½øĞĞ¾ßÌå´¦Àí
+	public void onEventMainThread(KFLoginEvent KFLoginEvent){
+		LogUtil.d("IMService", "½øÈëÁËµÇÂ¼ÊÂ¼şÇı¶¯µÄ·½·¨ÖĞ£¬½øĞĞÏàÓ¦µÄ´¦Àí");
+		switch (KFLoginEvent){
+			case LOGIN_SUCCESS:
+				onLoginSuccess();
+				break;
+			case LOGIN_FAILED:
+				onLoginFailed();
+				break;
+			case  LOGIN_KICKED:
+				onLoginKicked();
+				break;
+			case  NEW_MSG:
+				onNewMessageReceived();
+				break;
+			default:
+				break;
+		}
+	}
 
 	/**
-	 * æ¥æ”¶åˆ°æ–°æ¶ˆæ¯çš„å¤„ç†
+	 * ½ÓÊÕµ½ĞÂÏûÏ¢µÄ´¦Àí
 	 */
 	private void onNewMessageReceived() {
-		//è·å–æœåŠ¡å™¨çš„æ–°æ¶ˆæ¯
+		//»ñÈ¡·şÎñÆ÷µÄĞÂÏûÏ¢
 		ArrayList<String> array = MessageDao.getInstance()
 				.getUnReadDao();
 		HttpManager.getMsg(InfoDao.getInstance().getConnectionId(), array,
@@ -159,18 +145,18 @@ public class IMService extends Service{
 			String succeed = HttpParser.getSucceed(responseString);
 			String message = HttpParser.getMessage(responseString);
 			boolean isLargeMsg = HttpParser.isLargeMsg(responseString);
-			// è·å–æ•°æ®æˆåŠŸå¹¶ä¸”ä¸æ˜¯å¤§é‡æ•°æ®
+			// »ñÈ¡Êı¾İ³É¹¦²¢ÇÒ²»ÊÇ´óÁ¿Êı¾İ
 			if ("true".equals(succeed)) {
 				if(isLargeMsg) {
-					//æœ‰å¤§é‡çš„æ•°æ®
-					LogUtil.d("æ¶ˆæ¯æ¥æ”¶å™¨", "æœ‰å¤§é‡æ¶ˆæ¯è¦æ¥äº†");
+					//ÓĞ´óÁ¿µÄÊı¾İ
+					LogUtil.d("ÏûÏ¢½ÓÊÕÆ÷", "ÓĞ´óÁ¿ÏûÏ¢ÒªÀ´ÁË");
 					getLargeMsgsFromNet(largeMsgId);
 				}else {
-					//æ²¡æœ‰å¤§é‡çš„æ•°æ®
+					//Ã»ÓĞ´óÁ¿µÄÊı¾İ
 					fromToMessage = HttpParser.getMsgs(responseString);
-					// åˆ¤æ–­æ•°æ®æ˜¯å¦è¢«è¯»å–ã€åŠæ—¶æ›´æ–°
+					// ÅĞ¶ÏÊı¾İÊÇ·ñ±»¶ÁÈ¡¡¢¼°Ê±¸üĞÂ
 					MessageDao.getInstance().updateMsgsIdDao();
-					// å­˜å…¥æ‰‹æœºæ•°æ®åº“
+					// ´æÈëÊÖ»úÊı¾İ¿â
 					MessageDao.getInstance().insertGetMsgsToDao(fromToMessage);
 
 				}
@@ -182,16 +168,16 @@ public class IMService extends Service{
 	}
 
 	/**
-	 * ä»ç½‘ç»œè·å–å¤§é‡æ¶ˆæ¯æ•°æ®
+	 * ´ÓÍøÂç»ñÈ¡´óÁ¿ÏûÏ¢Êı¾İ
 	 */
 	public void getLargeMsgsFromNet(String largeMsgId) {
-		LogUtil.d("è·å–å¤§é‡æ¶ˆæ¯æ•°æ®ï¼š", "largeMsgIdæ˜¯ï¼š" + largeMsgId);
+		LogUtil.d("»ñÈ¡´óÁ¿ÏûÏ¢Êı¾İ£º", "largeMsgIdÊÇ£º" + largeMsgId);
 		ArrayList largeMsgIdarray = new ArrayList();
 		largeMsgIdarray.add(largeMsgId);
 		HttpManager.getLargeMsgs(InfoDao.getInstance().getConnectionId(), largeMsgIdarray, new GetLargeMsgsResponseHandler());
 	}
 
-	// å–å¤§é‡æ¶ˆæ¯
+	// È¡´óÁ¿ÏûÏ¢
 	class GetLargeMsgsResponseHandler extends TextHttpResponseHandler {
 
 
@@ -211,19 +197,19 @@ public class IMService extends Service{
 			fromToMessage.clear();
 			if("true".equals(succeed)) {
 				fromToMessage = HttpParser.getMsgs(responseString);
-				LogUtil.d("è·å–å¤§é‡æ•°æ®", "è·å–åˆ°çš„æ¶ˆæ¯æ•°ä¸ºï¼š"+fromToMessage.size());
+				LogUtil.d("»ñÈ¡´óÁ¿Êı¾İ", "»ñÈ¡µ½µÄÏûÏ¢ÊıÎª£º"+fromToMessage.size());
 
-				// åˆ¤æ–­æ•°æ®æ˜¯å¦è¢«è¯»å–ã€åŠæ—¶æ›´æ–°
+				// ÅĞ¶ÏÊı¾İÊÇ·ñ±»¶ÁÈ¡¡¢¼°Ê±¸üĞÂ
 				MessageDao.getInstance().updateMsgsIdDao();
-				// å­˜å…¥æ‰‹æœºæ•°æ®åº“
+				// ´æÈëÊÖ»úÊı¾İ¿â
 				MessageDao.getInstance().insertGetMsgsToDao(fromToMessage);
 
 				if(hasMore) {
-					//è¿˜æœ‰æ›´å¤šçš„æ¶ˆæ¯ï¼Œç»§ç»­å»å–
+					//»¹ÓĞ¸ü¶àµÄÏûÏ¢£¬¼ÌĞøÈ¥È¡
 					getLargeMsgsFromNet(largeMsgId);
 				}else {
-					//æ²¡æœ‰äº†ï¼Œåˆ·æ–°ç•Œé¢
-					LogUtil.d("è·å–å¤§é‡æ¶ˆæ¯æ•°æ®", "æ²¡æœ‰æ›´å¤šçš„æ•°æ®äº†");
+					//Ã»ÓĞÁË£¬Ë¢ĞÂ½çÃæ
+					LogUtil.d("»ñÈ¡´óÁ¿ÏûÏ¢Êı¾İ", "Ã»ÓĞ¸ü¶àµÄÊı¾İÁË");
 				}
 				Intent intnet = new Intent("com.moor.im.NEW_MSG");
 				context.sendBroadcast(intnet);
@@ -232,10 +218,10 @@ public class IMService extends Service{
 	}
 
 	/**
-     * è¢«è¸¢äº†
-     */
+	 * ±»ÌßÁË
+	 */
 	private void onLoginKicked() {
-		LogUtil.d("IMService", "è¢«è¸¢äº†");
+		LogUtil.d("IMService", "±»ÌßÁË");
 		loginMgr.onKickedOff();
 		Intent kickedIntent = new Intent();
 		kickedIntent.setAction("kicked");
@@ -243,21 +229,21 @@ public class IMService extends Service{
 	}
 
 	/**
-	 * ç™»å½•å¤±è´¥
+	 * µÇÂ¼Ê§°Ü
 	 */
 	private void onLoginFailed() {
-		LogUtil.d("IMService", "ç™»å½•å¤±è´¥");
+		LogUtil.d("IMService", "µÇÂ¼Ê§°Ü");
 		loginMgr.setIsStoreUsernamePasswordRight(false);
 	}
 
 	/**
-	 * ç™»å½•æˆåŠŸ
+	 * µÇÂ¼³É¹¦
 	 */
 	private void onLoginSuccess() {
-		LogUtil.d("IMService", "ç™»å½•æˆåŠŸ");
+		LogUtil.d("IMService", "µÇÂ¼³É¹¦");
 		loginMgr.setIsStoreUsernamePasswordRight(true);
 		loginMgr.setLoginOff(false);
-		//ç™»å½•æˆåŠŸäº†å‘é€å¿ƒè·³
+		//µÇÂ¼³É¹¦ÁË·¢ËÍĞÄÌø
 		heartBeatMgr.onloginSuccess();
 
 	}
