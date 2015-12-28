@@ -33,13 +33,13 @@ import de.greenrobot.event.EventBus;
 public class ServerMessageHandler extends IdleStateAwareChannelHandler {
 
 	private Context context;
-	
+
 	public ServerMessageHandler(Context context) {
 		this.context = context;
 
 	}
-	
-	
+
+
 	@Override
 	public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e)
 			throws Exception {
@@ -48,15 +48,15 @@ public class ServerMessageHandler extends IdleStateAwareChannelHandler {
 
 	@Override
 	public void channelDisconnected(ChannelHandlerContext ctx,
-			ChannelStateEvent e) throws Exception {
-        /**
-         * 1. 已经与远程主机建立的连接，远程主机主动关闭连接，或者网络异常连接被断开的情况
-         2. 已经与远程主机建立的连接，本地客户机主动关闭连接的情况
-         3. 本地客户机在试图与远程主机建立连接时，遇到类似与connection refused这样的异常，未能连接成功时
-         而只有当本地客户机已经成功的与远程主机建立连接（connected）时，连接断开的时候才会触发channelDisconnected事件，即对应上述的1和2两种情况。
-         *
-         **/
-  		super.channelDisconnected(ctx, e);
+									ChannelStateEvent e) throws Exception {
+		/**
+		 * 1. 已经与远程主机建立的连接，远程主机主动关闭连接，或者网络异常连接被断开的情况
+		 2. 已经与远程主机建立的连接，本地客户机主动关闭连接的情况
+		 3. 本地客户机在试图与远程主机建立连接时，遇到类似与connection refused这样的异常，未能连接成功时
+		 而只有当本地客户机已经成功的与远程主机建立连接（connected）时，连接断开的时候才会触发channelDisconnected事件，即对应上述的1和2两种情况。
+		 *
+		 **/
+		super.channelDisconnected(ctx, e);
 //		MobileApplication.logger.debug(TimeUtil.getCurrentTime() + "tcp 链接断开了：");
 		LogUtil.d("ServerMessageHandler", "已经与Server断开连接。。。。");
 		if(SocketManager.getInstance(IMChatManager.getInstance().getAppContext()).getSocketThread() != null
@@ -83,11 +83,11 @@ public class ServerMessageHandler extends IdleStateAwareChannelHandler {
 			throws Exception {
 		super.messageReceived(ctx, e);
 		ChannelBuffer buffer = (ChannelBuffer) e.getMessage();
-        String result = buffer.toString(Charset.defaultCharset());
-        LogUtil.d("ServerMessageHandler", "服务器返回的数据是：" + result);
+		String result = buffer.toString(Charset.defaultCharset());
+		LogUtil.d("ServerMessageHandler", "服务器返回的数据是：" + result);
 
-        if ("3".equals(result)) {
-        	//心跳管理器负责
+		if ("3".equals(result)) {
+			//心跳管理器负责
 		} else if ("4".equals(result)) {
 			//被踢了
 			//发送被踢了的事件
@@ -122,19 +122,19 @@ public class ServerMessageHandler extends IdleStateAwareChannelHandler {
 		}
 	}
 
-    /**
+	/**
 	 *
-     * */
-    @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) throws Exception {
+	 * */
+	@Override
+	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) throws Exception {
 //        super.exceptionCaught(ctx, e);
-        LogUtil.d("ServerMessageHandler", "exceptionCaught被调用了，直接断开连接");
-        //有异常时直接断开连接
+		LogUtil.d("ServerMessageHandler", "exceptionCaught被调用了，直接断开连接");
+		//有异常时直接断开连接
 		EventBus.getDefault().postSticky(KFSocketEvent.MSG_SERVER_DISCONNECTED);
 		//关闭channel
 		Channel ch = e.getChannel();
 		ch.close();
-    }
+	}
 
 
 	@Override
