@@ -65,6 +65,7 @@ public class LoginManager {
 				jb.put("AccessId", accessId);
 				jb.put("Platform", "android");
 				jb.put("DeviceId", getDeviceId());
+				jb.put("NewVersion", "true");
 			} catch (JSONException e) {
 				e.printStackTrace();
 			} catch (UnsupportedEncodingException e) {

@@ -2,6 +2,7 @@ package com.moor.imkf;
 
 import android.content.Context;
 import android.telephony.TelephonyManager;
+import android.widget.SeekBar;
 
 import com.loopj.android.http.TextHttpResponseHandler;
 import com.moor.imkf.db.dao.InfoDao;
@@ -31,6 +32,8 @@ public class IMChat {
     String connectionId = "";
 
     private static IMChat instance = new IMChat();
+
+    private String sessionId = "";
 
     private IMChat() {
 
@@ -227,20 +230,24 @@ public class IMChat {
      * @return
      */
     public String getSessionId() {
-        String deviceId = getDeviceId();
-        String accessId = InfoDao.getInstance().getAccessId();
-        String userId = InfoDao.getInstance().getUserId();
-        String sessionId = "";
-        if(accessId != null && !"".equals(accessId)) {
-            if(userId != null && !"".equals(userId)) {
-                sessionId = deviceId + "@" + userId + "@android";
-            }else {
-                sessionId = deviceId + "@android";
-            }
-        }
+//        String deviceId = getDeviceId();
+//        String accessId = InfoDao.getInstance().getAccessId();
+//        String userId = InfoDao.getInstance().getUserId();
+//        String sessionId = "";
+//        if(accessId != null && !"".equals(accessId)) {
+//            if(userId != null && !"".equals(userId)) {
+//                sessionId = deviceId + "@" + userId + "@android";
+//            }else {
+//                sessionId = deviceId + "@android";
+//            }
+//        }
 
         return sessionId;
 
+    }
+
+    public void setSessionId(String sessionId) {
+        this.sessionId = sessionId;
     }
 
     /**

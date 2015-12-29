@@ -3,6 +3,7 @@ package com.moor.imkf.tcpservice.tcp;
 import android.content.Context;
 import android.content.Intent;
 
+import com.moor.imkf.IMChat;
 import com.moor.imkf.IMChatManager;
 import com.moor.imkf.db.dao.InfoDao;
 import com.moor.imkf.event.KFLoginEvent;
@@ -103,7 +104,14 @@ public class ServerMessageHandler extends IdleStateAwareChannelHandler {
 			EventBus.getDefault().postSticky(KFLoginEvent.LOGIN_FAILED);
 			SocketManager.getInstance(IMChatManager.getInstance().getAppContext()).setStatus(SocketManagerStatus.CONNECTED);
 		} else if(result.startsWith("200")) {
-			String connectionid = result.replace("200", "");
+
+			String[] str = result.split("#");
+
+			String connectionid = str[1];
+			String sessionId = str[2];
+
+			IMChat.getInstance().setSessionId(sessionId);
+
 			InfoDao.getInstance().saveConnectionId(connectionid);
 			//发送登录成功的事件
 			EventBus.getDefault().postSticky(KFLoginEvent.LOGIN_SUCCESS);
