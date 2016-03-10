@@ -79,8 +79,8 @@ public class IMService extends Service{
 		heartBeatMgr.reset();
 		LogUtil.d("IMService", "进入了onDestroy方法， 重置了管理类");
 
-		Intent imserviceIntent = new Intent(context, IMService.class);
-		context.startService(imserviceIntent);
+//		Intent imserviceIntent = new Intent(context, IMService.class);
+//		context.startService(imserviceIntent);
 
 		super.onDestroy();
 	}
@@ -104,15 +104,27 @@ public class IMService extends Service{
 			case LOGIN_FAILED:
 				onLoginFailed();
 				break;
-			case  LOGIN_KICKED:
+			case LOGIN_KICKED:
 				onLoginKicked();
 				break;
-			case  NEW_MSG:
+			case LOGIN_OFF:
+				onLoginOff();
+				break;
+			case NEW_MSG:
 				onNewMessageReceived();
 				break;
 			default:
 				break;
 		}
+	}
+
+	/**
+	 * 注销，停止Service
+	 */
+	private void onLoginOff() {
+		loginMgr.loginOff();
+		stopSelf();
+		SocketManager.getInstance(context).setStatus(SocketManagerStatus.BREAK);
 	}
 
 	/**

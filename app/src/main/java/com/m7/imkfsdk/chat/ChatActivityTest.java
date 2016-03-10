@@ -45,6 +45,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.m7.imkfsdk.R;
+import com.m7.imkfsdk.chat.adapter.ChatAdapter2;
 import com.m7.imkfsdk.recordbutton.AudioRecorderButton;
 import com.m7.imkfsdk.recordbutton.MediaManager;
 import com.m7.imkfsdk.utils.FaceConversionUtil;
@@ -67,14 +68,14 @@ import java.util.List;
  * 聊天界面
  * @author LongWei
  */
-public class ChatActivity extends MyBaseActivity implements OnClickListener,
+public class ChatActivityTest extends MyBaseActivity implements OnClickListener,
 		OnItemClickListener, ChatListView.OnRefreshListener, AudioRecorderButton.RecorderFinishListener {
 	private ChatListView mChatList;
 	private Button mChatSend, mChatMore, mChatSetModeVoice,
 			mChatSetModeKeyboard, chat_btn_convert;
 	ImageView chat_btn_back;
 	private EditText mChatInput;
-	private ChatAdapter chatAdapter;
+	private ChatAdapter2 chatAdapter;
 	private List list;
 	private RelativeLayout mChatEdittextLayout,
 			mChatMoreContainer;
@@ -131,19 +132,19 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 
 			if(msg.what == 0x111) {
 				//当前是机器人
-				Toast.makeText(ChatActivity.this, "当前是机器人为你服务", Toast.LENGTH_SHORT).show();
+				Toast.makeText(ChatActivityTest.this, "当前是机器人为你服务", Toast.LENGTH_SHORT).show();
 				chat_btn_convert.setVisibility(View.VISIBLE);
 			}
 
 			if(msg.what == 0x222) {
 				//当前是客服
-				Toast.makeText(ChatActivity.this, "当前是客服为你服务", Toast.LENGTH_SHORT).show();
+				Toast.makeText(ChatActivityTest.this, "当前是客服为你服务", Toast.LENGTH_SHORT).show();
 				chat_btn_convert.setVisibility(View.GONE);
 			}
 
 			if(msg.what == 0x333) {
 				//当前是客服
-				Toast.makeText(ChatActivity.this, "当前客服不在线", Toast.LENGTH_SHORT).show();
+				Toast.makeText(ChatActivityTest.this, "当前客服不在线", Toast.LENGTH_SHORT).show();
 				chat_btn_convert.setVisibility(View.GONE);
 				showOffineDialog();
 			}
@@ -214,18 +215,14 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 		}
 		if (flag == false) {
 			//没有收到消息时
-			chatAdapter = new ChatAdapter(ChatActivity.this, handler);
-			list = chatAdapter.getAdapterData();
-			list.addAll(descFromToMessage);
+			chatAdapter = new ChatAdapter2(ChatActivityTest.this, descFromToMessage);
 			mChatList.setAdapter(chatAdapter);
 			chatAdapter.notifyDataSetChanged();
 			mChatList.setSelection(fromToMessage.size() + 1);
 		} else if (flag == true) {
 			//收到消息时
-			list = chatAdapter.getAdapterData();
 
-			list.clear();
-			list.addAll(descFromToMessage);
+			chatAdapter = new ChatAdapter2(ChatActivityTest.this, descFromToMessage);
 			mChatList.setAdapter(chatAdapter);
 			chatAdapter.notifyDataSetChanged();
 			mChatList.setSelection(fromToMessage.size() + 1);
@@ -247,9 +244,7 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 			descFromToMessage.add(fromToMessage.get(i));
 		}
 
-		list = chatAdapter.getAdapterData();
-		list.clear();
-		list.addAll(descFromToMessage);
+		chatAdapter = new ChatAdapter2(ChatActivityTest.this, descFromToMessage);
 		mChatList.setAdapter(chatAdapter);
 		chatAdapter.notifyDataSetChanged();
 
@@ -471,7 +466,7 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 				public void onLine() {
 					//有客服在线,隐藏转人工按钮
 					chat_btn_convert.setVisibility(View.GONE);
-					Toast.makeText(ChatActivity.this, "转人工服务成功", Toast.LENGTH_SHORT).show();
+					Toast.makeText(ChatActivityTest.this, "转人工服务成功", Toast.LENGTH_SHORT).show();
 				}
 
 				@Override
@@ -487,10 +482,10 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 			FromToMessage fromToMessage = IMMessage.createTxtMessage(txt);
 
 			//界面显示
-			list.add(fromToMessage);
+			descFromToMessage.add(fromToMessage);
 			mChatList.setAdapter(chatAdapter);
 			chatAdapter.notifyDataSetChanged();
-			mChatList.setSelection(list.size());
+			mChatList.setSelection(descFromToMessage.size());
 			mChatInput.setText("");
 
 			//发送消息
@@ -932,10 +927,10 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 				FromToMessage fromToMessage = IMMessage.createImageMessage(picFileFullName);
 				ArrayList fromTomsgs = new ArrayList<FromToMessage>();
 				fromTomsgs.add(fromToMessage);
-				list.addAll(fromTomsgs);
-				mChatList.setAdapter(chatAdapter);
+				descFromToMessage.addAll(fromTomsgs);
+//				mChatList.setAdapter(chatAdapter);
 				chatAdapter.notifyDataSetChanged();
-				mChatList.setSelection(list.size());
+				mChatList.setSelection(descFromToMessage.size());
 				IMChat.getInstance().sendMessage(fromToMessage, new ChatListener() {
 					@Override
 					public void onSuccess() {
@@ -970,10 +965,10 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 					FromToMessage fromToMessage = IMMessage.createImageMessage(picFileFullName);
 					ArrayList fromTomsgs = new ArrayList<FromToMessage>();
 					fromTomsgs.add(fromToMessage);
-					list.addAll(fromTomsgs);
-					mChatList.setAdapter(chatAdapter);
+					descFromToMessage.addAll(fromTomsgs);
+//					mChatList.setAdapter(chatAdapter);
 					chatAdapter.notifyDataSetChanged();
-					mChatList.setSelection(list.size());
+					mChatList.setSelection(descFromToMessage.size());
 					IMChat.getInstance().sendMessage(fromToMessage, new ChatListener() {
 						@Override
 						public void onSuccess() {
@@ -1051,6 +1046,7 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 		// TODO Auto-generated method stub
 		super.onPause();
 		MediaManager.pause();
+		chatAdapter.onPause();
 	}
 
 	@Override
@@ -1085,10 +1081,10 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 
 
 		fromTomsgs.add(fromToMessage);
-		list.addAll(fromTomsgs);
-		mChatList.setAdapter(chatAdapter);
+		descFromToMessage.addAll(fromTomsgs);
+//		mChatList.setAdapter(chatAdapter);
 		chatAdapter.notifyDataSetChanged();
-		mChatList.setSelection(list.size());
+		mChatList.setSelection(descFromToMessage.size());
 
 		IMChat.getInstance().sendMessage(fromToMessage, new ChatListener() {
 			@Override
@@ -1161,6 +1157,32 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 		Bundle b = new Bundle();
 		b.putString("PeerId", peerId);
 		dialog.setArguments(b);
-		dialog.show(ChatActivity.this.getFragmentManager(), "OfflineMessageDialog");
+		dialog.show(ChatActivityTest.this.getFragmentManager(), "OfflineMessageDialog");
 	}
+
+
+	public ChatAdapter2 getChatAdapter() {
+		return chatAdapter;
+	}
+
+	public void resendMsg(FromToMessage msg, int position) {
+		IMChat.getInstance().reSendMessage(msg, new ChatListener() {
+			@Override
+			public void onSuccess() {
+				updateMessage();
+			}
+
+			@Override
+			public void onFailed() {
+				updateMessage();
+			}
+
+			@Override
+			public void onProcess() {
+
+			}
+		});
+	}
+
+
 }

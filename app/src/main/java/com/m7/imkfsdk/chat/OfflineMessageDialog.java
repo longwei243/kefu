@@ -23,7 +23,7 @@ public class OfflineMessageDialog extends DialogFragment {
 
     EditText id_et_content, id_et_phone, id_et_email;
     Button btn_cancel, btn_submit;
-    @NonNull
+    private String peerId;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -37,6 +37,9 @@ public class OfflineMessageDialog extends DialogFragment {
         btn_submit = (Button) view.findViewById(R.id.id_btn_submit);
         btn_cancel = (Button) view.findViewById(R.id.id_btn_cancel);
 
+        Bundle bundle = getArguments();
+        peerId = bundle.getString("PeerId");
+
         btn_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -45,7 +48,7 @@ public class OfflineMessageDialog extends DialogFragment {
                 String email = id_et_email.getText().toString().trim();
                 if(!"".equals(content)) {
                     if(!"".equals(phone) || !"".equals(email)) {
-                        IMChatManager.getInstance().submitOfflineMessage(content, phone, email, new OnSubmitOfflineMessageListener() {
+                        IMChatManager.getInstance().submitOfflineMessage(peerId, content, phone, email, new OnSubmitOfflineMessageListener() {
                             @Override
                             public void onSuccess() {
                                 dismiss();

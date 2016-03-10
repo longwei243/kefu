@@ -177,13 +177,16 @@ public class HttpManager {
 	/**
 	 * 通知服务器开始新会话
 	 */
-	public static void beginNewChatSession(String connectionId, boolean isNewVisitor, ResponseHandlerInterface responseHandler) {
+	public static void beginNewChatSession(String connectionId, boolean isNewVisitor, String peerId, ResponseHandlerInterface responseHandler) {
 		AsyncHttpClient httpclient = hc;
 		JSONObject json = new JSONObject();
 		try {
 			json.put("ConnectionId", Utils.replaceBlank(connectionId));
 			json.put("Action", "sdkBeginNewChatSession");
 			json.put("IsNewVisitor", isNewVisitor);
+			if(peerId != null && !"".equals(peerId)) {
+				json.put("ToPeer", peerId);
+			}
 
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -197,7 +200,7 @@ public class HttpManager {
 	/**
 	 * 提交离线消息
 	 */
-	public static void submitOfflineMessage(String connectionId, String content, String phone, String email, ResponseHandlerInterface responseHandler) {
+	public static void submitOfflineMessage(String connectionId, String peerId, String content, String phone, String email, ResponseHandlerInterface responseHandler) {
 		AsyncHttpClient httpclient = hc;
 		JSONObject json = new JSONObject();
 		try {
@@ -206,7 +209,9 @@ public class HttpManager {
 			json.put("Phone", phone);
 			json.put("Email", email);
 			json.put("Action", "sdkSubmitLeaveMessage");
-
+			if(peerId != null && !"".equals(peerId)) {
+				json.put("ToPeer", peerId);
+			}
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -227,6 +232,25 @@ public class HttpManager {
 			json.put("ConnectionId", Utils.replaceBlank(connectionId));
 			json.put("Action", "sdkConvertManual");
 
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		RequestParams params = new RequestParams();
+		params.add("data", json + "");
+		httpclient.post(RequestUrl.baseHttp1, params, responseHandler);
+	}
+
+	/**
+	 * 获取技能组
+	 */
+	public static void getPeers(String connectionId,
+									 ResponseHandlerInterface responseHandler) {
+		AsyncHttpClient httpclient = hc;
+		JSONObject json = new JSONObject();
+		try {
+			json.put("ConnectionId", Utils.replaceBlank(connectionId));
+			json.put("Action", "sdkGetPeers");
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

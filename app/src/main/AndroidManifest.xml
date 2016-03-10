@@ -16,7 +16,6 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -52,13 +51,18 @@
             </intent-filter>
         </activity>
 
-        <activity
+        <!--<activity
             android:name="com.m7.imkfsdk.chat.ChatActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             >
+        </activity>-->
+        <activity
+            android:name="com.m7.imkfsdk.chat.ChatActivityTest"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            >
         </activity>
-
         <activity
             android:name="com.m7.imkfsdk.chat.ImageViewLookActivity"
             android:screenOrientation="portrait"

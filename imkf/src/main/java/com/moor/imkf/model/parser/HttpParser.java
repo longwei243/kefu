@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.moor.imkf.model.entity.FromToMessage;
 import com.moor.imkf.model.entity.Investigate;
+import com.moor.imkf.model.entity.Peer;
 import com.moor.imkf.utils.LogUtil;
 
 import org.json.JSONArray;
@@ -250,6 +251,25 @@ public class HttpParser {
 
 	}
 
+	public static List<Peer> getPeers(String responseString) {
+		List<Peer> peers = new ArrayList<Peer>();
 
+		try {
+			JSONObject o = new JSONObject(responseString);
+			JSONArray o1 = o.getJSONArray("Peers");
+
+			Gson gson = new Gson();
+			// TypeToken<Json>--他的参数是根节点【】或{}-集合或对象
+			peers = gson.fromJson(o1.toString(),
+					new TypeToken<List<Peer>>() {
+					}.getType());
+
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return peers;
+	}
 
 }

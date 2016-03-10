@@ -21,7 +21,7 @@ public class TimeUtil {
 		long dxTime = currentTime - time;
 		if(dxTime < 60 * 1000) {
 			//几秒前
-			str = (int)(dxTime / 1000) + "秒前";
+			str = "刚刚";
 		}else if(60 * 1000 < dxTime && dxTime < 60*60*1000){
 			//几分钟前
 			str = (int)(dxTime / (60*1000)) + "分钟前";

@@ -13,6 +13,7 @@ import com.moor.imkf.http.HttpManager;
 import com.moor.imkf.model.entity.FromToMessage;
 import com.moor.imkf.model.entity.Info;
 import com.moor.imkf.model.entity.Investigate;
+import com.moor.imkf.model.entity.Peer;
 import com.moor.imkf.model.parser.HttpParser;
 import com.moor.imkf.tcpservice.service.IMService;
 import com.moor.imkf.utils.LogUtil;
@@ -91,14 +92,14 @@ public class IMChatManager {
         }
 
         Info info = new Info();
-        if(userName != null && !"".equals(userName)) {
+        if(userName != null) {
             info.loginName = userName;
         }
-        if(userId != null && !"".equals(userId)) {
+        if(userId != null) {
             info.userId = userId;
         }
 
-        if(accessId != null && !"".equals(accessId)) {
+        if(accessId != null) {
             info.accessId = accessId;
         }
 
@@ -107,6 +108,15 @@ public class IMChatManager {
         Intent imserviceIntent = new Intent(appContext, IMService.class);
         appContext.startService(imserviceIntent);
 
+    }
+
+    /**
+     * 注销,停止IMService
+     */
+    public void quit() {
+        if(appContext != null) {
+            EventBus.getDefault().post(KFLoginEvent.LOGIN_OFF);
+        }
     }
 
     public void onEventMainThread(KFLoginEvent KFLoginEvent){
@@ -162,6 +172,7 @@ public class IMChatManager {
         public void onSuccess(int statusCode, Header[] headers,
                               String responseString) {
             String succeed = HttpParser.getSucceed(responseString);
+            System.out.println("评价数据:"+responseString);
             if ("true".equals(succeed)) {
                 List<Investigate> list = HttpParser.getInvestigates(responseString);
                 InvestigateDao.getInstance().deleteAll();
@@ -229,8 +240,8 @@ public class IMChatManager {
     /**
      * 开始会话
      */
-    public void beginSession(OnSessionBeginListener listener) {
-        HttpManager.beginNewChatSession(InfoDao.getInstance().getConnectionId(), getIsNewVisitor(), new BeginSessionResponse(listener));
+    public void beginSession(String peerId, OnSessionBeginListener listener) {
+        HttpManager.beginNewChatSession(InfoDao.getInstance().getConnectionId(), getIsNewVisitor(), peerId, new BeginSessionResponse(listener));
     }
 
     private class BeginSessionResponse extends TextHttpResponseHandler {
@@ -274,7 +285,7 @@ public class IMChatManager {
      * @param email 邮箱
      * @param listener
      */
-    public void submitOfflineMessage(String content, String phone, String email, OnSubmitOfflineMessageListener listener) {
+    public void submitOfflineMessage(String peerId, String content, String phone, String email, OnSubmitOfflineMessageListener listener) {
        if(content == null) {
            content = "";
        }
@@ -284,7 +295,7 @@ public class IMChatManager {
         if(email == null) {
             email = "";
         }
-        HttpManager.submitOfflineMessage(InfoDao.getInstance().getConnectionId(), content, phone, email, new SubmitOfflineMsgResponse(listener));
+        HttpManager.submitOfflineMessage(InfoDao.getInstance().getConnectionId(), peerId, content, phone, email, new SubmitOfflineMsgResponse(listener));
     }
 
     private class SubmitOfflineMsgResponse extends TextHttpResponseHandler {
@@ -383,6 +394,52 @@ public class IMChatManager {
                 if(listener != null) {
                     listener.offLine();
                 }
+            }
+        }
+    }
+
+
+    /**
+     * 获取技能组
+     */
+    public void getPeers(GetPeersListener listener) {
+        System.out.println("发出了技能组请求");
+        HttpManager.getPeers(InfoDao.getInstance().getConnectionId(), new GetPeersResponse(listener));
+    }
+
+    private class GetPeersResponse extends TextHttpResponseHandler {
+
+        private GetPeersListener listener;
+
+        public GetPeersResponse(GetPeersListener listener) {
+            this.listener = listener;
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers,
+                              String responseString, Throwable throwable) {
+            if(listener != null) {
+                listener.onFailed();
+            }
+
+        }
+
+        @Override
+        public void onSuccess(int statusCode, Header[] headers,
+                              String responseString) {
+            String succeed = HttpParser.getSucceed(responseString);
+            System.out.println("获取技能组返回数据:"+responseString);
+            if ("true".equals(succeed)) {
+                if(listener != null) {
+                    List<Peer> peers = HttpParser.getPeers(responseString);
+                    listener.onSuccess(peers);
+                }
+
+            } else {
+                if(listener != null) {
+                    listener.onFailed();
+                }
+
             }
         }
     }

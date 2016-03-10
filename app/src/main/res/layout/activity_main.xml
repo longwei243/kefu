@@ -11,6 +11,15 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="注销"
+            android:textColor="@color/all_white"
+            android:id="@+id/cancel_btn"
+            android:layout_alignParentLeft="true"
+            android:layout_marginRight="16dp"
+            />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="联系客服"
             android:textColor="@color/all_white"
             android:id="@+id/button"
