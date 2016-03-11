@@ -8,6 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:gravity="center"
         android:background="@color/lightgrey"
         android:textSize="10sp"
         android:layout_margin="2dp"
@@ -17,6 +18,7 @@
             android:id="@+id/chart_from_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/chatting_time_tv"
             android:layout_alignParentLeft="true"
             android:layout_marginRight="48dp"
             >

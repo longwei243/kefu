@@ -125,8 +125,9 @@ public class ServerMessageHandler extends IdleStateAwareChannelHandler {
 		}else if("offline".equals(result)){
 			Intent offlineIntent = new Intent(IMChatManager.OFFLINE_ACTION);
 			context.sendBroadcast(offlineIntent);
-		}else {
-
+		}else if("investigate".equals(result)){
+			Intent investigateIntent = new Intent(IMChatManager.INVESTIGATE_ACTION);
+			context.sendBroadcast(investigateIntent);
 		}
 	}
 

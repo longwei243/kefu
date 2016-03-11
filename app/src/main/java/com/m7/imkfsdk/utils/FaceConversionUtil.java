@@ -3,6 +3,7 @@ package com.m7.imkfsdk.utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
@@ -121,19 +122,21 @@ public class FaceConversionUtil {
 			int resId = context.getResources().getIdentifier(value, "drawable",
 					context.getPackageName());
 			// 通过上面匹配得到的字符串来生成图片资源id
-			// Field field=R.drawable.class.getDeclaredField(value);
-			// int resId=Integer.parseInt(field.get(null).toString());
 			if (resId != 0) {
-				Bitmap bitmap = BitmapFactory.decodeResource(
-						context.getResources(), resId);
-				bitmap = Bitmap.createScaledBitmap(bitmap, 180, 180, true);
-				// 通过图片资源id来得到bitmap，用一个ImageSpan来包装
-				ImageSpan imageSpan = new ImageSpan(bitmap);
+
+				Drawable drawable = null;
+
+				if(resId != 0) {
+					drawable = context.getResources().getDrawable(resId);
+				}
+
 				// 计算该图片名字的长度，也就是要替换的字符串的长度
 				int end = matcher.start() + key.length();
 				// 将该图片替换字符串中规定的位置中
-				spannableString.setSpan(imageSpan, matcher.start(), end,
-						Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+				if(drawable != null) {
+					drawable.setBounds(0, 0, (int) (1.3D * 32), (int) (1.3D * 32));
+					spannableString.setSpan(new ImageSpan(drawable, 0), matcher.start(), end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+				}
 				if (end < spannableString.length()) {
 					// 如果整个字符串还未验证完，则继续。。
 					dealExpression(context, spannableString, patten, end);

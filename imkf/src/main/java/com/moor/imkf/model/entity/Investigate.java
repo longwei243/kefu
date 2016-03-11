@@ -24,4 +24,5 @@ public class Investigate {
      */
     @DatabaseField
     public String value;
+
 }

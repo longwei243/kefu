@@ -32,7 +32,11 @@ public enum ChatRowType {
     /**
      * 发送的语音消息类型
      */
-    VOICE_ROW_TRANSMIT("C400T" , Integer.valueOf(6));
+    VOICE_ROW_TRANSMIT("C400T" , Integer.valueOf(6)),
+    /**
+     * 发送的评价类型
+     */
+    INVESTIGATE_ROW_TRANSMIT("C500T" , Integer.valueOf(7));
 
     private final Integer mId;
     private final Object mDefaultValue;

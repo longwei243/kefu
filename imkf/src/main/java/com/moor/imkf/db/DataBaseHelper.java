@@ -22,7 +22,7 @@ import java.sql.SQLException;
 public class DataBaseHelper extends OrmLiteSqliteOpenHelper {
 
 	private static final String DATABASE_NAME = "qmoorsdk.db";
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 2;
 	private Dao<FromToMessage, Integer> fromToMessageDao = null;
 	private Dao<Info, Integer> InfoDao = null;
 	private Dao<Investigate, Integer> investigateDao = null;

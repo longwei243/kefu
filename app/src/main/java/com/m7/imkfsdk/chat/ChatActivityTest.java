@@ -59,6 +59,7 @@ import com.moor.imkf.OnSessionBeginListener;
 import com.moor.imkf.model.entity.ChatEmoji;
 import com.moor.imkf.model.entity.ChatMore;
 import com.moor.imkf.model.entity.FromToMessage;
+import com.moor.imkf.model.entity.Investigate;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -148,6 +149,10 @@ public class ChatActivityTest extends MyBaseActivity implements OnClickListener,
 				chat_btn_convert.setVisibility(View.GONE);
 				showOffineDialog();
 			}
+
+			if(msg.what == 0x444) {
+				sendInvestigate();
+			}
 			
 			if(msg.what == 0x88) {
 				updateMessage();
@@ -213,17 +218,19 @@ public class ChatActivityTest extends MyBaseActivity implements OnClickListener,
 				descFromToMessage.size())) {
 			mChatList.dismiss();
 		}
+		chatAdapter = new ChatAdapter2(ChatActivityTest.this, descFromToMessage);
+		mChatList.setAdapter(chatAdapter);
 		if (flag == false) {
 			//没有收到消息时
-			chatAdapter = new ChatAdapter2(ChatActivityTest.this, descFromToMessage);
-			mChatList.setAdapter(chatAdapter);
+//			chatAdapter = new ChatAdapter2(ChatActivityTest.this, descFromToMessage);
+//			mChatList.setAdapter(chatAdapter);
 			chatAdapter.notifyDataSetChanged();
 			mChatList.setSelection(fromToMessage.size() + 1);
 		} else if (flag == true) {
 			//收到消息时
 
-			chatAdapter = new ChatAdapter2(ChatActivityTest.this, descFromToMessage);
-			mChatList.setAdapter(chatAdapter);
+//			chatAdapter = new ChatAdapter2(ChatActivityTest.this, descFromToMessage);
+//			mChatList.setAdapter(chatAdapter);
 			chatAdapter.notifyDataSetChanged();
 			mChatList.setSelection(fromToMessage.size() + 1);
 		}
@@ -244,8 +251,8 @@ public class ChatActivityTest extends MyBaseActivity implements OnClickListener,
 			descFromToMessage.add(fromToMessage.get(i));
 		}
 
-		chatAdapter = new ChatAdapter2(ChatActivityTest.this, descFromToMessage);
-		mChatList.setAdapter(chatAdapter);
+//		chatAdapter = new ChatAdapter2(ChatActivityTest.this, descFromToMessage);
+//		mChatList.setAdapter(chatAdapter);
 		chatAdapter.notifyDataSetChanged();
 
 		if (mChatList.getHeaderViewsCount() > 0) {
@@ -483,7 +490,7 @@ public class ChatActivityTest extends MyBaseActivity implements OnClickListener,
 
 			//界面显示
 			descFromToMessage.add(fromToMessage);
-			mChatList.setAdapter(chatAdapter);
+//			mChatList.setAdapter(chatAdapter);
 			chatAdapter.notifyDataSetChanged();
 			mChatList.setSelection(descFromToMessage.size());
 			mChatInput.setText("");
@@ -1133,6 +1140,9 @@ public class ChatActivityTest extends MyBaseActivity implements OnClickListener,
 			}else if(IMChatManager.OFFLINE_ACTION.equals(action)) {
 				//当前是客服
 				handler.sendEmptyMessage(0x333);
+			}else if(IMChatManager.INVESTIGATE_ACTION.equals(action)) {
+				//客服发起了评价
+				handler.sendEmptyMessage(0x444);
 			}
 		}
 	}
@@ -1184,5 +1194,14 @@ public class ChatActivityTest extends MyBaseActivity implements OnClickListener,
 		});
 	}
 
+	private void sendInvestigate() {
+		List<Investigate> investigates = IMChatManager.getInstance().getInvestigate();
+		if(investigates != null && investigates.size() > 0) {
+			FromToMessage message = IMMessage.createInvestigateMessage(investigates);
+			descFromToMessage.add(message);
+			chatAdapter.notifyDataSetChanged();
+			mChatList.setSelection(descFromToMessage.size());
+		}
+	}
 
 }

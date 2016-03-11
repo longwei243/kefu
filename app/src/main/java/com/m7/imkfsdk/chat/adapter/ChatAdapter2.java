@@ -9,6 +9,7 @@ import android.widget.BaseAdapter;
 
 import com.m7.imkfsdk.R;
 import com.m7.imkfsdk.chat.chatrow.BaseChatRow;
+import com.m7.imkfsdk.chat.chatrow.InvestigateChatRow;
 import com.m7.imkfsdk.chat.holder.BaseHolder;
 import com.m7.imkfsdk.chat.listener.ChatListClickListener;
 import com.m7.imkfsdk.chat.chatrow.ChatRowType;
@@ -57,6 +58,7 @@ public class ChatAdapter2 extends BaseAdapter{
         chatRowHashMap.put(Integer.valueOf(4), new ImageTxChatRow(4));
         chatRowHashMap.put(Integer.valueOf(5), new VoiceRxChatRow(5));
         chatRowHashMap.put(Integer.valueOf(6), new VoiceTxChatRow(6));
+        chatRowHashMap.put(Integer.valueOf(7), new InvestigateChatRow(7));
     }
 
     public void setVoicePosition(int position) {
@@ -101,6 +103,11 @@ public class ChatAdapter2 extends BaseAdapter{
             return null;
         }
 
+        //构建消息的view
+        Integer messageType = ChatRowUtils.getChattingMessageType(message);
+        BaseChatRow chatRow = getBaseChatRow(messageType, message.userType.equals("0"));
+        View chatView = chatRow.buildChatView(LayoutInflater.from(context), convertView);
+        BaseHolder baseHolder = (BaseHolder) chatView.getTag();
 
         //显示时间
         boolean showTimer = false;
@@ -114,18 +121,12 @@ public class ChatAdapter2 extends BaseAdapter{
             }
         }
 
-        //构建消息的view
-        Integer messageType = ChatRowUtils.getChattingMessageType(message);
-        BaseChatRow chatRow = getBaseChatRow(messageType, message.userType.equals("0"));
-        View chatView = chatRow.buildChatView(LayoutInflater.from(context), convertView);
-        BaseHolder baseHolder = (BaseHolder) chatView.getTag();
-
         if(showTimer) {
             baseHolder.getChattingTime().setVisibility(View.VISIBLE);
             baseHolder.getChattingTime().setBackgroundResource(R.drawable.chat_tips_bg);
             baseHolder.getChattingTime().setText(DateUtil.getDateString(message.when, DateUtil.SHOW_TYPE_CALL_LOG).trim());
             baseHolder.getChattingTime().setTextColor(Color.WHITE);
-            baseHolder.getChattingTime().setPadding(12, 12, 12, 12);
+            baseHolder.getChattingTime().setPadding(6, 2, 6, 2);
         } else {
             baseHolder.getChattingTime().setVisibility(View.GONE);
             baseHolder.getChattingTime().setShadowLayer(0.0F, 0.0F, 0.0F, 0);

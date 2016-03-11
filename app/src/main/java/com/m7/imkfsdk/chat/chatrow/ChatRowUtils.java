@@ -17,6 +17,8 @@ public class ChatRowUtils {
             return 300;
         }else if(FromToMessage.MSG_TYPE_AUDIO.equals(msg.msgType)) {
             return 400;
+        }else if(FromToMessage.MSG_TYPE_INVESTIGATE.equals(msg.msgType)) {
+            return 500;
         }
         return 0;
     }
@@ -40,6 +42,11 @@ public class ChatRowUtils {
                 return ChatRowType.VOICE_ROW_RECEIVED.getId();
             }
             return ChatRowType.VOICE_ROW_TRANSMIT.getId();
+        }else if(FromToMessage.MSG_TYPE_INVESTIGATE.equals(iMessage.msgType)) {
+            if("1".equals(iMessage.userType)) {
+
+            }
+            return ChatRowType.INVESTIGATE_ROW_TRANSMIT.getId();
         }
         return -1;
     }

@@ -107,7 +107,7 @@ public class VoiceViewHolder extends BaseHolder{
             holder.contentTv.setVisibility(View.VISIBLE);
             holder.contentTv.setText(Math.round(detail.recordTime) + "\"");
             holder.voicePlayAnim.setWidth(DensityUtil.fromDPToPix(activity, getTimeWidth(duration)));
-            return ;
+            return;
         } else {
             holder.voiceAnim.stopVoiceAnimation();
             holder.voiceAnim.setVisibility(View.GONE);

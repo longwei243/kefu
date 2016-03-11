@@ -1,7 +1,11 @@
 package com.moor.imkf.model.entity;
 
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  * 接收消息的实体类
@@ -23,6 +27,10 @@ public class FromToMessage {
 	 * 消息类型：语音
 	 */
 	public static final String MSG_TYPE_AUDIO = "2";
+	/**
+	 * 消息类型：评价
+	 */
+	public static final String MSG_TYPE_INVESTIGATE = "3";
 
 
 	/**
@@ -101,6 +109,8 @@ public class FromToMessage {
 	 */
 	@DatabaseField
 	public String type;
+
+	public List<Investigate> investigates;
 
 	public FromToMessage() {
 

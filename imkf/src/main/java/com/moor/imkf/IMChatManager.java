@@ -46,6 +46,10 @@ public class IMChatManager {
      * 接收客服不在线的action
      */
     public static final String OFFLINE_ACTION = "action_offline";
+    /**
+     * 客服发起的评价
+     */
+    public static final String INVESTIGATE_ACTION = "action_investigate";
 
     private Context appContext;
 
