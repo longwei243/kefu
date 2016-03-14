@@ -2,8 +2,8 @@ package com.m7.imkfsdk.chat.listener;
 
 import android.view.View;
 
-import com.m7.imkfsdk.chat.ChatActivityTest;
-import com.m7.imkfsdk.chat.adapter.ChatAdapter2;
+import com.m7.imkfsdk.chat.ChatActivity;
+import com.m7.imkfsdk.chat.adapter.ChatAdapter;
 import com.m7.imkfsdk.chat.holder.ViewHolderTag;
 import com.m7.imkfsdk.utils.MediaPlayTools;
 import com.moor.imkf.model.entity.FromToMessage;
@@ -14,9 +14,9 @@ import com.moor.imkf.model.entity.FromToMessage;
 public class ChatListClickListener  implements View.OnClickListener{
 
     /**聊天界面*/
-    private ChatActivityTest mContext;
+    private ChatActivity mContext;
 
-    public ChatListClickListener(ChatActivityTest activity , String userName) {
+    public ChatListClickListener(ChatActivity activity , String userName) {
         mContext = activity;
     }
     @Override
@@ -33,7 +33,7 @@ public class ChatListClickListener  implements View.OnClickListener{
                     return ;
                 }
                 MediaPlayTools instance = MediaPlayTools.getInstance();
-                final ChatAdapter2 adapterForce = mContext.getChatAdapter();
+                final ChatAdapter adapterForce = mContext.getChatAdapter();
                 if(instance.isPlaying()) {
                     instance.stop();
                 }

@@ -9,12 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.m7.imkfsdk.R;
-import com.moor.imkf.IMChatManager;
-import com.moor.imkf.SubmitInvestigateListener;
-import com.moor.imkf.model.entity.Investigate;
 import com.moor.imkf.model.entity.Peer;
 
 import java.util.ArrayList;

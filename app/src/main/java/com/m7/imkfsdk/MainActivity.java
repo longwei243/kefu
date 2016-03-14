@@ -2,6 +2,7 @@ package com.m7.imkfsdk;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -11,13 +12,11 @@ import android.view.Window;
 import android.widget.Toast;
 
 import com.m7.imkfsdk.chat.ChatActivity;
-import com.m7.imkfsdk.chat.ChatActivityTest;
-import com.m7.imkfsdk.chat.OfflineMessageDialog;
+import com.m7.imkfsdk.chat.LoadingFragmentDialog;
 import com.m7.imkfsdk.chat.PeerDialog;
 import com.moor.imkf.GetPeersListener;
 import com.moor.imkf.IMChatManager;
 import com.moor.imkf.InitListener;
-import com.moor.imkf.OnSessionBeginListener;
 import com.moor.imkf.model.entity.Peer;
 
 import java.io.Serializable;
@@ -26,6 +25,9 @@ import java.util.List;
 
 public class MainActivity extends Activity {
 
+    private SharedPreferences sp;
+    private LoadingFragmentDialog loadingDialog;
+
 
     private Handler handler = new Handler(){
         @Override
@@ -33,9 +35,11 @@ public class MainActivity extends Activity {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 0x444:
+                    loadingDialog.dismiss();
                     getPeers();
                     break;
                 case 0x555:
+                    loadingDialog.dismiss();
                     Toast.makeText(MainActivity.this, "客服初始化失败", Toast.LENGTH_SHORT).show();
                     break;
             }
@@ -47,16 +51,23 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
-
+        sp = getSharedPreferences("setting", 0);
+        loadingDialog = new LoadingFragmentDialog();
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (MobileApplication.isKFSDK) {
-                    getPeers();
-                } else {
-                    startKFService();
+                //填写过参数才能登录
+                if(!"".equals(sp.getString("accessId", ""))) {
+                    loadingDialog.show(getFragmentManager(), "");
+                    if (MobileApplication.isKFSDK) {
+                        loadingDialog.dismiss();
+                        getPeers();
+                    } else {
+                        startKFService();
+                    }
+                }else {
+                    Toast.makeText(MainActivity.this, "请先设置参数", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
         findViewById(R.id.cancel_btn).setOnClickListener(new View.OnClickListener() {
@@ -66,6 +77,14 @@ public class MainActivity extends Activity {
                     IMChatManager.getInstance().quit();
                     MobileApplication.isKFSDK = false;
                 }
+            }
+        });
+
+        findViewById(R.id.setting_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent settingIntent = new Intent(MainActivity.this, SettingActivity.class);
+                startActivity(settingIntent);
             }
         });
     }
@@ -131,19 +150,18 @@ public class MainActivity extends Activity {
                     }
                 });
 
+                String accessId = sp.getString("accessId", "");
+                String name = sp.getString("name", "");
+                String userId = sp.getString("userId", "");
                 //初始化IMSdk,填入相关参数
-//                IMChatManager.getInstance().init(MobileApplication.getInstance(), "com.moor.im.KEFU_NEW_MSG", "afedad20-8f46-11e5-8c27-f30d41978046", "噜啦啦测试", "999");
-//                IMChatManager.getInstance().init(MobileApplication.getInstance(), "com.moor.im.KEFU_NEW_MSG", "138a8d20-973b-11e5-a562-e3a3c254a8e7", "yx测试", "456");
-                IMChatManager.getInstance().init(MobileApplication.getInstance(), "com.moor.im.KEFU_NEW_MSG", "afedad20-8f46-11e5-8c27-f30d41978046", "Android测试", "99999");
-//                IMChatManager.getInstance().init(MobileApplication.getInstance(), "com.moor.im.KEFU_NEW_MSG", "ca7a6380-c4a3-11e5-88b2-8b944508f3f7", "雅希方正", "456");
-
+                IMChatManager.getInstance().init(MobileApplication.getInstance(), "com.moor.im.KEFU_NEW_MSG", accessId, name, userId);
             }
         }.start();
 
     }
 
     private void startChatActivity(String peerId) {
-        Intent chatIntent = new Intent(MainActivity.this, ChatActivityTest.class);
+        Intent chatIntent = new Intent(MainActivity.this, ChatActivity.class);
         chatIntent.putExtra("PeerId", peerId);
         startActivity(chatIntent);
     }

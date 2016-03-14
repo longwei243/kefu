@@ -21,7 +21,7 @@ import com.m7.imkfsdk.chat.chatrow.TextRxChatRow;
 import com.m7.imkfsdk.chat.chatrow.TextTxChatRow;
 import com.m7.imkfsdk.chat.chatrow.VoiceRxChatRow;
 import com.m7.imkfsdk.chat.chatrow.VoiceTxChatRow;
-import com.m7.imkfsdk.chat.ChatActivityTest;
+import com.m7.imkfsdk.chat.ChatActivity;
 import com.m7.imkfsdk.utils.DateUtil;
 import com.m7.imkfsdk.utils.MediaPlayTools;
 import com.moor.imkf.model.entity.FromToMessage;
@@ -32,7 +32,7 @@ import java.util.List;
 /**
  * Created by longwei on 2016/3/9.
  */
-public class ChatAdapter2 extends BaseAdapter{
+public class ChatAdapter extends BaseAdapter{
 
     private List<FromToMessage> messageList;
 
@@ -43,11 +43,11 @@ public class ChatAdapter2 extends BaseAdapter{
 
     protected View.OnClickListener mOnClickListener;
 
-    public ChatAdapter2(Context context, List<FromToMessage> messageList) {
+    public ChatAdapter(Context context, List<FromToMessage> messageList) {
         this.context = context;
         this.messageList = messageList;
         chatRowHashMap = new HashMap<Integer, IChatRow>();
-        mOnClickListener = new ChatListClickListener((ChatActivityTest)context, null);
+        mOnClickListener = new ChatListClickListener((ChatActivity)context, null);
         initRowItems();
     }
 

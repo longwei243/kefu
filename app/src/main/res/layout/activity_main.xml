@@ -8,36 +8,38 @@
         android:layout_height="48dp"
         android:background="@color/maincolor"
         >
-        <Button
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="注销"
-            android:textColor="@color/all_white"
-            android:id="@+id/cancel_btn"
-            android:layout_alignParentLeft="true"
-            android:layout_marginRight="16dp"
-            />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="联系客服"
-            android:textColor="@color/all_white"
-            android:id="@+id/button"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="16dp"
-            />
+            android:layout_centerInParent="true"
+            android:text="客服demo"/>
     </RelativeLayout>
 
-    <ScrollView
+    <Button
+        android:id="@+id/setting_btn"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/title_bg">
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scaleType="fitXY"
-            android:src="@drawable/shop_image_details"/>
-    </ScrollView>
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title_bg"
+        android:text="设置"
+        />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/setting_btn"
+        android:text="联系客服"
+        />
+
+    <Button
+        android:id="@+id/cancel_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/button"
+        android:visibility="gone"
+        android:text="注销"
+        />
 
 
 </RelativeLayout>

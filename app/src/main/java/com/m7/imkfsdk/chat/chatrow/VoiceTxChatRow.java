@@ -8,7 +8,7 @@ import android.view.View;
 import com.m7.imkfsdk.R;
 import com.m7.imkfsdk.chat.holder.BaseHolder;
 import com.m7.imkfsdk.chat.holder.VoiceViewHolder;
-import com.m7.imkfsdk.chat.ChatActivityTest;
+import com.m7.imkfsdk.chat.ChatActivity;
 import com.moor.imkf.model.entity.FromToMessage;
 
 /**
@@ -32,9 +32,9 @@ public class VoiceTxChatRow extends BaseChatRow{
 
         if(message != null) {
 
-            VoiceViewHolder.initVoiceRow(holder, detail, position, (ChatActivityTest) context, false);
+            VoiceViewHolder.initVoiceRow(holder, detail, position, (ChatActivity) context, false);
 
-            View.OnClickListener listener = ((ChatActivityTest)context).getChatAdapter().getOnClickListener();
+            View.OnClickListener listener = ((ChatActivity)context).getChatAdapter().getOnClickListener();
             getMsgStateResId(position, holder, message, listener);
         }
     }

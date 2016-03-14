@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide;
 import com.m7.imkfsdk.R;
 import com.m7.imkfsdk.chat.holder.BaseHolder;
 import com.m7.imkfsdk.chat.holder.ImageViewHolder;
-import com.m7.imkfsdk.chat.ChatActivityTest;
+import com.m7.imkfsdk.chat.ChatActivity;
 import com.moor.imkf.model.entity.FromToMessage;
 
 /**
@@ -36,7 +36,7 @@ public class ImageTxChatRow extends BaseChatRow{
                     .centerCrop()
                     .crossFade()
                     .into(holder.getImageView());
-            View.OnClickListener listener = ((ChatActivityTest)context).getChatAdapter().getOnClickListener();
+            View.OnClickListener listener = ((ChatActivity)context).getChatAdapter().getOnClickListener();
             getMsgStateResId(position, holder, message, listener);
         }
     }

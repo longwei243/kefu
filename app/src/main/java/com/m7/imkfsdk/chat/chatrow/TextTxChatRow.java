@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.m7.imkfsdk.R;
 import com.m7.imkfsdk.chat.holder.BaseHolder;
 import com.m7.imkfsdk.chat.holder.TextViewHolder;
-import com.m7.imkfsdk.chat.ChatActivityTest;
+import com.m7.imkfsdk.chat.ChatActivity;
 import com.m7.imkfsdk.utils.FaceConversionUtil;
 import com.moor.imkf.model.entity.FromToMessage;
 import com.moor.imkf.utils.AnimatedGifDrawable;
@@ -54,7 +54,7 @@ public class TextTxChatRow extends BaseChatRow{
                     .getExpressionString(context, content + "");
             holder.getDescTextView().setText(spannableString);
 
-            View.OnClickListener listener = ((ChatActivityTest)context).getChatAdapter().getOnClickListener();
+            View.OnClickListener listener = ((ChatActivity)context).getChatAdapter().getOnClickListener();
             getMsgStateResId(position, holder, message, listener);
         }
     }

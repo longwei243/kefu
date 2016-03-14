@@ -7,8 +7,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.m7.imkfsdk.R;
-import com.m7.imkfsdk.chat.ChatActivityTest;
-import com.m7.imkfsdk.chat.adapter.ChatAdapter2;
+import com.m7.imkfsdk.chat.ChatActivity;
+import com.m7.imkfsdk.chat.adapter.ChatAdapter;
 import com.m7.imkfsdk.utils.DensityUtil;
 import com.m7.imkfsdk.view.VoiceAnimImageView;
 import com.moor.imkf.model.entity.FromToMessage;
@@ -81,7 +81,7 @@ public class VoiceViewHolder extends BaseHolder{
 //        holder.voiceSendigBG.setVisibility(uploadVisibility);
     }
 
-    public static void initVoiceRow(VoiceViewHolder holder , FromToMessage detail , int position , ChatActivityTest activity , boolean receive) {
+    public static void initVoiceRow(VoiceViewHolder holder , FromToMessage detail , int position , ChatActivity activity , boolean receive) {
         if(holder == null) {
             return ;
         }
@@ -96,7 +96,7 @@ public class VoiceViewHolder extends BaseHolder{
         holder.voicePlayAnim.setTag(holderTag);
         holder.voicePlayAnim.setOnClickListener(activity.getChatAdapter().getOnClickListener());
 
-        ChatAdapter2 adapterForce = activity.getChatAdapter();
+        ChatAdapter adapterForce = activity.getChatAdapter();
         if(adapterForce.mVoicePosition == position) {
             uploadVoiceStatus(holder, View.GONE, View.VISIBLE, receive);
             holder.voiceAnim.setVisibility(View.VISIBLE);

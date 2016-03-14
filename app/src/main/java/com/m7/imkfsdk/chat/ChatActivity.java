@@ -45,8 +45,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.m7.imkfsdk.R;
+import com.m7.imkfsdk.chat.adapter.ChatAdapter;
 import com.m7.imkfsdk.recordbutton.AudioRecorderButton;
-import com.m7.imkfsdk.recordbutton.MediaManager;
 import com.m7.imkfsdk.utils.FaceConversionUtil;
 import com.m7.imkfsdk.view.ChatListView;
 import com.moor.imkf.ChatListener;
@@ -58,6 +58,7 @@ import com.moor.imkf.OnSessionBeginListener;
 import com.moor.imkf.model.entity.ChatEmoji;
 import com.moor.imkf.model.entity.ChatMore;
 import com.moor.imkf.model.entity.FromToMessage;
+import com.moor.imkf.model.entity.Investigate;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -147,6 +148,10 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 				chat_btn_convert.setVisibility(View.GONE);
 				showOffineDialog();
 			}
+
+			if(msg.what == 0x444) {
+				sendInvestigate();
+			}
 			
 			if(msg.what == 0x88) {
 				updateMessage();
@@ -212,21 +217,15 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 				descFromToMessage.size())) {
 			mChatList.dismiss();
 		}
+		chatAdapter = new ChatAdapter(ChatActivity.this, descFromToMessage);
+		mChatList.setAdapter(chatAdapter);
 		if (flag == false) {
 			//没有收到消息时
-			chatAdapter = new ChatAdapter(ChatActivity.this, handler);
-			list = chatAdapter.getAdapterData();
-			list.addAll(descFromToMessage);
-			mChatList.setAdapter(chatAdapter);
 			chatAdapter.notifyDataSetChanged();
 			mChatList.setSelection(fromToMessage.size() + 1);
 		} else if (flag == true) {
 			//收到消息时
-			list = chatAdapter.getAdapterData();
 
-			list.clear();
-			list.addAll(descFromToMessage);
-			mChatList.setAdapter(chatAdapter);
 			chatAdapter.notifyDataSetChanged();
 			mChatList.setSelection(fromToMessage.size() + 1);
 		}
@@ -247,10 +246,6 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 			descFromToMessage.add(fromToMessage.get(i));
 		}
 
-		list = chatAdapter.getAdapterData();
-		list.clear();
-		list.addAll(descFromToMessage);
-		mChatList.setAdapter(chatAdapter);
 		chatAdapter.notifyDataSetChanged();
 
 		if (mChatList.getHeaderViewsCount() > 0) {
@@ -487,10 +482,10 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 			FromToMessage fromToMessage = IMMessage.createTxtMessage(txt);
 
 			//界面显示
-			list.add(fromToMessage);
-			mChatList.setAdapter(chatAdapter);
+			descFromToMessage.add(fromToMessage);
+//			mChatList.setAdapter(chatAdapter);
 			chatAdapter.notifyDataSetChanged();
-			mChatList.setSelection(list.size());
+			mChatList.setSelection(descFromToMessage.size());
 			mChatInput.setText("");
 
 			//发送消息
@@ -932,10 +927,10 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 				FromToMessage fromToMessage = IMMessage.createImageMessage(picFileFullName);
 				ArrayList fromTomsgs = new ArrayList<FromToMessage>();
 				fromTomsgs.add(fromToMessage);
-				list.addAll(fromTomsgs);
-				mChatList.setAdapter(chatAdapter);
+				descFromToMessage.addAll(fromTomsgs);
+//				mChatList.setAdapter(chatAdapter);
 				chatAdapter.notifyDataSetChanged();
-				mChatList.setSelection(list.size());
+				mChatList.setSelection(descFromToMessage.size());
 				IMChat.getInstance().sendMessage(fromToMessage, new ChatListener() {
 					@Override
 					public void onSuccess() {
@@ -970,10 +965,10 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 					FromToMessage fromToMessage = IMMessage.createImageMessage(picFileFullName);
 					ArrayList fromTomsgs = new ArrayList<FromToMessage>();
 					fromTomsgs.add(fromToMessage);
-					list.addAll(fromTomsgs);
-					mChatList.setAdapter(chatAdapter);
+					descFromToMessage.addAll(fromTomsgs);
+//					mChatList.setAdapter(chatAdapter);
 					chatAdapter.notifyDataSetChanged();
-					mChatList.setSelection(list.size());
+					mChatList.setSelection(descFromToMessage.size());
 					IMChat.getInstance().sendMessage(fromToMessage, new ChatListener() {
 						@Override
 						public void onSuccess() {
@@ -1033,7 +1028,6 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
-		MediaManager.relese();
 
 		unregisterReceiver(msgReceiver);
 		unregisterReceiver(keFuStatusReceiver);
@@ -1043,14 +1037,13 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		MediaManager.resume();
 	}
 	
 	@Override
 	protected void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
-		MediaManager.pause();
+		chatAdapter.onPause();
 	}
 
 	@Override
@@ -1085,10 +1078,10 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 
 
 		fromTomsgs.add(fromToMessage);
-		list.addAll(fromTomsgs);
-		mChatList.setAdapter(chatAdapter);
+		descFromToMessage.addAll(fromTomsgs);
+//		mChatList.setAdapter(chatAdapter);
 		chatAdapter.notifyDataSetChanged();
-		mChatList.setSelection(list.size());
+		mChatList.setSelection(descFromToMessage.size());
 
 		IMChat.getInstance().sendMessage(fromToMessage, new ChatListener() {
 			@Override
@@ -1137,6 +1130,9 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 			}else if(IMChatManager.OFFLINE_ACTION.equals(action)) {
 				//当前是客服
 				handler.sendEmptyMessage(0x333);
+			}else if(IMChatManager.INVESTIGATE_ACTION.equals(action)) {
+				//客服发起了评价
+				handler.sendEmptyMessage(0x444);
 			}
 		}
 	}
@@ -1163,4 +1159,42 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 		dialog.setArguments(b);
 		dialog.show(ChatActivity.this.getFragmentManager(), "OfflineMessageDialog");
 	}
+
+
+	public ChatAdapter getChatAdapter() {
+		return chatAdapter;
+	}
+
+	public void resendMsg(FromToMessage msg, int position) {
+		IMChat.getInstance().reSendMessage(msg, new ChatListener() {
+			@Override
+			public void onSuccess() {
+				updateMessage();
+			}
+
+			@Override
+			public void onFailed() {
+				updateMessage();
+			}
+
+			@Override
+			public void onProcess() {
+
+			}
+		});
+	}
+
+	/**
+	 * 客服主动发起评价
+	 */
+	private void sendInvestigate() {
+		List<Investigate> investigates = IMChatManager.getInstance().getInvestigate();
+		if(investigates != null && investigates.size() > 0) {
+			FromToMessage message = IMMessage.createInvestigateMessage(investigates);
+			descFromToMessage.add(message);
+			chatAdapter.notifyDataSetChanged();
+			mChatList.setSelection(descFromToMessage.size());
+		}
+	}
+
 }
