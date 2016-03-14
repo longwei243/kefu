@@ -13,10 +13,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:textColor="@color/all_white"
+            android:textSize="20sp"
             android:text="客服demo"/>
     </RelativeLayout>
 
     <Button
+        android:layout_margin="16dp"
         android:id="@+id/setting_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,6 +28,8 @@
         />
 
     <Button
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:id="@+id/button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -33,6 +38,7 @@
         />
 
     <Button
+        android:layout_margin="16dp"
         android:id="@+id/cancel_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

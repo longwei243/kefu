@@ -67,7 +67,7 @@ public class TextRxChatRow extends BaseChatRow{
                 SpannableStringBuilder content = handler(holder.getDescTextView(),
                         message.message);
                 SpannableString spannableString = FaceConversionUtil.getInstace()
-                        .getExpressionString(context, content + "");
+                        .getExpressionString(context, content + "", holder.getDescTextView());
                 holder.getDescTextView().setText(spannableString);// 给对话内容赋值
             }
 

@@ -5,18 +5,21 @@
 
 
     <EditText
+        android:layout_margin="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="输入accessId"
         android:id="@+id/et_accessId"
         />
     <EditText
+        android:layout_margin="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="输入name"
         android:id="@+id/et_name"
         />
     <EditText
+        android:layout_margin="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="输入userId"
@@ -24,6 +27,7 @@
         />
 
     <Button
+        android:layout_margin="16dp"
         android:id="@+id/btn_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

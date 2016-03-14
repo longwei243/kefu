@@ -9,6 +9,7 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ImageSpan;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.m7.imkfsdk.R;
 import com.moor.imkf.model.entity.ChatEmoji;
@@ -57,7 +58,7 @@ public class FaceConversionUtil {
 	 * @param str
 	 * @return
 	 */
-	public SpannableString getExpressionString(Context context, String str) {
+	public SpannableString getExpressionString(Context context, String str, TextView textView) {
 		SpannableString spannableString = new SpannableString(str);
 		// 正则表达式比配字符串里是否含有表情，如： 我好[开心]啊
 //		String zhengze = "\\[[^\\]]+\\]";
@@ -65,7 +66,7 @@ public class FaceConversionUtil {
 		// 通过传入的正则表达式来生成一个pattern
 		Pattern sinaPatten = Pattern.compile(zhengze, Pattern.CASE_INSENSITIVE);
 		try {
-			dealExpression(context, spannableString, sinaPatten, 0);
+			dealExpression(context, spannableString, sinaPatten, 0, textView);
 		} catch (Exception e) {
 			Log.e("dealExpression", e.getMessage());
 		}
@@ -92,6 +93,7 @@ public class FaceConversionUtil {
 		SpannableString spannable = new SpannableString(spannableString);
 		spannable.setSpan(imageSpan, 0, spannableString.length(),
 				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
 		return spannable;
 	}
 
@@ -105,7 +107,7 @@ public class FaceConversionUtil {
 	 * @throws Exception
 	 */
 	private void dealExpression(Context context,
-			SpannableString spannableString, Pattern patten, int start)
+			SpannableString spannableString, Pattern patten, int start, TextView textView)
 			throws Exception {
 
 		Matcher matcher = patten.matcher(spannableString);
@@ -134,12 +136,12 @@ public class FaceConversionUtil {
 				int end = matcher.start() + key.length();
 				// 将该图片替换字符串中规定的位置中
 				if(drawable != null) {
-					drawable.setBounds(0, 0, (int) (1.3D * 32), (int) (1.3D * 32));
+					drawable.setBounds(0, 0, (int) (1.3D * textView.getTextSize()), (int) (1.3D * textView.getTextSize()));
 					spannableString.setSpan(new ImageSpan(drawable, 0), matcher.start(), end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 				}
 				if (end < spannableString.length()) {
 					// 如果整个字符串还未验证完，则继续。。
-					dealExpression(context, spannableString, patten, end);
+					dealExpression(context, spannableString, patten, end, textView);
 				}
 				break;
 			}

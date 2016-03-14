@@ -483,7 +483,6 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 
 			//界面显示
 			descFromToMessage.add(fromToMessage);
-//			mChatList.setAdapter(chatAdapter);
 			chatAdapter.notifyDataSetChanged();
 			mChatList.setSelection(descFromToMessage.size());
 			mChatInput.setText("");
