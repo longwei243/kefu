@@ -7,9 +7,11 @@ import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
+import com.moor.imkf.db.dao.MsgInvesDao;
 import com.moor.imkf.model.entity.FromToMessage;
 import com.moor.imkf.model.entity.Info;
 import com.moor.imkf.model.entity.Investigate;
+import com.moor.imkf.model.entity.MsgInves;
 
 import java.sql.SQLException;
 
@@ -26,6 +28,7 @@ public class DataBaseHelper extends OrmLiteSqliteOpenHelper {
 	private Dao<FromToMessage, Integer> fromToMessageDao = null;
 	private Dao<Info, Integer> InfoDao = null;
 	private Dao<Investigate, Integer> investigateDao = null;
+	private Dao<MsgInves, Integer> msgInvesDao = null;
 
 
 	private DataBaseHelper(Context context) {
@@ -38,9 +41,11 @@ public class DataBaseHelper extends OrmLiteSqliteOpenHelper {
 			TableUtils.createTable(connectionSource, FromToMessage.class);
 			TableUtils.createTable(connectionSource, Info.class);
 			TableUtils.createTable(connectionSource, Investigate.class);
+			TableUtils.createTable(connectionSource, MsgInves.class);
 			fromToMessageDao = getFromMessageDao();
 			InfoDao = getInfoDao();
 			investigateDao = getInvestigateDao();
+			msgInvesDao = getMsgInvesDao();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -53,6 +58,7 @@ public class DataBaseHelper extends OrmLiteSqliteOpenHelper {
 			TableUtils.dropTable(connectionSource, FromToMessage.class, true);
 			TableUtils.dropTable(connectionSource, Info.class, true);
 			TableUtils.dropTable(connectionSource, Investigate.class, true);
+			TableUtils.dropTable(connectionSource, MsgInves.class, true);
 			onCreate(db, connectionSource);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -71,6 +77,13 @@ public class DataBaseHelper extends OrmLiteSqliteOpenHelper {
 			fromToMessageDao = getDao(FromToMessage.class);
 		}
 		return fromToMessageDao;
+	}
+
+	public Dao<MsgInves, Integer> getMsgInvesDao() throws SQLException {
+		if (msgInvesDao == null) {
+			msgInvesDao = getDao(MsgInves.class);
+		}
+		return msgInvesDao;
 	}
 
 	/**
@@ -124,5 +137,6 @@ public class DataBaseHelper extends OrmLiteSqliteOpenHelper {
 		fromToMessageDao = null;
 		InfoDao = null;
 		investigateDao = null;
+		msgInvesDao = null;
 	}
 }

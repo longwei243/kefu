@@ -49,6 +49,15 @@ public class MessageDao {
 		}
 	}
 
+	public void deleteMsg(FromToMessage msg) {
+		try {
+			fromToMessageDao.delete(msg);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	/**
 	 * 获取已经获取到消息的id
 	 **/

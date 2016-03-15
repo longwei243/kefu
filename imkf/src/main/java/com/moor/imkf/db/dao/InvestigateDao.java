@@ -48,6 +48,14 @@ public class InvestigateDao {
         }
     }
 
+    public void insertOneInvestigateToDao(Investigate data) {
+        try {
+                investigateDao.create(data);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * 从数据库中取出评价列表
      * @return
@@ -72,5 +80,4 @@ public class InvestigateDao {
             e.printStackTrace();
         }
     }
-
 }

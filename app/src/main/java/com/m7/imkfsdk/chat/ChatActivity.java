@@ -44,6 +44,9 @@ import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.j256.ormlite.dao.BaseForeignCollection;
+import com.j256.ormlite.dao.EagerForeignCollection;
+import com.j256.ormlite.dao.ForeignCollection;
 import com.m7.imkfsdk.R;
 import com.m7.imkfsdk.chat.adapter.ChatAdapter;
 import com.m7.imkfsdk.recordbutton.AudioRecorderButton;
@@ -55,13 +58,18 @@ import com.moor.imkf.IMChatManager;
 import com.moor.imkf.IMMessage;
 import com.moor.imkf.OnConvertManualListener;
 import com.moor.imkf.OnSessionBeginListener;
+import com.moor.imkf.db.dao.InvestigateDao;
+import com.moor.imkf.db.dao.MessageDao;
+import com.moor.imkf.db.dao.MsgInvesDao;
 import com.moor.imkf.model.entity.ChatEmoji;
 import com.moor.imkf.model.entity.ChatMore;
 import com.moor.imkf.model.entity.FromToMessage;
 import com.moor.imkf.model.entity.Investigate;
+import com.moor.imkf.model.entity.MsgInves;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -186,6 +194,7 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 		kefuIntentFilter.addAction(IMChatManager.ROBOT_ACTION);
 		kefuIntentFilter.addAction(IMChatManager.ONLINE_ACTION);
 		kefuIntentFilter.addAction(IMChatManager.OFFLINE_ACTION);
+		kefuIntentFilter.addAction(IMChatManager.INVESTIGATE_ACTION);
 		keFuStatusReceiver = new KeFuStatusReceiver();
 		registerReceiver(keFuStatusReceiver, kefuIntentFilter);
 
@@ -1131,6 +1140,7 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 				handler.sendEmptyMessage(0x333);
 			}else if(IMChatManager.INVESTIGATE_ACTION.equals(action)) {
 				//客服发起了评价
+				System.out.println("接收到了评价");
 				handler.sendEmptyMessage(0x444);
 			}
 		}
@@ -1187,12 +1197,28 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 	 * 客服主动发起评价
 	 */
 	private void sendInvestigate() {
-		List<Investigate> investigates = IMChatManager.getInstance().getInvestigate();
+		ArrayList<Investigate> investigates = (ArrayList<Investigate>) IMChatManager.getInstance().getInvestigate();
 		if(investigates != null && investigates.size() > 0) {
-			FromToMessage message = IMMessage.createInvestigateMessage(investigates);
-			descFromToMessage.add(message);
-			chatAdapter.notifyDataSetChanged();
-			mChatList.setSelection(descFromToMessage.size());
+			FromToMessage message = new FromToMessage();
+			message.msgType = FromToMessage.MSG_TYPE_INVESTIGATE;
+			message.userType = "0";
+			message.when = System.currentTimeMillis();
+			message.sessionId = IMChat.getInstance().getSessionId();
+			message.tonotify  = IMChat.getInstance().get_id();
+			message.type = "User";
+			message.from = IMChat.getInstance().get_id();
+			message.sendState = "true";
+			MessageDao.getInstance().insertSendMsgsToDao(message);
+			for (int i=0; i<investigates.size(); i++) {
+				MsgInves msgInves = new MsgInves();
+				msgInves.name = investigates.get(i).name;
+				msgInves.value = investigates.get(i).value;
+				msgInves.msg = message;
+				MsgInvesDao.getInstance().insertOneMsgInvesToDao(msgInves);
+			}
+
+			updateMessage();
+
 		}
 	}
 

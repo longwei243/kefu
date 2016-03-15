@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="输入accessId"
+        android:text="2ff6ebc0-e40c-11e5-82a5-51d279813f91"
         android:id="@+id/et_accessId"
         />
     <EditText

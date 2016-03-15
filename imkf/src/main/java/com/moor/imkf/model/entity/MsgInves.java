@@ -4,12 +4,10 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 /**
- * 评价实体类
+ * Created by longwei on 2016/3/15.
  */
-@DatabaseTable(tableName = "investigate")
-public class Investigate {
-
-    public Investigate() {}
+@DatabaseTable(tableName = "msginves")
+public class MsgInves {
 
     /**
      * 主键
@@ -26,4 +24,6 @@ public class Investigate {
      */
     @DatabaseField
     public String value;
+    @DatabaseField(canBeNull = true, foreign = true, foreignAutoRefresh = true)
+    public FromToMessage msg;
 }

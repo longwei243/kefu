@@ -1,5 +1,6 @@
 package com.moor.imkf.model.entity;
 
+import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -33,10 +34,12 @@ public class FromToMessage {
 	public static final String MSG_TYPE_INVESTIGATE = "3";
 
 
+	@DatabaseField(generatedId = true)
+	public int id;
 	/**
 	 * 消息的id
 	 */
-	@DatabaseField(id = true, unique = true)
+	@DatabaseField
 	public String _id;
 	/**
 	 * 消息从哪里来的
@@ -110,7 +113,8 @@ public class FromToMessage {
 	@DatabaseField
 	public String type;
 
-	public List<Investigate> investigates;
+	@ForeignCollectionField(eager = true)
+	public ForeignCollection<MsgInves> investigates;
 
 	public FromToMessage() {
 

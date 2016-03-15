@@ -54,12 +54,17 @@ public class NewMsgReceiver extends BroadcastReceiver{
         }
     }
 
+    /**
+     * 判断聊天界面是否在前台
+     * @param mContext
+     * @return
+     */
     public boolean isAppForground(Context mContext) {
         ActivityManager am = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningTaskInfo> tasks = am.getRunningTasks(1);
         if (!tasks.isEmpty()) {
             ComponentName topActivity = tasks.get(0).topActivity;
-            if (!topActivity.getPackageName().equals(mContext.getPackageName())) {
+            if (!topActivity.getClassName().equals(ChatActivity.class.getName())) {
                 return false;
             }
         }

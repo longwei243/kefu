@@ -37,6 +37,7 @@ public class MainActivity extends Activity {
                 case 0x444:
                     loadingDialog.dismiss();
                     getPeers();
+
                     break;
                 case 0x555:
                     loadingDialog.dismiss();

@@ -1,18 +1,6 @@
 package com.m7.imkfsdk.chat.chatrow;
 
 import android.content.Context;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.media.Image;
-import android.os.AsyncTask;
-import android.text.Html;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
-import android.text.method.LinkMovementMethod;
-import android.text.style.ImageSpan;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,28 +8,20 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.j256.ormlite.dao.ForeignCollection;
 import com.m7.imkfsdk.R;
+import com.m7.imkfsdk.chat.ChatActivity;
 import com.m7.imkfsdk.chat.holder.BaseHolder;
 import com.m7.imkfsdk.chat.holder.InvestigateViewHolder;
-import com.m7.imkfsdk.chat.holder.TextViewHolder;
-import com.m7.imkfsdk.utils.FaceConversionUtil;
 import com.moor.imkf.IMChatManager;
 import com.moor.imkf.SubmitInvestigateListener;
+import com.moor.imkf.db.dao.InvestigateDao;
+import com.moor.imkf.db.dao.MessageDao;
 import com.moor.imkf.model.entity.FromToMessage;
 import com.moor.imkf.model.entity.Investigate;
-import com.moor.imkf.utils.AnimatedGifDrawable;
-import com.moor.imkf.utils.AnimatedImageSpan;
+import com.moor.imkf.model.entity.MsgInves;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Collection;
 
 /**
  * Created by longwei on 2016/3/9.
@@ -63,27 +43,31 @@ public class InvestigateChatRow extends BaseChatRow{
     protected void buildChattingData(final Context context, BaseHolder baseHolder, FromToMessage detail, int position) {
         this.context = context;
         InvestigateViewHolder holder = (InvestigateViewHolder) baseHolder;
-        FromToMessage message = detail;
+        final FromToMessage message = detail;
+        System.out.println("msg is:"+message.investigates.size());
         LinearLayout linearLayout = holder.getChat_investigate_ll();
         linearLayout.removeAllViews();
         if(message != null) {
-            final List<Investigate> investigates = message.investigates;
-            for (int i=0; i<investigates.size(); i++) {
-                System.out.println("name is:"+investigates.get(i).name);
+            final Collection<MsgInves> investigates = message.investigates;
+            for (final MsgInves investigate : investigates) {
                 LinearLayout investigateItem = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.investigate_item, null);
                 TextView tv = (TextView) investigateItem.findViewById(R.id.investigate_item_tv_name);
-                final Investigate investigate = investigates.get(i);
                 tv.setText(investigate.name);
                 investigateItem.setTag(investigate);
                 investigateItem.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(context, "点击了:"+investigate.name, Toast.LENGTH_SHORT).show();
-                        IMChatManager.getInstance().submitInvestigate(investigate, new SubmitInvestigateListener() {
+//                        Toast.makeText(context, "点击了:"+investigate.name, Toast.LENGTH_SHORT).show();
+                        Investigate inv = new Investigate();
+                        inv.name = investigate.name;
+                        inv.value = investigate.value;
+                        IMChatManager.getInstance().submitInvestigate(inv, new SubmitInvestigateListener() {
                             @Override
                             public void onSuccess() {
-//                                Toast.makeText(context, "评价成功", Toast.LENGTH_SHORT).show();
-
+                                Toast.makeText(context, "评价成功", Toast.LENGTH_SHORT).show();
+                                //删除该条数据
+                                MessageDao.getInstance().deleteMsg(message);
+                                ((ChatActivity) context).updateMessage();
                             }
 
                             @Override

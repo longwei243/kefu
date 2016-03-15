@@ -1,8 +1,10 @@
 package com.moor.imkf;
 
+import com.j256.ormlite.dao.ForeignCollection;
 import com.moor.imkf.model.entity.FromToMessage;
 import com.moor.imkf.model.entity.Investigate;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -71,18 +73,18 @@ public class IMMessage {
         return fromToMessage;
     }
 
-    public static FromToMessage createInvestigateMessage(List<Investigate> investigates) {
-        FromToMessage fromToMessage = new FromToMessage();
-        fromToMessage.msgType = FromToMessage.MSG_TYPE_INVESTIGATE;
-        fromToMessage.userType = "0";
-        fromToMessage.when = System.currentTimeMillis();
-        fromToMessage.sessionId = IMChat.getInstance().getSessionId();
-        fromToMessage.tonotify  = IMChat.getInstance().get_id();
-        fromToMessage.type = "User";
-        fromToMessage.from = IMChat.getInstance().get_id();
-        fromToMessage.investigates = investigates;
-        fromToMessage.sendState = "true";
-
-        return fromToMessage;
-    }
+//    public static FromToMessage createInvestigateMessage(Collection<Investigate> investigates) {
+//        FromToMessage fromToMessage = new FromToMessage();
+//        fromToMessage.msgType = FromToMessage.MSG_TYPE_INVESTIGATE;
+//        fromToMessage.userType = "0";
+//        fromToMessage.when = System.currentTimeMillis();
+//        fromToMessage.sessionId = IMChat.getInstance().getSessionId();
+//        fromToMessage.tonotify  = IMChat.getInstance().get_id();
+//        fromToMessage.type = "User";
+//        fromToMessage.from = IMChat.getInstance().get_id();
+//        fromToMessage.investigates = (Collection)investigates;
+//        fromToMessage.sendState = "true";
+//
+//        return fromToMessage;
+//    }
 }
