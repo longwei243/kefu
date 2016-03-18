@@ -1,8 +1,11 @@
 package com.moor.imkf;
 
 import com.j256.ormlite.dao.ForeignCollection;
+import com.moor.imkf.db.dao.MessageDao;
+import com.moor.imkf.db.dao.MsgInvesDao;
 import com.moor.imkf.model.entity.FromToMessage;
 import com.moor.imkf.model.entity.Investigate;
+import com.moor.imkf.model.entity.MsgInves;
 
 import java.util.Collection;
 import java.util.List;
@@ -73,18 +76,27 @@ public class IMMessage {
         return fromToMessage;
     }
 
-//    public static FromToMessage createInvestigateMessage(Collection<Investigate> investigates) {
-//        FromToMessage fromToMessage = new FromToMessage();
-//        fromToMessage.msgType = FromToMessage.MSG_TYPE_INVESTIGATE;
-//        fromToMessage.userType = "0";
-//        fromToMessage.when = System.currentTimeMillis();
-//        fromToMessage.sessionId = IMChat.getInstance().getSessionId();
-//        fromToMessage.tonotify  = IMChat.getInstance().get_id();
-//        fromToMessage.type = "User";
-//        fromToMessage.from = IMChat.getInstance().get_id();
-//        fromToMessage.investigates = (Collection)investigates;
-//        fromToMessage.sendState = "true";
-//
-//        return fromToMessage;
-//    }
+    public static void createInvestigateMessage(List<Investigate> investigates) {
+        if(investigates != null && investigates.size() > 0) {
+            FromToMessage message = new FromToMessage();
+            message.msgType = FromToMessage.MSG_TYPE_INVESTIGATE;
+            message.userType = "0";
+            message.when = System.currentTimeMillis();
+            message.sessionId = IMChat.getInstance().getSessionId();
+            message.tonotify  = IMChat.getInstance().get_id();
+            message.type = "User";
+            message.from = IMChat.getInstance().get_id();
+            message.sendState = "true";
+            MessageDao.getInstance().insertSendMsgsToDao(message);
+            for (int i=0; i<investigates.size(); i++) {
+                MsgInves msgInves = new MsgInves();
+                msgInves.name = investigates.get(i).name;
+                msgInves.value = investigates.get(i).value;
+                msgInves.msg = message;
+                MsgInvesDao.getInstance().insertOneMsgInvesToDao(msgInves);
+            }
+
+
+        }
+    }
 }

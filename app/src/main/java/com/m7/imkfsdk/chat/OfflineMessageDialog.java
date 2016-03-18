@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.m7.imkfsdk.R;
+import com.m7.imkfsdk.utils.RegexUtils;
 import com.moor.imkf.IMChatManager;
 import com.moor.imkf.OnSubmitOfflineMessageListener;
 
@@ -46,6 +47,30 @@ public class OfflineMessageDialog extends DialogFragment {
                 String content = id_et_content.getText().toString().trim();
                 String phone = id_et_phone.getText().toString().trim();
                 String email = id_et_email.getText().toString().trim();
+
+                if("".equals(phone)) {
+                    Toast.makeText(getActivity(), "请输入电话号", Toast.LENGTH_SHORT).show();
+                    return;
+                }else {
+                    if(RegexUtils.checkMobile(phone) || RegexUtils.checkPhone(phone)) {
+
+                    }else {
+                        Toast.makeText(getActivity(), "请输入正确的电话号", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+                if("".equals(email)) {
+                    Toast.makeText(getActivity(), "请输入邮箱", Toast.LENGTH_SHORT).show();
+                    return;
+                }else {
+                    if(RegexUtils.checkEmail(email)) {
+
+                    }else {
+                        Toast.makeText(getActivity(), "请输入正确的邮箱", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+
                 if(!"".equals(content)) {
                     if(!"".equals(phone) || !"".equals(email)) {
                         IMChatManager.getInstance().submitOfflineMessage(peerId, content, phone, email, new OnSubmitOfflineMessageListener() {

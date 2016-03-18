@@ -25,9 +25,11 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/title_bg"
         android:text="设置"
+        android:visibility="gone"
         />
 
     <Button
+        android:layout_marginTop="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:id="@+id/button"

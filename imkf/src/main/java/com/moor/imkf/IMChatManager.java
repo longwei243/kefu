@@ -15,6 +15,7 @@ import com.moor.imkf.model.entity.Info;
 import com.moor.imkf.model.entity.Investigate;
 import com.moor.imkf.model.entity.Peer;
 import com.moor.imkf.model.parser.HttpParser;
+import com.moor.imkf.requesturl.RequestUrl;
 import com.moor.imkf.tcpservice.service.IMService;
 import com.moor.imkf.utils.LogUtil;
 
@@ -447,5 +448,45 @@ public class IMChatManager {
             }
         }
     }
+
+    /**
+     * 删除评价消息
+     * @param msg
+     */
+    public void deleteInvestigateMsg (FromToMessage msg) {
+        MessageDao.getInstance().deleteMsg(msg);
+    }
+
+    /**
+     * 设置tcp的IP和端口
+     * @param tcpIp
+     * @param port
+     */
+    public void setTcpIpAndPort(String tcpIp, int port) {
+        if(tcpIp != null && !"".equals(tcpIp) && port > 0) {
+            RequestUrl.baseTcpHost = tcpIp;
+            RequestUrl.baseTcpPort = port;
+        }
+    }
+
+    /**
+     * 设置http的IP
+     */
+    public void setHttpIp(String httpIp) {
+        if(httpIp != null && !"".equals(httpIp)) {
+            RequestUrl.baseHttp1 = httpIp;
+        }
+    }
+
+    /**
+     * 设置七牛的IP
+     */
+    public void setQiNiuIp(String qiNiuIp) {
+        if(qiNiuIp != null && !"".equals(qiNiuIp)) {
+            RequestUrl.QiniuHttp = qiNiuIp;
+        }
+    }
+
+
 
 }

@@ -857,6 +857,20 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 					arg2);
 			if (emoji.getId() == R.drawable.face_del_icon) {
 				//TODO 删除图片先不做操作
+				int selection = mChatInput.getSelectionStart();
+				String text = mChatInput.getText().toString();
+				if (selection > 0) {
+					String text2 = text.substring(selection - 1);
+					if (":".equals(text2)) {
+						String str = text.substring(0, selection - 1);
+						int start = str.lastIndexOf(":");
+						int end = selection;
+						System.out.println("start is:"+start+",end is:"+end);
+						mChatInput.getText().delete(start, end);
+						return;
+					}
+					mChatInput.getText().delete(selection - 1, selection);
+				}
 
 			}
 			if (!TextUtils.isEmpty(emoji.getCharacter())) {
@@ -1157,7 +1171,8 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 			@Override
 			public void onFailed() {
 				chat_btn_convert.setVisibility(View.GONE);
-				showOffineDialog();			}
+				showOffineDialog();
+			}
 		});
 	}
 
@@ -1198,28 +1213,8 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 	 */
 	private void sendInvestigate() {
 		ArrayList<Investigate> investigates = (ArrayList<Investigate>) IMChatManager.getInstance().getInvestigate();
-		if(investigates != null && investigates.size() > 0) {
-			FromToMessage message = new FromToMessage();
-			message.msgType = FromToMessage.MSG_TYPE_INVESTIGATE;
-			message.userType = "0";
-			message.when = System.currentTimeMillis();
-			message.sessionId = IMChat.getInstance().getSessionId();
-			message.tonotify  = IMChat.getInstance().get_id();
-			message.type = "User";
-			message.from = IMChat.getInstance().get_id();
-			message.sendState = "true";
-			MessageDao.getInstance().insertSendMsgsToDao(message);
-			for (int i=0; i<investigates.size(); i++) {
-				MsgInves msgInves = new MsgInves();
-				msgInves.name = investigates.get(i).name;
-				msgInves.value = investigates.get(i).value;
-				msgInves.msg = message;
-				MsgInvesDao.getInstance().insertOneMsgInvesToDao(msgInves);
-			}
-
-			updateMessage();
-
-		}
+		IMMessage.createInvestigateMessage(investigates);
+		updateMessage();
 	}
 
 }

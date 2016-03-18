@@ -66,7 +66,7 @@ public class InvestigateChatRow extends BaseChatRow{
                             public void onSuccess() {
                                 Toast.makeText(context, "评价成功", Toast.LENGTH_SHORT).show();
                                 //删除该条数据
-                                MessageDao.getInstance().deleteMsg(message);
+                                IMChatManager.getInstance().deleteInvestigateMsg(message);
                                 ((ChatActivity) context).updateMessage();
                             }
 

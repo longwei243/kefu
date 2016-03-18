@@ -58,7 +58,7 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View v) {
                 //填写过参数才能登录
-                if(!"".equals(sp.getString("accessId", ""))) {
+//                if(!"".equals(sp.getString("accessId", ""))) {
                     loadingDialog.show(getFragmentManager(), "");
                     if (MobileApplication.isKFSDK) {
                         loadingDialog.dismiss();
@@ -66,9 +66,9 @@ public class MainActivity extends Activity {
                     } else {
                         startKFService();
                     }
-                }else {
-                    Toast.makeText(MainActivity.this, "请先设置参数", Toast.LENGTH_SHORT).show();
-                }
+//                }else {
+//                    Toast.makeText(MainActivity.this, "请先设置参数", Toast.LENGTH_SHORT).show();
+//                }
             }
         });
         findViewById(R.id.cancel_btn).setOnClickListener(new View.OnClickListener() {
@@ -123,6 +123,14 @@ public class MainActivity extends Activity {
 
 
     private void startKFService() {
+
+        //设置tcp地址
+//        IMChatManager.getInstance().setTcpIpAndPort("28.163.1.82", 8006);
+        IMChatManager.getInstance().setTcpIpAndPort("120.55.72.213", 8006);
+        //设置http地址
+//        IMChatManager.getInstance().setHttpIp("http://28.163.1.82:4999/sdkChat");
+        IMChatManager.getInstance().setHttpIp("http://115.29.10.194:4999/sdkChat");
+
         new Thread() {
             @Override
             public void run() {
@@ -151,11 +159,11 @@ public class MainActivity extends Activity {
                     }
                 });
 
-                String accessId = sp.getString("accessId", "");
-                String name = sp.getString("name", "");
-                String userId = sp.getString("userId", "");
+//                String accessId = sp.getString("accessId", "");
+//                String name = sp.getString("name", "");
+//                String userId = sp.getString("userId", "");
                 //初始化IMSdk,填入相关参数
-                IMChatManager.getInstance().init(MobileApplication.getInstance(), "com.moor.im.KEFU_NEW_MSG", accessId, name, userId);
+                IMChatManager.getInstance().init(MobileApplication.getInstance(), "com.moor.im.KEFU_NEW_MSG", "2ff6ebc0-e40c-11e5-82a5-51d279813f91", "name", "userId");
             }
         }.start();
 
