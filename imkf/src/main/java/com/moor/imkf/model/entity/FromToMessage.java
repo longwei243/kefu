@@ -5,9 +5,6 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
-import java.util.Collection;
-import java.util.List;
-
 /**
  * 接收消息的实体类
  * 

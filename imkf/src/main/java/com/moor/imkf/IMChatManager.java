@@ -3,13 +3,16 @@ package com.moor.imkf;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.Looper;
 
-import com.loopj.android.http.TextHttpResponseHandler;
 import com.moor.imkf.db.dao.InfoDao;
 import com.moor.imkf.db.dao.InvestigateDao;
 import com.moor.imkf.db.dao.MessageDao;
 import com.moor.imkf.event.KFLoginEvent;
+import com.moor.imkf.eventbus.EventBus;
 import com.moor.imkf.http.HttpManager;
+import com.moor.imkf.http.HttpResponseListener;
 import com.moor.imkf.model.entity.FromToMessage;
 import com.moor.imkf.model.entity.Info;
 import com.moor.imkf.model.entity.Investigate;
@@ -19,12 +22,9 @@ import com.moor.imkf.requesturl.RequestUrl;
 import com.moor.imkf.tcpservice.service.IMService;
 import com.moor.imkf.utils.LogUtil;
 
-import org.apache.http.Header;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import de.greenrobot.event.EventBus;
 
 /**
  * SDK管理类
@@ -51,6 +51,10 @@ public class IMChatManager {
      * 客服发起的评价
      */
     public static final String INVESTIGATE_ACTION = "action_investigate";
+    /**
+     * 技能组排队数
+     */
+    public static final String QUEUENUM_ACTION = "action_queuenum";
 
     private Context appContext;
 
@@ -68,6 +72,7 @@ public class IMChatManager {
 
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
+    private Handler mDelivery;
 
     /**
      * 获取应用全局context
@@ -76,6 +81,7 @@ public class IMChatManager {
     public Context getAppContext() {
         return appContext;
     }
+
 
     /**
      * 初始化sdk方法，必须先调用该方法进行初始化后才能使用IM相关功能
@@ -88,7 +94,7 @@ public class IMChatManager {
     public void init(Context appContext, String receiverAction, String accessId, String userName,
                      String userId) {
         this.appContext = appContext.getApplicationContext();
-
+        mDelivery = new Handler(Looper.getMainLooper());
         sp = appContext.getSharedPreferences("isnewvisitor", 0);
         editor = sp.edit();
 
@@ -112,7 +118,8 @@ public class IMChatManager {
 
         Intent imserviceIntent = new Intent(appContext, IMService.class);
         appContext.startService(imserviceIntent);
-
+        editor.putBoolean("firstInit", true);
+        editor.commit();
     }
 
     /**
@@ -127,15 +134,38 @@ public class IMChatManager {
     public void onEventMainThread(KFLoginEvent KFLoginEvent){
         switch (KFLoginEvent){
             case LOGIN_SUCCESS:
-                HttpManager.getInvestigateList(InfoDao.getInstance().getConnectionId(), new GetInvestigateResponseHandler());
-                if(initListener != null) {
-                    initListener.oninitSuccess();
+                if(sp.getBoolean("firstInit", true)) {
+                    editor.putBoolean("firstInit", false);
+                    editor.commit();
+                    HttpManager.getInvestigateList(InfoDao.getInstance().getConnectionId(), new GetInvestigateResponseHandler());
+                    if(initListener != null) {
+                        mDelivery.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                initListener.oninitSuccess();
+                            }
+                        });
+
+                    }
                 }
+
+
                 break;
             case LOGIN_FAILED:
-                if(initListener != null) {
-                    initListener.onInitFailed();
+                if(sp.getBoolean("firstInit", true)) {
+                    editor.putBoolean("firstInit", false);
+                    editor.commit();
+                    if(initListener != null) {
+                        mDelivery.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                initListener.onInitFailed();
+                            }
+                        });
+
+                    }
                 }
+
             default:
                 break;
         }
@@ -165,17 +195,15 @@ public class IMChatManager {
         return list;
     }
 
-    private class GetInvestigateResponseHandler extends TextHttpResponseHandler {
+    private class GetInvestigateResponseHandler implements HttpResponseListener {
 
         @Override
-        public void onFailure(int statusCode, Header[] headers,
-                              String responseString, Throwable throwable) {
+        public void onFailed() {
 
         }
 
         @Override
-        public void onSuccess(int statusCode, Header[] headers,
-                              String responseString) {
+        public void onSuccess(String responseString) {
             String succeed = HttpParser.getSucceed(responseString);
             System.out.println("评价数据:"+responseString);
             if ("true".equals(succeed)) {
@@ -198,7 +226,7 @@ public class IMChatManager {
         HttpManager.submitInvestigate(InfoDao.getInstance().getConnectionId(), investigate.name, investigate.value, new SubmitResponse(listener));
     }
 
-    private class SubmitResponse extends TextHttpResponseHandler {
+    private class SubmitResponse implements HttpResponseListener {
 
         private SubmitInvestigateListener listener;
 
@@ -207,8 +235,7 @@ public class IMChatManager {
         }
 
         @Override
-        public void onFailure(int statusCode, Header[] headers,
-                              String responseString, Throwable throwable) {
+        public void onFailed() {
             if(listener != null) {
                 listener.onFailed();
             }
@@ -216,8 +243,7 @@ public class IMChatManager {
         }
 
         @Override
-        public void onSuccess(int statusCode, Header[] headers,
-                              String responseString) {
+        public void onSuccess(String responseString) {
             String succeed = HttpParser.getSucceed(responseString);
             if ("true".equals(succeed)) {
                 if(listener != null) {
@@ -249,7 +275,7 @@ public class IMChatManager {
         HttpManager.beginNewChatSession(InfoDao.getInstance().getConnectionId(), getIsNewVisitor(), peerId, new BeginSessionResponse(listener));
     }
 
-    private class BeginSessionResponse extends TextHttpResponseHandler {
+    private class BeginSessionResponse implements HttpResponseListener {
 
         OnSessionBeginListener listener;
         public BeginSessionResponse(OnSessionBeginListener listener) {
@@ -257,16 +283,14 @@ public class IMChatManager {
         }
 
         @Override
-        public void onFailure(int statusCode, Header[] headers,
-                              String responseString, Throwable throwable) {
+        public void onFailed() {
             if(listener != null) {
                 listener.onFailed();
             }
         }
 
         @Override
-        public void onSuccess(int statusCode, Header[] headers,
-                              String responseString) {
+        public void onSuccess(String responseString) {
             String succeed = HttpParser.getSucceed(responseString);
             LogUtil.d("IMChatManger", "biginSession:"+responseString);
             if ("true".equals(succeed)) {
@@ -303,7 +327,7 @@ public class IMChatManager {
         HttpManager.submitOfflineMessage(InfoDao.getInstance().getConnectionId(), peerId, content, phone, email, new SubmitOfflineMsgResponse(listener));
     }
 
-    private class SubmitOfflineMsgResponse extends TextHttpResponseHandler {
+    private class SubmitOfflineMsgResponse implements HttpResponseListener {
 
         OnSubmitOfflineMessageListener listener;
         public SubmitOfflineMsgResponse(OnSubmitOfflineMessageListener listener) {
@@ -311,16 +335,14 @@ public class IMChatManager {
         }
 
         @Override
-        public void onFailure(int statusCode, Header[] headers,
-                              String responseString, Throwable throwable) {
+        public void onFailed() {
             if(listener != null) {
                 listener.onFailed();
             }
         }
 
         @Override
-        public void onSuccess(int statusCode, Header[] headers,
-                              String responseString) {
+        public void onSuccess(String responseString) {
             String succeed = HttpParser.getSucceed(responseString);
             if ("true".equals(succeed)) {
                 if(listener != null) {
@@ -371,7 +393,7 @@ public class IMChatManager {
         HttpManager.convertManual(InfoDao.getInstance().getConnectionId(), new ConvertManualResponse(listener));
     }
 
-    private class ConvertManualResponse extends TextHttpResponseHandler {
+    private class ConvertManualResponse implements HttpResponseListener {
 
         OnConvertManualListener listener;
         public ConvertManualResponse(OnConvertManualListener listener) {
@@ -379,16 +401,14 @@ public class IMChatManager {
         }
 
         @Override
-        public void onFailure(int statusCode, Header[] headers,
-                              String responseString, Throwable throwable) {
+        public void onFailed() {
             if(listener != null) {
                 listener.offLine();
             }
         }
 
         @Override
-        public void onSuccess(int statusCode, Header[] headers,
-                              String responseString) {
+        public void onSuccess(String responseString) {
             String succeed = HttpParser.getSucceed(responseString);
             LogUtil.d("IMChatManger", "ConvertManualResponse:"+responseString);
             if ("true".equals(succeed)) {
@@ -412,7 +432,7 @@ public class IMChatManager {
         HttpManager.getPeers(InfoDao.getInstance().getConnectionId(), new GetPeersResponse(listener));
     }
 
-    private class GetPeersResponse extends TextHttpResponseHandler {
+    private class GetPeersResponse implements HttpResponseListener {
 
         private GetPeersListener listener;
 
@@ -421,8 +441,7 @@ public class IMChatManager {
         }
 
         @Override
-        public void onFailure(int statusCode, Header[] headers,
-                              String responseString, Throwable throwable) {
+        public void onFailed() {
             if(listener != null) {
                 listener.onFailed();
             }
@@ -430,8 +449,7 @@ public class IMChatManager {
         }
 
         @Override
-        public void onSuccess(int statusCode, Header[] headers,
-                              String responseString) {
+        public void onSuccess(String responseString) {
             String succeed = HttpParser.getSucceed(responseString);
             System.out.println("获取技能组返回数据:"+responseString);
             if ("true".equals(succeed)) {

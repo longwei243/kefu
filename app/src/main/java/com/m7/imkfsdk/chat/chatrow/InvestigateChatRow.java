@@ -8,15 +8,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.j256.ormlite.dao.ForeignCollection;
 import com.m7.imkfsdk.R;
 import com.m7.imkfsdk.chat.ChatActivity;
 import com.m7.imkfsdk.chat.holder.BaseHolder;
 import com.m7.imkfsdk.chat.holder.InvestigateViewHolder;
 import com.moor.imkf.IMChatManager;
 import com.moor.imkf.SubmitInvestigateListener;
-import com.moor.imkf.db.dao.InvestigateDao;
-import com.moor.imkf.db.dao.MessageDao;
 import com.moor.imkf.model.entity.FromToMessage;
 import com.moor.imkf.model.entity.Investigate;
 import com.moor.imkf.model.entity.MsgInves;
@@ -26,7 +23,7 @@ import java.util.Collection;
 /**
  * Created by longwei on 2016/3/9.
  */
-public class InvestigateChatRow extends BaseChatRow{
+public class InvestigateChatRow extends BaseChatRow {
 
     private Context context;
 

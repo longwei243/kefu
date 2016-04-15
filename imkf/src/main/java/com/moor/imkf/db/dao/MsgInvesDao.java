@@ -3,12 +3,9 @@ package com.moor.imkf.db.dao;
 import com.j256.ormlite.dao.Dao;
 import com.moor.imkf.IMChatManager;
 import com.moor.imkf.db.DataBaseHelper;
-import com.moor.imkf.model.entity.Investigate;
 import com.moor.imkf.model.entity.MsgInves;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by longwei on 2015/9/16.

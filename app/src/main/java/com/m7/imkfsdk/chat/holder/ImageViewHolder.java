@@ -9,7 +9,7 @@ import com.m7.imkfsdk.R;
 /**
  * Created by longwei on 2016/3/10.
  */
-public class ImageViewHolder extends BaseHolder{
+public class ImageViewHolder extends BaseHolder {
 
     private ImageView iv_content;
 

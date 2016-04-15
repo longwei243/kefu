@@ -5,14 +5,13 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
 import com.moor.imkf.IMChatManager;
-import com.moor.imkf.requesturl.RequestUrl;
 import com.moor.imkf.event.KFSocketEvent;
+import com.moor.imkf.eventbus.EventBus;
+import com.moor.imkf.requesturl.RequestUrl;
 import com.moor.imkf.tcpservice.tcp.ServerMessageHandler;
 import com.moor.imkf.tcpservice.tcp.SocketManagerStatus;
 import com.moor.imkf.tcpservice.tcp.SocketThread;
 import com.moor.imkf.utils.LogUtil;
-
-import de.greenrobot.event.EventBus;
 
 /**
  * tcp连接的管理类，这里进行真正的连接等操作
@@ -57,7 +56,6 @@ public class SocketManager {
 	 */
 	public void login() {
 		if (socketThread != null) {
-			socketThread.setConnecting(false);
 			socketThread.close();
 			socketThread = null;
         }
@@ -105,7 +103,7 @@ public class SocketManager {
         return true;
     }
 
-	public void onEvent(KFSocketEvent KFSocketEvent){
+	public void onEventMainThread(KFSocketEvent KFSocketEvent){
     	LogUtil.d("IMService", "进入了socket事件驱动的方法中");
     	switch (KFSocketEvent){
     	case NONE:

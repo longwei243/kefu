@@ -2,15 +2,13 @@ package com.m7.imkfsdk.chat.holder;
 
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.m7.imkfsdk.R;
 
 /**
  * Created by longwei on 2016/3/9.
  */
-public class InvestigateViewHolder extends BaseHolder{
+public class InvestigateViewHolder extends BaseHolder {
 
     private LinearLayout chat_investigate_ll;
 

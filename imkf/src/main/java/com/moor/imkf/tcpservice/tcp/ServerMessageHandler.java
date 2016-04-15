@@ -8,6 +8,7 @@ import com.moor.imkf.IMChatManager;
 import com.moor.imkf.db.dao.InfoDao;
 import com.moor.imkf.event.KFLoginEvent;
 import com.moor.imkf.event.KFSocketEvent;
+import com.moor.imkf.eventbus.EventBus;
 import com.moor.imkf.tcpservice.manager.LoginManager;
 import com.moor.imkf.tcpservice.manager.SocketManager;
 import com.moor.imkf.utils.LogUtil;
@@ -23,7 +24,6 @@ import org.jboss.netty.handler.timeout.IdleStateEvent;
 
 import java.nio.charset.Charset;
 
-import de.greenrobot.event.EventBus;
 
 
 /**
@@ -65,7 +65,7 @@ public class ServerMessageHandler extends IdleStateAwareChannelHandler {
 			if(ctx.getChannel().getId().equals(SocketManager.getInstance(IMChatManager.getInstance().getAppContext()).getSocketThread().getChannel().getId())){
 //				MobileApplication.logger.debug(TimeUtil.getCurrentTime() + "tcp1 开始连：");
 				//发送tcp服务器连接断开的事件
-				EventBus.getDefault().postSticky(KFSocketEvent.MSG_SERVER_DISCONNECTED);
+				EventBus.getDefault().post(KFSocketEvent.MSG_SERVER_DISCONNECTED);
 				LogUtil.d("ServerMessageHandler", "发送tcp服务器连接断开的事件");
 			}else{
 				System.out.println("发现了 old tcp channel 断开");
@@ -74,7 +74,7 @@ public class ServerMessageHandler extends IdleStateAwareChannelHandler {
 
 //			MobileApplication.logger.debug(TimeUtil.getCurrentTime() + "tcp2 开始连：");
 			//发送tcp服务器连接断开的事件
-			EventBus.getDefault().postSticky(KFSocketEvent.MSG_SERVER_DISCONNECTED);
+			EventBus.getDefault().post(KFSocketEvent.MSG_SERVER_DISCONNECTED);
 			LogUtil.d("ServerMessageHandler", "发送tcp服务器连接断开的事件");
 		}
 	}
@@ -83,6 +83,10 @@ public class ServerMessageHandler extends IdleStateAwareChannelHandler {
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e)
 			throws Exception {
 		super.messageReceived(ctx, e);
+
+		if(!ctx.getChannel().getId().equals( SocketManager.getInstance(IMChatManager.getInstance().getAppContext()).getSocketThread().getChannel().getId())) {
+			return;
+		}
 		ChannelBuffer buffer = (ChannelBuffer) e.getMessage();
 		String result = buffer.toString(Charset.defaultCharset());
 		LogUtil.d("ServerMessageHandler", "服务器返回的数据是：" + result);
@@ -96,12 +100,12 @@ public class ServerMessageHandler extends IdleStateAwareChannelHandler {
 			SocketManager.getInstance(IMChatManager.getInstance().getAppContext()).setStatus(SocketManagerStatus.BREAK);
 		}else if ("100".equals(result)) {
 			//有新消息之后的处理
-			EventBus.getDefault().postSticky(KFLoginEvent.NEW_MSG);
+			EventBus.getDefault().post(KFLoginEvent.NEW_MSG);
 		} else if ("400".equals(result)) {
 			//登录失败，用户名或密码错误
 			//发送登录失败的事件
 			LoginManager.getInstance(IMChatManager.getInstance().getAppContext()).setIsStoreUsernamePasswordRight(false);
-			EventBus.getDefault().postSticky(KFLoginEvent.LOGIN_FAILED);
+			EventBus.getDefault().post(KFLoginEvent.LOGIN_FAILED);
 			SocketManager.getInstance(IMChatManager.getInstance().getAppContext()).setStatus(SocketManagerStatus.CONNECTED);
 		} else if(result.startsWith("200")) {
 
@@ -114,7 +118,7 @@ public class ServerMessageHandler extends IdleStateAwareChannelHandler {
 
 			InfoDao.getInstance().saveConnectionId(connectionid);
 			//发送登录成功的事件
-			EventBus.getDefault().postSticky(KFLoginEvent.LOGIN_SUCCESS);
+			EventBus.getDefault().post(KFLoginEvent.LOGIN_SUCCESS);
 			SocketManager.getInstance(IMChatManager.getInstance().getAppContext()).setStatus(SocketManagerStatus.LOGINED);
 		} else if("robot".equals(result)){
 			Intent robotIntent = new Intent(IMChatManager.ROBOT_ACTION);
@@ -128,6 +132,14 @@ public class ServerMessageHandler extends IdleStateAwareChannelHandler {
 		}else if("investigate".equals(result)){
 			Intent investigateIntent = new Intent(IMChatManager.INVESTIGATE_ACTION);
 			context.sendBroadcast(investigateIntent);
+		}else if("queueNum".equals(result)){
+			String queueNum = result.split("@")[1];
+			if(queueNum != null && (Integer.parseInt(queueNum) > 0)) {
+				Intent queueNumIntent = new Intent(IMChatManager.QUEUENUM_ACTION);
+				queueNumIntent.putExtra(IMChatManager.QUEUENUM_ACTION, queueNum);
+				context.sendBroadcast(queueNumIntent);
+			}
+
 		}
 	}
 
@@ -139,7 +151,7 @@ public class ServerMessageHandler extends IdleStateAwareChannelHandler {
 //        super.exceptionCaught(ctx, e);
 		LogUtil.d("ServerMessageHandler", "exceptionCaught被调用了，直接断开连接");
 		//有异常时直接断开连接
-		EventBus.getDefault().postSticky(KFSocketEvent.MSG_SERVER_DISCONNECTED);
+		EventBus.getDefault().post(KFSocketEvent.MSG_SERVER_DISCONNECTED);
 		//关闭channel
 		Channel ch = e.getChannel();
 		ch.close();
@@ -153,7 +165,7 @@ public class ServerMessageHandler extends IdleStateAwareChannelHandler {
 		switch (e.getState()) {
 			case READER_IDLE:
 				LogUtil.d("ServerMessageHandler", "读取通道空闲了");
-				EventBus.getDefault().postSticky(KFSocketEvent.MSG_SERVER_DISCONNECTED);
+				EventBus.getDefault().post(KFSocketEvent.MSG_SERVER_DISCONNECTED);
 				Channel ch = e.getChannel();
 				ch.close();
 				break;

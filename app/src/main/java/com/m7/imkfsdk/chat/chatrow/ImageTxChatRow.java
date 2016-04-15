@@ -7,15 +7,15 @@ import android.view.View;
 
 import com.bumptech.glide.Glide;
 import com.m7.imkfsdk.R;
+import com.m7.imkfsdk.chat.ChatActivity;
 import com.m7.imkfsdk.chat.holder.BaseHolder;
 import com.m7.imkfsdk.chat.holder.ImageViewHolder;
-import com.m7.imkfsdk.chat.ChatActivity;
 import com.moor.imkf.model.entity.FromToMessage;
 
 /**
  * Created by longwei on 2016/3/10.
  */
-public class ImageTxChatRow extends BaseChatRow{
+public class ImageTxChatRow extends BaseChatRow {
 
 
     public ImageTxChatRow(int type) {

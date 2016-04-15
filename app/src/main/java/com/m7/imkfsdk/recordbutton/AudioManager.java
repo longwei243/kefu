@@ -1,6 +1,6 @@
 package com.m7.imkfsdk.recordbutton;
 
-import com.czt.mp3recorder.MP3Recorder;
+import com.moor.imkf.mp3recorder.MP3Recorder;
 
 import java.io.File;
 import java.util.UUID;

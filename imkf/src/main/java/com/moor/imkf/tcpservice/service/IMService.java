@@ -1,22 +1,20 @@
 package com.moor.imkf.tcpservice.service;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
-import com.loopj.android.http.TextHttpResponseHandler;
 import com.moor.imkf.IMChatManager;
 import com.moor.imkf.db.dao.InfoDao;
 import com.moor.imkf.db.dao.MessageDao;
 import com.moor.imkf.event.KFLoginEvent;
+import com.moor.imkf.eventbus.EventBus;
 import com.moor.imkf.http.HttpManager;
+import com.moor.imkf.http.HttpResponseListener;
 import com.moor.imkf.model.entity.FromToMessage;
 import com.moor.imkf.model.parser.HttpParser;
-import com.moor.imkf.receiver.AlarmManagerReceiver;
 import com.moor.imkf.tcpservice.manager.HeartBeatManager;
 import com.moor.imkf.tcpservice.manager.LoginManager;
 import com.moor.imkf.tcpservice.manager.SocketManager;
@@ -24,13 +22,9 @@ import com.moor.imkf.tcpservice.tcp.SocketManagerStatus;
 import com.moor.imkf.utils.LogUtil;
 import com.moor.imkf.utils.NetUtils;
 
-import org.apache.http.Header;
-
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
-import de.greenrobot.event.EventBus;
 
 /**
  * im服务,进行tcp的连接的管理
@@ -140,20 +134,18 @@ public class IMService extends Service{
 	}
 
 
-	class getMsgResponseHandler extends TextHttpResponseHandler {
+	class getMsgResponseHandler implements HttpResponseListener {
 		Context context;
 		public getMsgResponseHandler(Context context) {
 			this.context = context;
 		}
 
 		@Override
-		public void onFailure(int statusCode, Header[] headers,
-							  String responseString, Throwable throwable) {
+		public void onFailed() {
 		}
 
 		@Override
-		public void onSuccess(int statusCode, Header[] headers,
-							  String responseString) {
+		public void onSuccess(String responseString) {
 			String succeed = HttpParser.getSucceed(responseString);
 			String message = HttpParser.getMessage(responseString);
 			boolean isLargeMsg = HttpParser.isLargeMsg(responseString);
@@ -190,18 +182,16 @@ public class IMService extends Service{
 	}
 
 	// 取大量消息
-	class GetLargeMsgsResponseHandler extends TextHttpResponseHandler {
+	class GetLargeMsgsResponseHandler implements HttpResponseListener {
 
 
 
 		@Override
-		public void onFailure(int statusCode, Header[] headers,
-							  String responseString, Throwable throwable) {
+		public void onFailed() {
 		}
 
 		@Override
-		public void onSuccess(int statusCode, Header[] headers,
-							  String responseString) {
+		public void onSuccess(String responseString) {
 			String succeed = HttpParser.getSucceed(responseString);
 			String message = HttpParser.getMessage(responseString);
 			largeMsgId = HttpParser.getLargeMsgId(responseString);

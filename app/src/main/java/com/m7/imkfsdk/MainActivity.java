@@ -1,11 +1,16 @@
 package com.m7.imkfsdk;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -57,18 +62,19 @@ public class MainActivity extends Activity {
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //填写过参数才能登录
-//                if(!"".equals(sp.getString("accessId", ""))) {
-                    loadingDialog.show(getFragmentManager(), "");
-                    if (MobileApplication.isKFSDK) {
-                        loadingDialog.dismiss();
-                        getPeers();
-                    } else {
-                        startKFService();
+                //判断版本若为6.0申请权限
+                if(Build.VERSION.SDK_INT < 23) {
+                    init();
+                }else {
+                    //6.0
+                    if(ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+                        //该权限已经有了
+                        init();
+                    }else {
+                        //申请该权限
+                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_PHONE_STATE}, 0x1111);
                     }
-//                }else {
-//                    Toast.makeText(MainActivity.this, "请先设置参数", Toast.LENGTH_SHORT).show();
-//                }
+                }
             }
         });
         findViewById(R.id.cancel_btn).setOnClickListener(new View.OnClickListener() {
@@ -88,6 +94,21 @@ public class MainActivity extends Activity {
                 startActivity(settingIntent);
             }
         });
+    }
+
+    private void init() {
+        //填写过参数才能登录
+//                if(!"".equals(sp.getString("accessId", ""))) {
+            loadingDialog.show(getFragmentManager(), "");
+            if (MobileApplication.isKFSDK) {
+                loadingDialog.dismiss();
+                getPeers();
+            } else {
+                startKFService();
+            }
+//                }else {
+//                    Toast.makeText(MainActivity.this, "请先设置参数", Toast.LENGTH_SHORT).show();
+//                }
     }
 
     private void getPeers() {
@@ -124,13 +145,6 @@ public class MainActivity extends Activity {
 
     private void startKFService() {
 
-        //设置tcp地址
-//        IMChatManager.getInstance().setTcpIpAndPort("28.163.1.82", 8006);
-        IMChatManager.getInstance().setTcpIpAndPort("120.55.72.213", 8006);
-        //设置http地址
-//        IMChatManager.getInstance().setHttpIp("http://28.163.1.82:4999/sdkChat");
-        IMChatManager.getInstance().setHttpIp("http://115.29.10.194:4999/sdkChat");
-
         new Thread() {
             @Override
             public void run() {
@@ -138,8 +152,9 @@ public class MainActivity extends Activity {
                     @Override
                     public void oninitSuccess() {
                         MobileApplication.isKFSDK = true;
-                        handler.sendEmptyMessage(0x444);
-
+//                        handler.sendEmptyMessage(0x444);
+                        loadingDialog.dismiss();
+                        getPeers();
                         Log.d("MobileApplication", "sdk初始化成功");
                         //初始化表情,界面效果需要
                         new Thread(new Runnable() {
@@ -154,7 +169,9 @@ public class MainActivity extends Activity {
                     @Override
                     public void onInitFailed() {
                         MobileApplication.isKFSDK = false;
-                        handler.sendEmptyMessage(0x555);
+                        loadingDialog.dismiss();
+                        Toast.makeText(MainActivity.this, "客服初始化失败", Toast.LENGTH_SHORT).show();
+//                        handler.sendEmptyMessage(0x555);
                         Log.d("MobileApplication", "sdk初始化失败");
                     }
                 });
@@ -163,7 +180,8 @@ public class MainActivity extends Activity {
 //                String name = sp.getString("name", "");
 //                String userId = sp.getString("userId", "");
                 //初始化IMSdk,填入相关参数
-                IMChatManager.getInstance().init(MobileApplication.getInstance(), "com.moor.im.KEFU_NEW_MSG", "2ff6ebc0-e40c-11e5-82a5-51d279813f91", "name", "userId");
+//                IMChatManager.getInstance().init(MobileApplication.getInstance(), "com.moor.im.KEFU_NEW_MSG", "2ff6ebc0-e40c-11e5-82a5-51d279813f91", "游客", "999000");
+                IMChatManager.getInstance().init(MobileApplication.getInstance(), "com.moor.im.KEFU_NEW_MSG", "1a407410-9ee1-11e5-a8e6-17b9721f92b3", "未知", "123456");
             }
         }.start();
 
@@ -176,4 +194,21 @@ public class MainActivity extends Activity {
     }
 
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case 0x1111:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    init();
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                break;
+        }
+    }
 }

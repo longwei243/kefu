@@ -14,6 +14,7 @@ import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFactory;
 import org.jboss.netty.channel.ChannelFuture;
+import org.jboss.netty.channel.ChannelFutureListener;
 import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
@@ -83,7 +84,7 @@ public class SocketThread extends Thread{
 					pipeline.addLast("decoder", new LineBasedFrameDecoder(1024));
 					// 发送的数据包编码
 					pipeline.addLast("encoder", new StringEncoder());
-					pipeline.addLast("IdleStateHandler", new IdleStateHandler(new HashedWheelTimer(), 290, 0, 0));
+					pipeline.addLast("IdleStateHandler", new IdleStateHandler(new HashedWheelTimer(), 490, 490, 490));
 					pipeline.addLast("handler", handler);
 					return pipeline;
 
@@ -106,7 +107,6 @@ public class SocketThread extends Thread{
 	 */
 	public void doConnect() {
 
-		while (connecting){
 			connTryTimes++;
 			try {
 				if(channel != null){
@@ -116,38 +116,36 @@ public class SocketThread extends Thread{
 				// Start the connection attempt.
 				channelFuture = clientBootstrap.connect(new InetSocketAddress(
 						ipAddress, ipPort));
-				// Wait until the connection attempt succeeds or fails.
-				channel = channelFuture.awaitUninterruptibly().getChannel();
-				if (!channelFuture.isSuccess()) {
-					ConnectivityManager connectivityManager = (ConnectivityManager) IMChatManager.getInstance().getAppContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-					NetworkInfo info = connectivityManager.getActiveNetworkInfo();
-					if(info == null || !info.isConnected()) {
-						setConnecting(false);
-						break;
-					}
-					if(connTryTimes <= 5){
-						sleep(1000);
-					}else if(connTryTimes > 5 && connTryTimes < 20){
-						sleep(3000);
-					}else{
-						if(connTryTimes>150){
-							break;
+				channelFuture.addListener(new ChannelFutureListener() {
+					@Override
+					public void operationComplete(ChannelFuture channelFuture) throws Exception {
+						if(channelFuture.isSuccess()) {
+							//连接成功
+							channel = channelFuture.getChannel();
+							SocketManager.getInstance(IMChatManager.getInstance().getAppContext()).setStatus(SocketManagerStatus.CONNECTED);
+							LoginManager.getInstance(IMChatManager.getInstance().getAppContext()).login();
+						}else {
+							ConnectivityManager connectivityManager = (ConnectivityManager) IMChatManager.getInstance().getAppContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+							NetworkInfo info = connectivityManager.getActiveNetworkInfo();
+							if(info != null && info.isConnected()) {
+								if(connTryTimes < 10) {
+									Thread.sleep(1000);
+								}else if(connTryTimes > 10 && connTryTimes < 30) {
+									Thread.sleep(3000);
+								}else if(connTryTimes > 30 && connTryTimes < 100) {
+									Thread.sleep(5000);
+								}if(connTryTimes> 150) {
+									Thread.sleep(20000);
+								}
+								doConnect();
+							}
 						}
-						sleep(10000);
 					}
-					if(!connecting){
-						break;
-					}
-				}else{
-					setConnecting(false);
-					SocketManager.getInstance(IMChatManager.getInstance().getAppContext()).setStatus(SocketManagerStatus.CONNECTED);
-					LoginManager.getInstance(IMChatManager.getInstance().getAppContext()).login();
-					break;
-				}
+				});
+
 			} catch (Exception e) {
 
 			}
-		}
 	}
 	/**
 	 * 向服务器发送数据
@@ -172,11 +170,9 @@ public class SocketThread extends Thread{
 		if (null == channelFuture)
 			return;
 		if (null != channelFuture.getChannel()) {
-//			channelFuture.getChannel().close();
-			channelFuture.getChannel().getCloseFuture().awaitUninterruptibly();
+			channelFuture.getChannel().close();
 			channelFactory.releaseExternalResources();
 		}
-        channelFuture.cancel();
 	}
 	
 	public Channel getChannel() {

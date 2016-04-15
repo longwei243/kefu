@@ -1,13 +1,11 @@
 package com.moor.imkf;
 
-import com.j256.ormlite.dao.ForeignCollection;
 import com.moor.imkf.db.dao.MessageDao;
 import com.moor.imkf.db.dao.MsgInvesDao;
 import com.moor.imkf.model.entity.FromToMessage;
 import com.moor.imkf.model.entity.Investigate;
 import com.moor.imkf.model.entity.MsgInves;
 
-import java.util.Collection;
 import java.util.List;
 
 /**

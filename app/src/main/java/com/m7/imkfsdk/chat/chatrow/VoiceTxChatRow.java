@@ -6,9 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.m7.imkfsdk.R;
+import com.m7.imkfsdk.chat.ChatActivity;
 import com.m7.imkfsdk.chat.holder.BaseHolder;
 import com.m7.imkfsdk.chat.holder.VoiceViewHolder;
-import com.m7.imkfsdk.chat.ChatActivity;
 import com.moor.imkf.model.entity.FromToMessage;
 
 /**

@@ -16,7 +16,7 @@ import com.moor.imkf.model.entity.FromToMessage;
 /**
  * Created by longwei on 2016/3/9.
  */
-public class VoiceViewHolder extends BaseHolder{
+public class VoiceViewHolder extends BaseHolder {
 
     public TextView contentTv;
     public TextView voicePlayAnim;

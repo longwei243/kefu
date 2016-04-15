@@ -8,9 +8,9 @@ import android.view.View;
 
 import com.bumptech.glide.Glide;
 import com.m7.imkfsdk.R;
+import com.m7.imkfsdk.chat.ImageViewLookActivity;
 import com.m7.imkfsdk.chat.holder.BaseHolder;
 import com.m7.imkfsdk.chat.holder.ImageViewHolder;
-import com.m7.imkfsdk.chat.ImageViewLookActivity;
 import com.moor.imkf.model.entity.FromToMessage;
 
 /**

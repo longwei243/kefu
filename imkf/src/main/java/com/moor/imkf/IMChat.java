@@ -2,26 +2,25 @@ package com.moor.imkf;
 
 import android.content.Context;
 import android.telephony.TelephonyManager;
-import android.widget.SeekBar;
 
-import com.loopj.android.http.TextHttpResponseHandler;
 import com.moor.imkf.db.dao.InfoDao;
 import com.moor.imkf.db.dao.MessageDao;
 import com.moor.imkf.http.HttpManager;
+import com.moor.imkf.http.HttpResponseListener;
 import com.moor.imkf.model.entity.FromToMessage;
 import com.moor.imkf.model.parser.HttpParser;
+import com.moor.imkf.qiniu.http.ResponseInfo;
+import com.moor.imkf.qiniu.storage.UpCompletionHandler;
+import com.moor.imkf.qiniu.storage.UploadManager;
 import com.moor.imkf.requesturl.RequestUrl;
 import com.moor.imkf.utils.LogUtil;
-import com.qiniu.android.http.ResponseInfo;
-import com.qiniu.android.storage.UpCompletionHandler;
-import com.qiniu.android.storage.UploadManager;
 
-import org.apache.http.Header;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
+
 
 /**
  * 提供发送消息的方法
@@ -86,7 +85,7 @@ public class IMChat {
      * @author LongWei
      *
      */
-    class UploadFileResponseHandler extends TextHttpResponseHandler {
+    class UploadFileResponseHandler implements HttpResponseListener {
         String fileType = "";
         FromToMessage fromToMessage;
         ChatListener chatListener;
@@ -100,15 +99,13 @@ public class IMChat {
         }
 
         @Override
-        public void onFailure(int statusCode, Header[] headers,
-                              String responseString, Throwable throwable) {
+        public void onFailed() {
 //			Toast.makeText(ChatActivity.this, "上传7牛失败了", Toast.LENGTH_SHORT).show();;
             MessageDao.getInstance().updateFailedMsgToDao(fromToMessage);
         }
 
         @Override
-        public void onSuccess(int statusCode, Header[] headers,
-                              String responseString) {
+        public void onSuccess(String responseString) {
             // TODO Auto-generated method stub
             String succeed = HttpParser.getSucceed(responseString);
             String message = HttpParser.getMessage(responseString);
@@ -178,7 +175,7 @@ public class IMChat {
         }
     }
 
-    class NewMessageResponseHandler extends TextHttpResponseHandler {
+    class NewMessageResponseHandler implements HttpResponseListener {
         FromToMessage fromToMessage;
         ChatListener chatListener;
         public NewMessageResponseHandler(FromToMessage fromToMessage, ChatListener chatListener) {
@@ -187,8 +184,7 @@ public class IMChat {
         }
 
         @Override
-        public void onFailure(int statusCode, Header[] headers,
-                              String responseString, Throwable throwable) {
+        public void onFailed() {
             MessageDao.getInstance().updateFailedMsgToDao(fromToMessage);
             if(chatListener != null) {
                 chatListener.onFailed();
@@ -198,8 +194,7 @@ public class IMChat {
         }
 
         @Override
-        public void onSuccess(int statusCode, Header[] headers,
-                              String responseString) {
+        public void onSuccess(String responseString) {
             String succeed = HttpParser.getSucceed(responseString);
             String message = HttpParser.getMessage(responseString);
             LogUtil.d("NewMessageResponseHandler", "服务器返回的数据是:"+responseString);
@@ -260,7 +255,7 @@ public class IMChat {
     }
 
     private String getDeviceId() {
-        TelephonyManager TelephonyMgr = (TelephonyManager)IMChatManager.getInstance().getAppContext().getSystemService(Context.TELEPHONY_SERVICE);
+        TelephonyManager TelephonyMgr = (TelephonyManager) IMChatManager.getInstance().getAppContext().getSystemService(Context.TELEPHONY_SERVICE);
         String szImei = TelephonyMgr.getDeviceId();
         return szImei;
     }

@@ -8,7 +8,6 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.m7.imkfsdk.R;
-import com.moor.imkf.model.entity.Investigate;
 import com.moor.imkf.model.entity.Peer;
 
 import java.util.List;

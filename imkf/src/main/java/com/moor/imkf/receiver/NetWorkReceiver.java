@@ -8,9 +8,8 @@ import android.net.NetworkInfo;
 import android.telephony.TelephonyManager;
 
 import com.moor.imkf.event.KFSocketEvent;
+import com.moor.imkf.eventbus.EventBus;
 import com.moor.imkf.utils.LogUtil;
-
-import de.greenrobot.event.EventBus;
 
 /**
  * 网络状态监听器

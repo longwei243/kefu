@@ -12,9 +12,9 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.m7.imkfsdk.R;
+import com.m7.imkfsdk.chat.ChatActivity;
 import com.m7.imkfsdk.chat.holder.BaseHolder;
 import com.m7.imkfsdk.chat.holder.TextViewHolder;
-import com.m7.imkfsdk.chat.ChatActivity;
 import com.m7.imkfsdk.utils.FaceConversionUtil;
 import com.moor.imkf.model.entity.FromToMessage;
 import com.moor.imkf.utils.AnimatedGifDrawable;
