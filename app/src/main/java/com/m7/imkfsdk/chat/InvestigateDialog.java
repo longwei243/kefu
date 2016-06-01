@@ -37,7 +37,7 @@ public class InvestigateDialog extends DialogFragment {
         getDialog().setTitle("提交评价");
 
         // Get the layout inflater
-        View view = inflater.inflate(R.layout.dialog_investigate, null);
+        View view = inflater.inflate(R.layout.kf_dialog_investigate, null);
         investigateListView = (ListView) view.findViewById(R.id.investigate_list);
 
         investigates = IMChatManager.getInstance().getInvestigate();

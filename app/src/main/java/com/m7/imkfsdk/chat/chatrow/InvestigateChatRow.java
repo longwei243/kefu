@@ -47,7 +47,7 @@ public class InvestigateChatRow extends BaseChatRow {
         if(message != null) {
             final Collection<MsgInves> investigates = message.investigates;
             for (final MsgInves investigate : investigates) {
-                LinearLayout investigateItem = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.investigate_item, null);
+                LinearLayout investigateItem = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.kf_investigate_item, null);
                 TextView tv = (TextView) investigateItem.findViewById(R.id.investigate_item_tv_name);
                 tv.setText(investigate.name);
                 investigateItem.setTag(investigate);
@@ -82,7 +82,7 @@ public class InvestigateChatRow extends BaseChatRow {
     @Override
     public View buildChatView(LayoutInflater inflater, View convertView) {
         if(convertView == null) {
-            convertView = inflater.inflate(R.layout.chat_row_investigate, null);
+            convertView = inflater.inflate(R.layout.kf_chat_row_investigate, null);
             InvestigateViewHolder holder = new InvestigateViewHolder(mRowType);
             convertView.setTag(holder.initBaseHolder(convertView, false));
         }

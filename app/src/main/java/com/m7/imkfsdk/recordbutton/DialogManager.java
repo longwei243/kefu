@@ -28,7 +28,7 @@ public class DialogManager {
 
     public void showDialog() {
         mDialog = new Dialog(context, R.style.Theme_AudioDialog);
-        View view = LayoutInflater.from(context).inflate(R.layout.dialog_recorder, null);
+        View view = LayoutInflater.from(context).inflate(R.layout.kf_dialog_recorder, null);
         mDialog.setContentView(view);
         mIcon = (ImageView) view.findViewById(R.id.dialog_recorder_iv_rd);
         mVoice = (ImageView) view.findViewById(R.id.dialog_recorder_iv_voice);
@@ -43,7 +43,7 @@ public class DialogManager {
             mVoice.setVisibility(View.VISIBLE);
             textView.setVisibility(View.VISIBLE);
 
-            mIcon.setImageResource(R.drawable.recorder);
+            mIcon.setImageResource(R.drawable.kf_recorder);
             textView.setText("手指上滑 取消发送");
         }
     }
@@ -54,7 +54,7 @@ public class DialogManager {
             mVoice.setVisibility(View.GONE);
             textView.setVisibility(View.VISIBLE);
 
-            mIcon.setImageResource(R.drawable.cancel);
+            mIcon.setImageResource(R.drawable.kf_cancel);
             textView.setText("松开手指 取消发送");
         }
     }
@@ -65,7 +65,7 @@ public class DialogManager {
             mVoice.setVisibility(View.GONE);
             textView.setVisibility(View.VISIBLE);
 
-            mIcon.setImageResource(R.drawable.voice_to_short);
+            mIcon.setImageResource(R.drawable.kf_voice_to_short);
             textView.setText("录音时间太短");
         }
     }

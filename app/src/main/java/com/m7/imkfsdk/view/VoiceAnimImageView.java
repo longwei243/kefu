@@ -108,15 +108,15 @@ public class VoiceAnimImageView extends TextView {
 		
 		// chatting from animation
 		mChattingFromAnimationDrawable = new AnimationDrawable();
-		Drawable chattingFDrawale1 = getResources().getDrawable(R.drawable.chatfrom_voice_playing_f1);
+		Drawable chattingFDrawale1 = getResources().getDrawable(R.drawable.kf_chatfrom_voice_playing_f1);
 		chattingFDrawale1.setBounds(0, 0, chattingFDrawale1.getIntrinsicWidth(), chattingFDrawale1.getIntrinsicHeight());
 		mChattingFromAnimationDrawable.addFrame(chattingFDrawale1, mDuration);
 		
-		Drawable chattingFDrawale2 = getResources().getDrawable(R.drawable.chatfrom_voice_playing_f2);
+		Drawable chattingFDrawale2 = getResources().getDrawable(R.drawable.kf_chatfrom_voice_playing_f2);
 		chattingFDrawale2.setBounds(0, 0, chattingFDrawale2.getIntrinsicWidth(), chattingFDrawale2.getIntrinsicHeight());
 		mChattingFromAnimationDrawable.addFrame(chattingFDrawale2, mDuration);
 		
-		Drawable chattingFDrawale3 = getResources().getDrawable(R.drawable.chatfrom_voice_playing_f3);
+		Drawable chattingFDrawale3 = getResources().getDrawable(R.drawable.kf_chatfrom_voice_playing_f3);
 		chattingFDrawale3.setBounds(0, 0, chattingFDrawale3.getIntrinsicWidth(), chattingFDrawale3.getIntrinsicHeight());
 		mChattingFromAnimationDrawable.addFrame(chattingFDrawale3, mDuration);
 		mChattingFromAnimationDrawable.setOneShot(false);
@@ -125,15 +125,15 @@ public class VoiceAnimImageView extends TextView {
 		
 		// chatting to animation
 		mChattingToAnimationDrawable = new AnimationDrawable();
-		Drawable chattingTDrawable_1 = getResources().getDrawable(R.drawable.chatto_voice_playing_f1);
+		Drawable chattingTDrawable_1 = getResources().getDrawable(R.drawable.kf_chatto_voice_playing_f1);
 		chattingTDrawable_1.setBounds(0, 0, chattingTDrawable_1.getIntrinsicWidth(), chattingTDrawable_1.getIntrinsicHeight());
 		mChattingToAnimationDrawable.addFrame(chattingTDrawable_1, mDuration);
 		
-		Drawable chattingTDrawable_2 = getResources().getDrawable(R.drawable.chatto_voice_playing_f2);
+		Drawable chattingTDrawable_2 = getResources().getDrawable(R.drawable.kf_chatto_voice_playing_f2);
 		chattingTDrawable_2.setBounds(0, 0, chattingTDrawable_2.getIntrinsicWidth(), chattingTDrawable_2.getIntrinsicHeight());
 		mChattingToAnimationDrawable.addFrame(chattingTDrawable_2, mDuration);
 		
-		Drawable chattingTDrawable_3 = getResources().getDrawable(R.drawable.chatto_voice_playing_f3);
+		Drawable chattingTDrawable_3 = getResources().getDrawable(R.drawable.kf_chatto_voice_playing_f3);
 		chattingTDrawable_3.setBounds(0, 0, chattingTDrawable_3.getIntrinsicWidth(), chattingTDrawable_3.getIntrinsicHeight());
 		mChattingToAnimationDrawable.addFrame(chattingTDrawable_3, mDuration);
 		mChattingToAnimationDrawable.setOneShot(false);
@@ -163,9 +163,9 @@ public class VoiceAnimImageView extends TextView {
 		case TYPE_VOICE_DOWNLOADING:
 			
 			if(isFrom) {
-				setBackgroundDrawable(mActivity.getResources().getDrawable(R.drawable.chatfrom_bg_voice_downloading));
+				setBackgroundDrawable(mActivity.getResources().getDrawable(R.drawable.kf_chatfrom_bg_voice_downloading));
 			} else {
-				setBackgroundDrawable(mActivity.getResources().getDrawable(R.drawable.chatto_bg_voice_downloading));
+				setBackgroundDrawable(mActivity.getResources().getDrawable(R.drawable.kf_chatto_bg_voice_downloading));
 			}
 			
 			setAnimation(mAlphaAnimation);
@@ -200,10 +200,10 @@ public class VoiceAnimImageView extends TextView {
 	 */
 	public final void restBackground() {
 		if(isFrom) {
-			setBackgroundDrawable(getResources().getDrawable(R.drawable.chatfrom_bg_normal));
+			setBackgroundDrawable(getResources().getDrawable(R.drawable.kf_chatfrom_bg_normal));
 			return;
 		}
-		setBackgroundDrawable(getResources().getDrawable(R.drawable.chatto_bg_normal));
+		setBackgroundDrawable(getResources().getDrawable(R.drawable.kf_chatto_bg_normal));
 	}
 	
 	/**

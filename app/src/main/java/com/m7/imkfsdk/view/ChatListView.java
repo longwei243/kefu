@@ -79,7 +79,7 @@ public class ChatListView extends ListView implements OnScrollListener {
 	private void init(Context context) {
 		// 获取自定义头view
 		headView = (LinearLayout) LayoutInflater.from(context).inflate(
-				R.layout.head_private_letter, null);
+				R.layout.kf_head_private_letter, null);
 		// 获取headView中控件
 		imgCycle = (ImageView) headView.findViewById(R.id.imgCycle);
 		// 预估headView宽高
@@ -97,7 +97,7 @@ public class ChatListView extends ListView implements OnScrollListener {
 		this.setOnScrollListener(this);
 		// 获取进度条图片旋转动画
 		cycleAnim = AnimationUtils.loadAnimation(context,
-				R.anim.anim_chat_cycle);
+				R.anim.kf_anim_chat_cycle);
 		// 初始刷新状态
 		refreshState = DONE;
 	}

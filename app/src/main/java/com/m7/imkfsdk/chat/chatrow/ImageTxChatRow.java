@@ -45,7 +45,7 @@ public class ImageTxChatRow extends BaseChatRow {
     public View buildChatView(LayoutInflater inflater, View convertView) {
 
         if(convertView == null) {
-            convertView = inflater.inflate(R.layout.chat_row_image_tx, null);
+            convertView = inflater.inflate(R.layout.kf_chat_row_image_tx, null);
             ImageViewHolder holder = new ImageViewHolder(mRowType);
             convertView.setTag(holder.initBaseHolder(convertView, false));
         }

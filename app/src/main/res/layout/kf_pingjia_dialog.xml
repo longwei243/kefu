@@ -8,7 +8,7 @@
         android:id="@+id/direct_seeding_linear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/calling_linear"
+        android:background="@drawable/kf_calling_linear"
         android:gravity="center"
         android:orientation="vertical" >
 
@@ -26,7 +26,7 @@
         android:id="@+id/call_return_linear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/calling_linear"
+        android:background="@drawable/kf_calling_linear"
         android:gravity="center"
         android:orientation="vertical" >
 
@@ -44,7 +44,7 @@
         android:id="@+id/ordinary_call_linear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/calling_linear"
+        android:background="@drawable/kf_calling_linear"
         android:gravity="center"
         android:orientation="vertical" >
 
@@ -62,7 +62,7 @@
         android:id="@+id/cancel_linear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/calling_linear"
+        android:background="@drawable/kf_calling_linear"
         android:gravity="center"
         android:orientation="vertical" >
 

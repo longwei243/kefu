@@ -19,7 +19,7 @@ public class InfoDao {
 
     private InfoDao() {
         try {
-            infoDao = helper.getDao(Info.class);
+            infoDao = helper.getInfoDao();
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

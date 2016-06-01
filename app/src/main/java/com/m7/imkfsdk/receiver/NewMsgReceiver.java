@@ -29,7 +29,7 @@ public class NewMsgReceiver extends BroadcastReceiver{
                 context.sendBroadcast(new Intent("com.m7.imkfsdk.msgreceiver"));
             }else {
 //                Notification notification = new Notification();
-//                notification.icon = R.drawable.ic_launcher;
+//                notification.kf_icon = R.drawable.kf_ic_launcher;
 //                notification.defaults = Notification.DEFAULT_LIGHTS|Notification.DEFAULT_SOUND;
 //                notification.flags |= Notification.FLAG_AUTO_CANCEL;
 //                notification.when = System.currentTimeMillis();

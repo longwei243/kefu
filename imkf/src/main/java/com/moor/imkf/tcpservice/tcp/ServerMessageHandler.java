@@ -123,8 +123,11 @@ public class ServerMessageHandler extends IdleStateAwareChannelHandler {
 		} else if("robot".equals(result)){
 			Intent robotIntent = new Intent(IMChatManager.ROBOT_ACTION);
 			context.sendBroadcast(robotIntent);
-		}else if("online".equals(result) || "claim".equals(result)){
+		}else if("online".equals(result)){
 			Intent onlineIntent = new Intent(IMChatManager.ONLINE_ACTION);
+			context.sendBroadcast(onlineIntent);
+		}else if("claim".equals(result)){
+			Intent onlineIntent = new Intent(IMChatManager.CLIAM_ACTION);
 			context.sendBroadcast(onlineIntent);
 		}else if("offline".equals(result)){
 			Intent offlineIntent = new Intent(IMChatManager.OFFLINE_ACTION);
@@ -132,7 +135,7 @@ public class ServerMessageHandler extends IdleStateAwareChannelHandler {
 		}else if("investigate".equals(result)){
 			Intent investigateIntent = new Intent(IMChatManager.INVESTIGATE_ACTION);
 			context.sendBroadcast(investigateIntent);
-		}else if("queueNum".equals(result)){
+		}else if(result.startsWith("queueNum")){
 			String queueNum = result.split("@")[1];
 			if(queueNum != null && (Integer.parseInt(queueNum) > 0)) {
 				Intent queueNumIntent = new Intent(IMChatManager.QUEUENUM_ACTION);
@@ -140,6 +143,9 @@ public class ServerMessageHandler extends IdleStateAwareChannelHandler {
 				context.sendBroadcast(queueNumIntent);
 			}
 
+		}else if("finish".equals(result)) {
+			Intent finishIntent = new Intent(IMChatManager.FINISH_ACTION);
+			context.sendBroadcast(finishIntent);
 		}
 	}
 

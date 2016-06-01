@@ -23,7 +23,7 @@ public class MessageDao {
 
 	private MessageDao() {
 		try {
-			fromToMessageDao = helper.getDao(FromToMessage.class);
+			fromToMessageDao = helper.getFromMessageDao();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

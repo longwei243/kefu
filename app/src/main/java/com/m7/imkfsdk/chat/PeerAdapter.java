@@ -45,7 +45,7 @@ public class PeerAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
         if(convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.investigate_list, null);
+            convertView = LayoutInflater.from(context).inflate(R.layout.kf_investigate_list, null);
             holder = new ViewHolder();
             holder.tv_name = (TextView) convertView.findViewById(R.id.investigate_list_tv_name);
             convertView.setTag(holder);

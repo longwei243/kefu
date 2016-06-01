@@ -18,7 +18,7 @@ public class LoadingFragmentDialog extends DialogFragment{
     public Dialog onCreateDialog(Bundle savedInstanceState)
     {
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.dialog_loading, null);
+        View view = inflater.inflate(R.layout.kf_dialog_loading, null);
         TextView title = (TextView) view
                 .findViewById(R.id.id_dialog_loading_msg);
         title.setText("请稍等...");

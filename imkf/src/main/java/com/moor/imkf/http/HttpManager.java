@@ -21,6 +21,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * 请求服务器方法类
@@ -29,6 +31,8 @@ import java.util.HashMap;
 public class HttpManager {
 	public static OkHttpClient httpClient = new OkHttpClient();
 	private static Handler mDelivery;
+
+	private static ExecutorService mExecutorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
 	static {
 		mDelivery = new Handler(Looper.getMainLooper());
@@ -63,37 +67,43 @@ public class HttpManager {
 					.url(RequestUrl.baseHttp1)
 					.post(formBody)
 					.build();
-			Call call = httpClient.newCall(request);
-			call.enqueue(new Callback() {
+			final Call call = httpClient.newCall(request);
+			mExecutorService.submit(new Runnable() {
 				@Override
-				public void onFailure(Request request, IOException e) {
-					if(listener != null) {
-						mDelivery.post(new Runnable() {
-							@Override
-							public void run() {
-								listener.onFailed();
-							}
-						});
+				public void run() {
+					call.enqueue(new Callback() {
+						@Override
+						public void onFailure(Request request, IOException e) {
+							if (listener != null) {
+								mDelivery.post(new Runnable() {
+									@Override
+									public void run() {
+										listener.onFailed();
+									}
+								});
 
-					}
-				}
-
-				@Override
-				public void onResponse(final Response response) throws IOException {
-					if(listener != null) {
-						mDelivery.post(new Runnable() {
-							@Override
-							public void run() {
-								try {
-									listener.onSuccess(response.body().string());
-								} catch (IOException e) {
-									e.printStackTrace();
-								}
 							}
-						});
-					}
+						}
+
+						@Override
+						public void onResponse(final Response response) throws IOException {
+							if (listener != null) {
+								mDelivery.post(new Runnable() {
+									@Override
+									public void run() {
+										try {
+											listener.onSuccess(response.body().string());
+										} catch (IOException e) {
+											e.printStackTrace();
+										}
+									}
+								});
+							}
+						}
+					});
 				}
 			});
+
 			
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -125,37 +135,43 @@ public class HttpManager {
 				.url(RequestUrl.baseHttp1)
 				.post(formBody)
 				.build();
-		Call call = httpClient.newCall(request);
-		call.enqueue(new Callback() {
+		final Call call = httpClient.newCall(request);
+		mExecutorService.submit(new Runnable() {
 			@Override
-			public void onFailure(Request request, IOException e) {
-				if(listener != null) {
-					mDelivery.post(new Runnable() {
-						@Override
-						public void run() {
-							listener.onFailed();
-						}
-					});
+			public void run() {
+				call.enqueue(new Callback() {
+					@Override
+					public void onFailure(Request request, IOException e) {
+						if (listener != null) {
+							mDelivery.post(new Runnable() {
+								@Override
+								public void run() {
+									listener.onFailed();
+								}
+							});
 
-				}
-			}
-
-			@Override
-			public void onResponse(final Response response) throws IOException {
-				if(listener != null) {
-					mDelivery.post(new Runnable() {
-						@Override
-						public void run() {
-							try {
-								listener.onSuccess(response.body().string());
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
 						}
-					});
-				}
+					}
+
+					@Override
+					public void onResponse(final Response response) throws IOException {
+						if (listener != null) {
+							mDelivery.post(new Runnable() {
+								@Override
+								public void run() {
+									try {
+										listener.onSuccess(response.body().string());
+									} catch (IOException e) {
+										e.printStackTrace();
+									}
+								}
+							});
+						}
+					}
+				});
 			}
 		});
+
 
 	}
 	/**
@@ -181,37 +197,43 @@ public class HttpManager {
 				.url(RequestUrl.baseHttp1)
 				.post(formBody)
 				.build();
-		Call call = httpClient.newCall(request);
-		call.enqueue(new Callback() {
+		final Call call = httpClient.newCall(request);
+		mExecutorService.submit(new Runnable() {
 			@Override
-			public void onFailure(Request request, IOException e) {
-				if(listener != null) {
-					mDelivery.post(new Runnable() {
-						@Override
-						public void run() {
-							listener.onFailed();
-						}
-					});
+			public void run() {
+				call.enqueue(new Callback() {
+					@Override
+					public void onFailure(Request request, IOException e) {
+						if (listener != null) {
+							mDelivery.post(new Runnable() {
+								@Override
+								public void run() {
+									listener.onFailed();
+								}
+							});
 
-				}
-			}
-
-			@Override
-			public void onResponse(final Response response) throws IOException {
-				if(listener != null) {
-					mDelivery.post(new Runnable() {
-						@Override
-						public void run() {
-							try {
-								listener.onSuccess(response.body().string());
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
 						}
-					});
-				}
+					}
+
+					@Override
+					public void onResponse(final Response response) throws IOException {
+						if (listener != null) {
+							mDelivery.post(new Runnable() {
+								@Override
+								public void run() {
+									try {
+										listener.onSuccess(response.body().string());
+									} catch (IOException e) {
+										e.printStackTrace();
+									}
+								}
+							});
+						}
+					}
+				});
 			}
 		});
+
 		
 	}
 
@@ -236,37 +258,43 @@ public class HttpManager {
 					.url(RequestUrl.baseHttp1)
 					.post(formBody)
 					.build();
-			Call call = httpClient.newCall(request);
-			call.enqueue(new Callback() {
+			final Call call = httpClient.newCall(request);
+			mExecutorService.submit(new Runnable() {
 				@Override
-				public void onFailure(Request request, IOException e) {
-					if(listener != null) {
-						mDelivery.post(new Runnable() {
-							@Override
-							public void run() {
-								listener.onFailed();
-							}
-						});
+				public void run() {
+					call.enqueue(new Callback() {
+						@Override
+						public void onFailure(Request request, IOException e) {
+							if (listener != null) {
+								mDelivery.post(new Runnable() {
+									@Override
+									public void run() {
+										listener.onFailed();
+									}
+								});
 
-					}
-				}
-
-				@Override
-				public void onResponse(final Response response) throws IOException {
-					if(listener != null) {
-						mDelivery.post(new Runnable() {
-							@Override
-							public void run() {
-								try {
-									listener.onSuccess(response.body().string());
-								} catch (IOException e) {
-									e.printStackTrace();
-								}
 							}
-						});
-					}
+						}
+
+						@Override
+						public void onResponse(final Response response) throws IOException {
+							if (listener != null) {
+								mDelivery.post(new Runnable() {
+									@Override
+									public void run() {
+										try {
+											listener.onSuccess(response.body().string());
+										} catch (IOException e) {
+											e.printStackTrace();
+										}
+									}
+								});
+							}
+						}
+					});
 				}
 			});
+
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -290,36 +318,43 @@ public class HttpManager {
 					.url(RequestUrl.baseHttp1)
 					.post(formBody)
 					.build();
-			Call call = httpClient.newCall(request);
-			call.enqueue(new Callback() {
+			final Call call = httpClient.newCall(request);
+			mExecutorService.submit(new Runnable() {
 				@Override
-				public void onFailure(Request request, IOException e) {
-					if(listener != null) {
-						mDelivery.post(new Runnable() {
-							@Override
-							public void run() {
-								listener.onFailed();
-							}
-						});
+				public void run() {
+					call.enqueue(new Callback() {
+						@Override
+						public void onFailure(Request request, IOException e) {
+							if (listener != null) {
+								mDelivery.post(new Runnable() {
+									@Override
+									public void run() {
+										listener.onFailed();
+									}
+								});
 
-					}
-				}
-				@Override
-				public void onResponse(final Response response) throws IOException {
-					if(listener != null) {
-						mDelivery.post(new Runnable() {
-							@Override
-							public void run() {
-								try {
-									listener.onSuccess(response.body().string());
-								} catch (IOException e) {
-									e.printStackTrace();
-								}
 							}
-						});
-					}
+						}
+
+						@Override
+						public void onResponse(final Response response) throws IOException {
+							if (listener != null) {
+								mDelivery.post(new Runnable() {
+									@Override
+									public void run() {
+										try {
+											listener.onSuccess(response.body().string());
+										} catch (IOException e) {
+											e.printStackTrace();
+										}
+									}
+								});
+							}
+						}
+					});
 				}
 			});
+
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -344,37 +379,43 @@ public class HttpManager {
 					.url(RequestUrl.baseHttp1)
 					.post(formBody)
 					.build();
-			Call call = httpClient.newCall(request);
-			call.enqueue(new Callback() {
+			final Call call = httpClient.newCall(request);
+			mExecutorService.submit(new Runnable() {
 				@Override
-				public void onFailure(Request request, IOException e) {
-					if(listener != null) {
-						mDelivery.post(new Runnable() {
-							@Override
-							public void run() {
-								listener.onFailed();
-							}
-						});
+				public void run() {
+					call.enqueue(new Callback() {
+						@Override
+						public void onFailure(Request request, IOException e) {
+							if (listener != null) {
+								mDelivery.post(new Runnable() {
+									@Override
+									public void run() {
+										listener.onFailed();
+									}
+								});
 
-					}
-				}
-
-				@Override
-				public void onResponse(final Response response) throws IOException {
-					if(listener != null) {
-						mDelivery.post(new Runnable() {
-							@Override
-							public void run() {
-								try {
-									listener.onSuccess(response.body().string());
-								} catch (IOException e) {
-									e.printStackTrace();
-								}
 							}
-						});
-					}
+						}
+
+						@Override
+						public void onResponse(final Response response) throws IOException {
+							if (listener != null) {
+								mDelivery.post(new Runnable() {
+									@Override
+									public void run() {
+										try {
+											listener.onSuccess(response.body().string());
+										} catch (IOException e) {
+											e.printStackTrace();
+										}
+									}
+								});
+							}
+						}
+					});
 				}
 			});
+
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -400,36 +441,43 @@ public class HttpManager {
 					.url(RequestUrl.baseHttp1)
 					.post(formBody)
 					.build();
-			Call call = httpClient.newCall(request);
-			call.enqueue(new Callback() {
+			final Call call = httpClient.newCall(request);
+			mExecutorService.submit(new Runnable() {
 				@Override
-				public void onFailure(Request request, IOException e) {
-					if(listener != null) {
-						mDelivery.post(new Runnable() {
-							@Override
-							public void run() {
-								listener.onFailed();
-							}
-						});
+				public void run() {
+					call.enqueue(new Callback() {
+						@Override
+						public void onFailure(Request request, IOException e) {
+							if (listener != null) {
+								mDelivery.post(new Runnable() {
+									@Override
+									public void run() {
+										listener.onFailed();
+									}
+								});
 
-					}
-				}
-				@Override
-				public void onResponse(final Response response) throws IOException {
-					if(listener != null) {
-						mDelivery.post(new Runnable() {
-							@Override
-							public void run() {
-								try {
-									listener.onSuccess(response.body().string());
-								} catch (IOException e) {
-									e.printStackTrace();
-								}
 							}
-						});
-					}
+						}
+
+						@Override
+						public void onResponse(final Response response) throws IOException {
+							if (listener != null) {
+								mDelivery.post(new Runnable() {
+									@Override
+									public void run() {
+										try {
+											listener.onSuccess(response.body().string());
+										} catch (IOException e) {
+											e.printStackTrace();
+										}
+									}
+								});
+							}
+						}
+					});
 				}
 			});
+
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -457,37 +505,43 @@ public class HttpManager {
 					.url(RequestUrl.baseHttp1)
 					.post(formBody)
 					.build();
-			Call call = httpClient.newCall(request);
-			call.enqueue(new Callback() {
+			final Call call = httpClient.newCall(request);
+			mExecutorService.submit(new Runnable() {
 				@Override
-				public void onFailure(Request request, IOException e) {
-					if(listener != null) {
-						mDelivery.post(new Runnable() {
-							@Override
-							public void run() {
-								listener.onFailed();
-							}
-						});
+				public void run() {
+					call.enqueue(new Callback() {
+						@Override
+						public void onFailure(Request request, IOException e) {
+							if (listener != null) {
+								mDelivery.post(new Runnable() {
+									@Override
+									public void run() {
+										listener.onFailed();
+									}
+								});
 
-					}
-				}
-
-				@Override
-				public void onResponse(final Response response) throws IOException {
-					if(listener != null) {
-						mDelivery.post(new Runnable() {
-							@Override
-							public void run() {
-								try {
-									listener.onSuccess(response.body().string());
-								} catch (IOException e) {
-									e.printStackTrace();
-								}
 							}
-						});
-					}
+						}
+
+						@Override
+						public void onResponse(final Response response) throws IOException {
+							if (listener != null) {
+								mDelivery.post(new Runnable() {
+									@Override
+									public void run() {
+										try {
+											listener.onSuccess(response.body().string());
+										} catch (IOException e) {
+											e.printStackTrace();
+										}
+									}
+								});
+							}
+						}
+					});
 				}
 			});
+
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -510,37 +564,43 @@ public class HttpManager {
 					.url(RequestUrl.baseHttp1)
 					.post(formBody)
 					.build();
-			Call call = httpClient.newCall(request);
-			call.enqueue(new Callback() {
+			final Call call = httpClient.newCall(request);
+			mExecutorService.submit(new Runnable() {
 				@Override
-				public void onFailure(Request request, IOException e) {
-					if(listener != null) {
-						mDelivery.post(new Runnable() {
-							@Override
-							public void run() {
-								listener.onFailed();
-							}
-						});
+				public void run() {
+					call.enqueue(new Callback() {
+						@Override
+						public void onFailure(Request request, IOException e) {
+							if (listener != null) {
+								mDelivery.post(new Runnable() {
+									@Override
+									public void run() {
+										listener.onFailed();
+									}
+								});
 
-					}
-				}
-
-				@Override
-				public void onResponse(final Response response) throws IOException {
-					if(listener != null) {
-						mDelivery.post(new Runnable() {
-							@Override
-							public void run() {
-								try {
-									listener.onSuccess(response.body().string());
-								} catch (IOException e) {
-									e.printStackTrace();
-								}
 							}
-						});
-					}
+						}
+
+						@Override
+						public void onResponse(final Response response) throws IOException {
+							if (listener != null) {
+								mDelivery.post(new Runnable() {
+									@Override
+									public void run() {
+										try {
+											listener.onSuccess(response.body().string());
+										} catch (IOException e) {
+											e.printStackTrace();
+										}
+									}
+								});
+							}
+						}
+					});
 				}
 			});
+
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -563,37 +623,43 @@ public class HttpManager {
 					.url(RequestUrl.baseHttp1)
 					.post(formBody)
 					.build();
-			Call call = httpClient.newCall(request);
-			call.enqueue(new Callback() {
+			final Call call = httpClient.newCall(request);
+			mExecutorService.submit(new Runnable() {
 				@Override
-				public void onFailure(Request request, IOException e) {
-					if(listener != null) {
-						mDelivery.post(new Runnable() {
-							@Override
-							public void run() {
-								listener.onFailed();
-							}
-						});
+				public void run() {
+					call.enqueue(new Callback() {
+						@Override
+						public void onFailure(Request request, IOException e) {
+							if (listener != null) {
+								mDelivery.post(new Runnable() {
+									@Override
+									public void run() {
+										listener.onFailed();
+									}
+								});
 
-					}
-				}
-
-				@Override
-				public void onResponse(final Response response) throws IOException {
-					if(listener != null) {
-						mDelivery.post(new Runnable() {
-							@Override
-							public void run() {
-								try {
-									listener.onSuccess(response.body().string());
-								} catch (IOException e) {
-									e.printStackTrace();
-								}
 							}
-						});
-					}
+						}
+
+						@Override
+						public void onResponse(final Response response) throws IOException {
+							if (listener != null) {
+								mDelivery.post(new Runnable() {
+									@Override
+									public void run() {
+										try {
+											listener.onSuccess(response.body().string());
+										} catch (IOException e) {
+											e.printStackTrace();
+										}
+									}
+								});
+							}
+						}
+					});
 				}
 			});
+
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

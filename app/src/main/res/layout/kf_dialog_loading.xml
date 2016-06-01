@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:layout_gravity="center"
-    android:background="@drawable/dialog_loading_bg" >
+    android:background="@drawable/kf_dialog_loading_bg" >
 
     <View
         android:layout_width="160.0dip"

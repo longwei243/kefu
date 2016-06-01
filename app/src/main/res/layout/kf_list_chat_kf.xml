@@ -54,7 +54,7 @@
                 android:id="@+id/chatfrom_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/chatfrom_bg_normal"
+                android:background="@drawable/kf_chatfrom_bg_normal"
                 android:gravity="center_vertical"
                 android:layout_marginLeft="3dp"
                 android:lineSpacingMultiplier="1.1"
@@ -69,7 +69,7 @@
                  android:id="@+id/chat_from_recorder_length"
                  android:layout_width="wrap_content"
                  android:layout_height="wrap_content"
-                 android:background="@drawable/chatfrom_bg_normal"
+                 android:background="@drawable/kf_chatfrom_bg_normal"
                  android:layout_centerVertical="true"
                  android:layout_toRightOf="@id/chatfrom_icon"
                 android:layout_below="@id/chatfrom_tv_name"
@@ -81,7 +81,7 @@
                  android:layout_height="30dp"
                  android:layout_centerVertical="true"
                  android:layout_alignParentLeft="true"
-                 android:background="@drawable/adj_left"
+                 android:background="@drawable/kf_adj_left"
                  />
 
                 <TextView
@@ -105,7 +105,7 @@
                 android:layout_below="@id/chatfrom_tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/chatfrom_bg_normal"
+                android:background="@drawable/kf_chatfrom_bg_normal"
                 >
                 <ImageView
                     android:id="@+id/chat_from_iv_img"
@@ -152,7 +152,7 @@
                         android:id="@+id/chatto_content"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/chatto_bg_normal"
+                        android:background="@drawable/kf_chatto_bg_normal"
                         android:gravity="center_vertical"
                         android:lineSpacingMultiplier="1.1"
                         android:paddingBottom="10dp"
@@ -167,7 +167,7 @@
                     android:id="@+id/chat_to_recorder_length"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/chatto_bg_normal"
+                    android:background="@drawable/kf_chatto_bg_normal"
                     android:layout_centerVertical="true"
                     >
 
@@ -177,7 +177,7 @@
                         android:layout_height="30dp"
                         android:layout_centerVertical="true"
                         android:layout_alignParentRight="true"
-                        android:background="@drawable/adj"
+                        android:background="@drawable/kf_adj"
                         />
 
                     <TextView
@@ -201,7 +201,7 @@
                     android:id="@+id/chat_to_layout_img"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/chatto_bg_normal"
+                    android:background="@drawable/kf_chatto_bg_normal"
                     >
 
                     <ImageView
@@ -222,7 +222,7 @@
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_centerVertical="true"
-                android:background="@drawable/chat_failure_msgs"
+                android:background="@drawable/kf_chat_failure_msgs"
                 android:layout_toLeftOf="@id/chatto_content_layout"
                 android:visibility="gone" />
 

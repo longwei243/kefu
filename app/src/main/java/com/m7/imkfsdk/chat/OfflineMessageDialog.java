@@ -29,7 +29,7 @@ public class OfflineMessageDialog extends DialogFragment {
                              Bundle savedInstanceState) {
         // Get the layout inflater
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
-        View view = inflater.inflate(R.layout.dialog_offline, null);
+        View view = inflater.inflate(R.layout.kf_dialog_offline, null);
         id_et_content = (EditText) view.findViewById(R.id.id_et_content);
         id_et_phone = (EditText) view.findViewById(R.id.id_et_phone);
         id_et_email = (EditText) view.findViewById(R.id.id_et_email);

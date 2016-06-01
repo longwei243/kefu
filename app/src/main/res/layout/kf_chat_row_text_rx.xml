@@ -27,7 +27,7 @@
                 android:id="@+id/chatting_avatar_iv"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/head_default_robot"
+                android:src="@drawable/kf_head_default_robot"
                 android:scaleType="fitXY" />
 
             <TextView
@@ -48,7 +48,7 @@
                 android:id="@+id/chat_content_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/chatfrom_bg_normal"
+                android:background="@drawable/kf_chatfrom_bg_normal"
                 android:gravity="center_vertical"
                 android:layout_marginLeft="3dp"
                 android:lineSpacingMultiplier="1.1"

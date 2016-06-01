@@ -56,7 +56,7 @@ public class FaceAdapter extends BaseAdapter {
 		ChatEmoji emoji = data.get(position);
 		if (convertView == null) {
 			viewHolder = new ViewHolder();
-			convertView = inflater.inflate(R.layout.viewpager_item_face, null);
+			convertView = inflater.inflate(R.layout.kf_viewpager_item_face, null);
 			viewHolder.mIvFace = (ImageView) convertView
 					.findViewById(R.id.item_iv_face);
 
@@ -64,7 +64,7 @@ public class FaceAdapter extends BaseAdapter {
 		} else {
 			viewHolder = (ViewHolder) convertView.getTag();
 		}
-		if (emoji.getId() == R.drawable.face_del_icon) {
+		if (emoji.getId() == R.drawable.kf_face_del_icon) {
 			convertView.setBackgroundDrawable(null);
 			viewHolder.mIvFace.setImageResource(emoji.getId());
 		} else if (TextUtils.isEmpty(emoji.getCharacter())) {

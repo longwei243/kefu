@@ -32,7 +32,7 @@ public abstract class BaseChatRow implements IChatRow{
         if(msg != null && msg.userType.equals("0")) {
             String msgStatus = msg.sendState;
             if(msgStatus.equals("false")) {
-                holder.getUploadState().setImageResource(R.drawable.chat_failure_msgs);
+                holder.getUploadState().setImageResource(R.drawable.kf_chat_failure_msgs);
                 holder.getUploadState().setVisibility(View.VISIBLE);
                 if(holder.getUploadProgressBar() != null) {
                     holder.getUploadProgressBar().setVisibility(View.GONE);

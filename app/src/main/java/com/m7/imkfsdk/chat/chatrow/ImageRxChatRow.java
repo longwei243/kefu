@@ -16,7 +16,7 @@ import com.moor.imkf.model.entity.FromToMessage;
 /**
  * Created by longwei on 2016/3/10.
  */
-public class ImageRxChatRow extends BaseChatRow{
+public class ImageRxChatRow extends BaseChatRow {
 
     public ImageRxChatRow(int type) {
         super(type);
@@ -35,8 +35,8 @@ public class ImageRxChatRow extends BaseChatRow{
             Glide.with(context).load(message.message+"?imageView2/0/w/200/h/140")
                     .centerCrop()
                     .crossFade()
-                    .placeholder(R.drawable.pic_thumb_bg)
-                    .error(R.drawable.image_download_fail_icon)
+                    .placeholder(R.drawable.kf_pic_thumb_bg)
+                    .error(R.drawable.kf_image_download_fail_icon)
                     .into(holder.getImageView());
 
             holder.getImageView().setOnClickListener(new View.OnClickListener() {
@@ -53,7 +53,7 @@ public class ImageRxChatRow extends BaseChatRow{
     @Override
     public View buildChatView(LayoutInflater inflater, View convertView) {
         if(convertView == null) {
-            convertView = inflater.inflate(R.layout.chat_row_image_rx, null);
+            convertView = inflater.inflate(R.layout.kf_chat_row_image_rx, null);
             ImageViewHolder holder = new ImageViewHolder(mRowType);
             convertView.setTag(holder.initBaseHolder(convertView, true));
         }

@@ -18,7 +18,7 @@ public class MsgInvesDao {
 
     private MsgInvesDao() {
         try {
-            investigateDao = helper.getDao(MsgInves.class);
+            investigateDao = helper.getMsgInvesDao();
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

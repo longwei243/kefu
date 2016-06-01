@@ -20,7 +20,7 @@ public class InvestigateDao {
 
     private InvestigateDao() {
         try {
-            investigateDao = helper.getDao(Investigate.class);
+            investigateDao = helper.getInvestigateDao();
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

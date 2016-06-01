@@ -140,11 +140,11 @@ public class VoiceViewHolder extends BaseHolder {
         }
 
         if(!receive) {
-            holder.voiceAnim.setBackgroundResource(R.drawable.chatto_bg_normal);
-            holder.voicePlayAnim.setBackgroundResource(R.drawable.chatto_bg_normal);
+            holder.voiceAnim.setBackgroundResource(R.drawable.kf_chatto_bg_normal);
+            holder.voicePlayAnim.setBackgroundResource(R.drawable.kf_chatto_bg_normal);
         } else {
-            holder.voiceAnim.setBackgroundResource(R.drawable.chatfrom_bg_normal);
-            holder.voicePlayAnim.setBackgroundResource(R.drawable.chatfrom_bg_normal);
+            holder.voiceAnim.setBackgroundResource(R.drawable.kf_chatfrom_bg_normal);
+            holder.voicePlayAnim.setBackgroundResource(R.drawable.kf_chatfrom_bg_normal);
         }
 
         holder.contentTv.setBackgroundColor(0);

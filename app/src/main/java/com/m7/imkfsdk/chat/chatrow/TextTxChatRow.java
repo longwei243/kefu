@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
 /**
  * Created by longwei on 2016/3/9.
  */
-public class TextTxChatRow extends BaseChatRow{
+public class TextTxChatRow extends BaseChatRow {
 
     private Context context;
 
@@ -63,7 +63,7 @@ public class TextTxChatRow extends BaseChatRow{
     public View buildChatView(LayoutInflater inflater, View convertView) {
 
         if(convertView == null) {
-            convertView = inflater.inflate(R.layout.chat_row_text_tx, null);
+            convertView = inflater.inflate(R.layout.kf_chat_row_text_tx, null);
             TextViewHolder holder = new TextViewHolder(mRowType);
             convertView.setTag(holder.initBaseHolder(convertView, false));
         }

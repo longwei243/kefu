@@ -44,6 +44,10 @@ public class IMChatManager {
      */
     public static final String ONLINE_ACTION = "action_online";
     /**
+     * 接收客服领取会话的action
+     */
+    public static final String CLIAM_ACTION = "action_cliam";
+    /**
      * 接收客服不在线的action
      */
     public static final String OFFLINE_ACTION = "action_offline";
@@ -55,6 +59,10 @@ public class IMChatManager {
      * 技能组排队数
      */
     public static final String QUEUENUM_ACTION = "action_queuenum";
+    /**
+     * 会话结束
+     */
+    public static final String FINISH_ACTION = "action_finish";
 
     private Context appContext;
 

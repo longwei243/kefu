@@ -62,7 +62,7 @@
             android:enabled="true"
             >
             <intent-filter android:priority="2147483647" >
-                <action android:name="com.moor.im.KEFU_NEW_MSG" />
+                <action android:name="com.m7.imkf.KEFU_NEW_MSG" />
             </intent-filter>
         </receiver>
     </application>

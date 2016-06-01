@@ -59,7 +59,7 @@ public class MoreAdapter extends BaseAdapter {
 		ViewHolder viewHolder = null;
 		if (convertView == null) {
 			viewHolder = new ViewHolder();
-			convertView = inflater.inflate(R.layout.viewpager_item_more, null);
+			convertView = inflater.inflate(R.layout.kf_viewpager_item_more, null);
 			viewHolder.mItemIvMoreImg = (ImageView) convertView
 					.findViewById(R.id.item_iv_more_img);
 			viewHolder.mItemIvMoreText = (TextView) convertView

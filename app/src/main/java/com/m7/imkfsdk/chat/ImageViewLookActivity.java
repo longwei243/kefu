@@ -5,10 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
 
 import com.bumptech.glide.Glide;
-
 import com.m7.imkfsdk.R;
 import com.m7.imkfsdk.view.TouchImageView;
 
@@ -23,7 +21,7 @@ public class ImageViewLookActivity extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_image_look);
+        setContentView(R.layout.kf_activity_image_look);
         touchImageView = (TouchImageView) findViewById(R.id.matrixImageView);
 
         Intent intent = getIntent();
@@ -31,8 +29,8 @@ public class ImageViewLookActivity extends Activity{
 
         if(imgPath != null && !"".equals(imgPath)) {
             Glide.with(this).load(imgPath)
-                    .placeholder(R.drawable.pic_thumb_bg)
-                    .error(R.drawable.image_download_fail_icon)
+                    .placeholder(R.drawable.kf_pic_thumb_bg)
+                    .error(R.drawable.kf_image_download_fail_icon)
                     .into(touchImageView);
         }else {
             finish();

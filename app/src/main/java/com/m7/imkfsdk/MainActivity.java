@@ -56,7 +56,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.kf_activity_main);
         sp = getSharedPreferences("setting", 0);
         loadingDialog = new LoadingFragmentDialog();
         findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
@@ -119,6 +119,7 @@ public class MainActivity extends Activity {
                     PeerDialog dialog = new PeerDialog();
                     Bundle b = new Bundle();
                     b.putSerializable("Peers", (Serializable) peers);
+                    b.putString("type", "init");
                     dialog.setArguments(b);
                     dialog.show(getFragmentManager(), "");
 
@@ -176,12 +177,9 @@ public class MainActivity extends Activity {
                     }
                 });
 
-//                String accessId = sp.getString("accessId", "");
-//                String name = sp.getString("name", "");
-//                String userId = sp.getString("userId", "");
                 //初始化IMSdk,填入相关参数
-//                IMChatManager.getInstance().init(MobileApplication.getInstance(), "com.moor.im.KEFU_NEW_MSG", "2ff6ebc0-e40c-11e5-82a5-51d279813f91", "游客", "999000");
-                IMChatManager.getInstance().init(MobileApplication.getInstance(), "com.moor.im.KEFU_NEW_MSG", "1a407410-9ee1-11e5-a8e6-17b9721f92b3", "未知", "123456");
+//                IMChatManager.getInstance().init(MobileApplication.getInstance(), "com.m7.imkf.KEFU_NEW_MSG", "2ff6ebc0-e40c-11e5-82a5-51d279813f91", "aaaa", "userid");
+                IMChatManager.getInstance().init(MobileApplication.getInstance(), "com.m7.imkf.KEFU_NEW_MSG", "4c7b7fb0-231b-11e6-a75f-6ddaf0aceb9d", "小马测试", "1119");
             }
         }.start();
 
@@ -205,8 +203,6 @@ public class MainActivity extends Activity {
                     init();
                 } else {
 
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
                 }
                 break;
         }

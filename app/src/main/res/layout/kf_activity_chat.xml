@@ -16,7 +16,7 @@
             android:id="@+id/chat_btn_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_arrow_left"
+            android:src="@drawable/kf_ic_arrow_left"
             android:layout_marginLeft="8dp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
@@ -45,6 +45,35 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:visibility="gone"
+        android:layout_below="@id/chat_title"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp"
+        android:padding="4dp"
+        android:id="@+id/chat_queue_ll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:background="@color/lightgrey">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="当前咨询人数较多,你排在第"/>
+        <TextView
+            android:id="@+id/chat_queue_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/maincolor"
+            android:text="1"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="位"/>
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/bar_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -70,7 +99,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginLeft="6dp"
-                android:background="@drawable/icon_chat_voice"
+                android:background="@drawable/kf_icon_chat_voice"
                 android:visibility="visible" />
 
             <Button
@@ -78,7 +107,7 @@
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginLeft="6dp"
-                android:background="@drawable/chatting_setmode_keyboard_btn"
+                android:background="@drawable/kf_chatting_setmode_keyboard_btn"
                 android:visibility="gone" />
 
             <com.m7.imkfsdk.recordbutton.AudioRecorderButton
@@ -93,7 +122,7 @@
                 android:gravity="center"
                 android:text="@string/recorder_normal"
             	android:textColor="#727272"
-                android:background="@drawable/btn_recorder_normal"
+                android:background="@drawable/kf_btn_recorder_normal"
                 android:visibility="gone" >
 
                 
@@ -107,7 +136,7 @@
                 android:layout_marginLeft="6dp"
                 android:layout_marginRight="6dp"
                 android:layout_weight="1"
-                android:background="@drawable/input_bar_bg_normal"
+                android:background="@drawable/kf_input_bar_bg_normal"
                 android:gravity="bottom" >
 
                 <EditText
@@ -133,7 +162,7 @@
                     android:layout_gravity="center_vertical|right"
                     android:layout_margin="1dp"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/icon_chat_emoji_normal"
+                    android:src="@drawable/kf_icon_chat_emoji_normal"
                     android:visibility="visible" />
 
                 <ImageView
@@ -145,7 +174,7 @@
                     android:layout_gravity="center_vertical|right"
                     android:layout_margin="1dp"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/icon_chat_emoji_checked"
+                    android:src="@drawable/kf_icon_chat_emoji_checked"
                     android:visibility="invisible" />
             </RelativeLayout>
 
@@ -155,14 +184,14 @@
                 android:layout_height="32dp"
                 android:layout_marginLeft="6dp"
                 android:layout_marginRight="16dp"
-                android:background="@drawable/icon_chattype_add" />
+                android:background="@drawable/kf_icon_chattype_add" />
 
             <Button
                 android:id="@+id/chat_send"
                 android:layout_width="48dp"
                 android:layout_height="32dp"
                 android:layout_marginRight="4dp"
-                android:background="@drawable/chat_send_btn_selector"
+                android:background="@drawable/kf_chat_send_btn_selector"
                 android:text="发送"
                 android:textColor="#666666"
                 android:textSize="16sp"

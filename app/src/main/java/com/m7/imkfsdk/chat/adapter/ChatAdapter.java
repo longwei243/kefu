@@ -123,7 +123,7 @@ public class ChatAdapter extends BaseAdapter{
 
         if(showTimer) {
             baseHolder.getChattingTime().setVisibility(View.VISIBLE);
-            baseHolder.getChattingTime().setBackgroundResource(R.drawable.chat_tips_bg);
+            baseHolder.getChattingTime().setBackgroundResource(R.drawable.kf_chat_tips_bg);
             baseHolder.getChattingTime().setText(DateUtil.getDateString(message.when, DateUtil.SHOW_TYPE_CALL_LOG).trim());
             baseHolder.getChattingTime().setTextColor(Color.WHITE);
             baseHolder.getChattingTime().setPadding(6, 2, 6, 2);

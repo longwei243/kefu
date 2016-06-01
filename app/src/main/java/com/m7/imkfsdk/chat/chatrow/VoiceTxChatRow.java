@@ -14,7 +14,7 @@ import com.moor.imkf.model.entity.FromToMessage;
 /**
  * Created by longwei on 2016/3/9.
  */
-public class VoiceTxChatRow extends BaseChatRow{
+public class VoiceTxChatRow extends BaseChatRow {
 
     public VoiceTxChatRow(int type) {
         super(type);
@@ -43,7 +43,7 @@ public class VoiceTxChatRow extends BaseChatRow{
     public View buildChatView(LayoutInflater inflater, View convertView) {
 
         if(convertView == null) {
-            convertView = inflater.inflate(R.layout.chat_row_voice_tx, null);
+            convertView = inflater.inflate(R.layout.kf_chat_row_voice_tx, null);
             VoiceViewHolder holder = new VoiceViewHolder(mRowType);
             convertView.setTag(holder.initBaseHolder(convertView, false));
         }

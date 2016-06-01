@@ -2,10 +2,6 @@ package com.m7.imkfsdk.chat.chatrow;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -27,7 +23,6 @@ import com.moor.imkf.utils.AnimatedImageSpan;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -74,7 +69,7 @@ public class TextRxChatRow extends BaseChatRow {
     @Override
     public View buildChatView(LayoutInflater inflater, View convertView) {
         if(convertView == null) {
-            convertView = inflater.inflate(R.layout.chat_row_text_rx, null);
+            convertView = inflater.inflate(R.layout.kf_chat_row_text_rx, null);
             TextViewHolder holder = new TextViewHolder(mRowType);
             convertView.setTag(holder.initBaseHolder(convertView, true));
         }
