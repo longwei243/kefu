@@ -101,4 +101,21 @@ public class OfflineMessageDialog extends DialogFragment {
         });
         return view;
     }
+
+    @Override
+    public void show(android.app.FragmentManager manager, String tag) {
+        if(!this.isAdded()) {
+            try {
+                super.show(manager, tag);
+            }catch (Exception e) {}
+        }
+    }
+
+    @Override
+    public void dismiss() {
+        try {
+            super.dismiss();
+        }catch (Exception e) {}
+
+    }
 }

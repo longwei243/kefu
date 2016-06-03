@@ -28,23 +28,6 @@ public class NewMsgReceiver extends BroadcastReceiver{
             if(isAppForground(context)) {
                 context.sendBroadcast(new Intent("com.m7.imkfsdk.msgreceiver"));
             }else {
-//                Notification notification = new Notification();
-//                notification.kf_icon = R.drawable.kf_ic_launcher;
-//                notification.defaults = Notification.DEFAULT_LIGHTS|Notification.DEFAULT_SOUND;
-//                notification.flags |= Notification.FLAG_AUTO_CANCEL;
-//                notification.when = System.currentTimeMillis();
-//                notification.tickerText = "有新消息来了";
-//
-//                Intent it = new Intent(context,
-//                        ChatActivity.class);
-//                it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                it.setAction(Intent.ACTION_MAIN);
-//                it.addCategory(Intent.CATEGORY_LAUNCHER);
-//                PendingIntent contentIntent = PendingIntent.getActivity(context, 1,
-//                        it, PendingIntent.FLAG_UPDATE_CURRENT);
-//                notification.setLatestEventInfo(context, "客服消息", "新消息",
-//                        contentIntent);
-//                notificationManager.notify(1, notification);
 
             }
 

@@ -513,6 +513,4 @@ public class IMChatManager {
         }
     }
 
-
-
 }

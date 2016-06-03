@@ -31,12 +31,12 @@ public class FromToMessage {
 	public static final String MSG_TYPE_INVESTIGATE = "3";
 
 
-	@DatabaseField(generatedId = true)
-	public int id;
+//	@DatabaseField(generatedId = true)
+//	public int id;
 	/**
 	 * 消息的id
 	 */
-	@DatabaseField
+	@DatabaseField(id = true, unique = true)
 	public String _id;
 	/**
 	 * 消息从哪里来的

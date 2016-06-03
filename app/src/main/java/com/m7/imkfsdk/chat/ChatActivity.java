@@ -50,6 +50,7 @@ import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.m7.imkfsdk.MobileApplication;
 import com.m7.imkfsdk.R;
 import com.m7.imkfsdk.chat.adapter.ChatAdapter;
 import com.m7.imkfsdk.recordbutton.AudioRecorderButton;
@@ -257,6 +258,8 @@ public class ChatActivity extends MyBaseActivity implements OnClickListener,
 				.setNegativeButton("退出", new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialogInterface, int i) {
+						MobileApplication.isKFSDK = false;
+						IMChatManager.getInstance().quit();
 						finish();
 					}
 				})

@@ -157,14 +157,7 @@ public class MainActivity extends Activity {
                         loadingDialog.dismiss();
                         getPeers();
                         Log.d("MobileApplication", "sdk初始化成功");
-                        //初始化表情,界面效果需要
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                com.m7.imkfsdk.utils.FaceConversionUtil.getInstace().getFileText(
-                                        MobileApplication.getInstance());
-                            }
-                        }).start();
+
                     }
 
                     @Override
@@ -178,8 +171,9 @@ public class MainActivity extends Activity {
                 });
 
                 //初始化IMSdk,填入相关参数
-//                IMChatManager.getInstance().init(MobileApplication.getInstance(), "com.m7.imkf.KEFU_NEW_MSG", "2ff6ebc0-e40c-11e5-82a5-51d279813f91", "aaaa", "userid");
-                IMChatManager.getInstance().init(MobileApplication.getInstance(), "com.m7.imkf.KEFU_NEW_MSG", "4c7b7fb0-231b-11e6-a75f-6ddaf0aceb9d", "小马测试", "1119");
+                IMChatManager.getInstance().init(MobileApplication.getInstance(), "com.m7.imkf.KEFU_NEW_MSG", "1cf5bdb0-c66d-11e5-9875-63635d52845f", "正式测试", "userid");
+//                IMChatManager.getInstance().init(MobileApplication.getInstance(), "com.m7.imkf.KEFU_NEW_MSG", "2ff6ebc0-e40c-11e5-82a5-51d279813f91", "AT", "userid");
+//                IMChatManager.getInstance().init(MobileApplication.getInstance(), "com.m7.imkf.KEFU_NEW_MSG", "4c7b7fb0-231b-11e6-a75f-6ddaf0aceb9d", "小马测试", "1119");
             }
         }.start();
 

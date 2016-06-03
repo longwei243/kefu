@@ -117,8 +117,8 @@ public class IMService extends Service{
 	 */
 	private void onLoginOff() {
 		loginMgr.loginOff();
-		stopSelf();
 		SocketManager.getInstance(context).setStatus(SocketManagerStatus.BREAK);
+		stopSelf();
 	}
 
 	/**

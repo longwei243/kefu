@@ -31,11 +31,45 @@ import java.util.concurrent.Executors;
 public class HttpManager {
 	public static OkHttpClient httpClient = new OkHttpClient();
 	private static Handler mDelivery;
-
-	private static ExecutorService mExecutorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-
 	static {
 		mDelivery = new Handler(Looper.getMainLooper());
+	}
+
+	private static void post(String content, final HttpResponseListener listener) {
+		RequestBody formBody = new FormEncodingBuilder()
+				.add("data", content)
+				.build();
+		Request request = new Request.Builder()
+				.url(RequestUrl.baseHttp1)
+				.post(formBody)
+				.build();
+		final Call call = httpClient.newCall(request);
+		call.enqueue(new Callback() {
+			@Override
+			public void onFailure(Request request, IOException e) {
+				if (listener != null) {
+					mDelivery.post(new Runnable() {
+						@Override
+						public void run() {
+							listener.onFailed();
+						}
+					});
+				}
+			}
+
+			@Override
+			public void onResponse(final Response response) throws IOException {
+				final String st = response.body().string();
+				if (listener != null) {
+					mDelivery.post(new Runnable() {
+						@Override
+						public void run() {
+							listener.onSuccess(st);
+						}
+					});
+				}
+			}
+		});
 	}
 	/**
 	 * 发送新消息到服务器
@@ -59,52 +93,8 @@ public class HttpManager {
 			json.put("Message", fromToMessage.message);
 			json.put("VoiceSecond", fromToMessage.voiceSecond);
 			json.put("Action", "sdkNewMsg");
+			post(json.toString(), listener);
 
-			RequestBody formBody = new FormEncodingBuilder()
-					.add("data", json.toString())
-					.build();
-			Request request = new Request.Builder()
-					.url(RequestUrl.baseHttp1)
-					.post(formBody)
-					.build();
-			final Call call = httpClient.newCall(request);
-			mExecutorService.submit(new Runnable() {
-				@Override
-				public void run() {
-					call.enqueue(new Callback() {
-						@Override
-						public void onFailure(Request request, IOException e) {
-							if (listener != null) {
-								mDelivery.post(new Runnable() {
-									@Override
-									public void run() {
-										listener.onFailed();
-									}
-								});
-
-							}
-						}
-
-						@Override
-						public void onResponse(final Response response) throws IOException {
-							if (listener != null) {
-								mDelivery.post(new Runnable() {
-									@Override
-									public void run() {
-										try {
-											listener.onSuccess(response.body().string());
-										} catch (IOException e) {
-											e.printStackTrace();
-										}
-									}
-								});
-							}
-						}
-					});
-				}
-			});
-
-			
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -126,52 +116,7 @@ public class HttpManager {
 		map.put("ReceivedMsgIds", array);
 		map.put("Action", "sdkGetMsg");
 		JSONWriter jw = new JSONWriter();
-		jw.write(map);
-
-		RequestBody formBody = new FormEncodingBuilder()
-				.add("data", jw.write(map))
-				.build();
-		Request request = new Request.Builder()
-				.url(RequestUrl.baseHttp1)
-				.post(formBody)
-				.build();
-		final Call call = httpClient.newCall(request);
-		mExecutorService.submit(new Runnable() {
-			@Override
-			public void run() {
-				call.enqueue(new Callback() {
-					@Override
-					public void onFailure(Request request, IOException e) {
-						if (listener != null) {
-							mDelivery.post(new Runnable() {
-								@Override
-								public void run() {
-									listener.onFailed();
-								}
-							});
-
-						}
-					}
-
-					@Override
-					public void onResponse(final Response response) throws IOException {
-						if (listener != null) {
-							mDelivery.post(new Runnable() {
-								@Override
-								public void run() {
-									try {
-										listener.onSuccess(response.body().string());
-									} catch (IOException e) {
-										e.printStackTrace();
-									}
-								}
-							});
-						}
-					}
-				});
-			}
-		});
-
+		post(jw.write(map), listener);
 
 	}
 	/**
@@ -189,52 +134,7 @@ public class HttpManager {
 		map.put("LargeMsgId", largeMsgIdarray);
 		map.put("Action", "getLargeMsg");
 		JSONWriter jw = new JSONWriter();
-		jw.write(map);
-		RequestBody formBody = new FormEncodingBuilder()
-				.add("data", jw.write(map))
-				.build();
-		Request request = new Request.Builder()
-				.url(RequestUrl.baseHttp1)
-				.post(formBody)
-				.build();
-		final Call call = httpClient.newCall(request);
-		mExecutorService.submit(new Runnable() {
-			@Override
-			public void run() {
-				call.enqueue(new Callback() {
-					@Override
-					public void onFailure(Request request, IOException e) {
-						if (listener != null) {
-							mDelivery.post(new Runnable() {
-								@Override
-								public void run() {
-									listener.onFailed();
-								}
-							});
-
-						}
-					}
-
-					@Override
-					public void onResponse(final Response response) throws IOException {
-						if (listener != null) {
-							mDelivery.post(new Runnable() {
-								@Override
-								public void run() {
-									try {
-										listener.onSuccess(response.body().string());
-									} catch (IOException e) {
-										e.printStackTrace();
-									}
-								}
-							});
-						}
-					}
-				});
-			}
-		});
-
-		
+		post(jw.write(map), listener);
 	}
 
 	/**
@@ -251,49 +151,7 @@ public class HttpManager {
 			json.put("ConnectionId", Utils.replaceBlank(connectionId));
 			json.put("Action", "qiniu.getUptoken");
 			json.put("fileName", fileName);
-			RequestBody formBody = new FormEncodingBuilder()
-					.add("data", json.toString())
-					.build();
-			Request request = new Request.Builder()
-					.url(RequestUrl.baseHttp1)
-					.post(formBody)
-					.build();
-			final Call call = httpClient.newCall(request);
-			mExecutorService.submit(new Runnable() {
-				@Override
-				public void run() {
-					call.enqueue(new Callback() {
-						@Override
-						public void onFailure(Request request, IOException e) {
-							if (listener != null) {
-								mDelivery.post(new Runnable() {
-									@Override
-									public void run() {
-										listener.onFailed();
-									}
-								});
-
-							}
-						}
-
-						@Override
-						public void onResponse(final Response response) throws IOException {
-							if (listener != null) {
-								mDelivery.post(new Runnable() {
-									@Override
-									public void run() {
-										try {
-											listener.onSuccess(response.body().string());
-										} catch (IOException e) {
-											e.printStackTrace();
-										}
-									}
-								});
-							}
-						}
-					});
-				}
-			});
+			post(json.toString(), listener);
 
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -311,50 +169,7 @@ public class HttpManager {
 		try {
 			json.put("ConnectionId", Utils.replaceBlank(connectionId));
 			json.put("Action", "sdkGetInvestigate");
-			RequestBody formBody = new FormEncodingBuilder()
-					.add("data", json.toString())
-					.build();
-			Request request = new Request.Builder()
-					.url(RequestUrl.baseHttp1)
-					.post(formBody)
-					.build();
-			final Call call = httpClient.newCall(request);
-			mExecutorService.submit(new Runnable() {
-				@Override
-				public void run() {
-					call.enqueue(new Callback() {
-						@Override
-						public void onFailure(Request request, IOException e) {
-							if (listener != null) {
-								mDelivery.post(new Runnable() {
-									@Override
-									public void run() {
-										listener.onFailed();
-									}
-								});
-
-							}
-						}
-
-						@Override
-						public void onResponse(final Response response) throws IOException {
-							if (listener != null) {
-								mDelivery.post(new Runnable() {
-									@Override
-									public void run() {
-										try {
-											listener.onSuccess(response.body().string());
-										} catch (IOException e) {
-											e.printStackTrace();
-										}
-									}
-								});
-							}
-						}
-					});
-				}
-			});
-
+			post(json.toString(), listener);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -372,50 +187,7 @@ public class HttpManager {
 			json.put("Action", "sdkSubmitInvestigate");
 			json.put("Name", name);
 			json.put("Value", value);
-			RequestBody formBody = new FormEncodingBuilder()
-					.add("data", json.toString())
-					.build();
-			Request request = new Request.Builder()
-					.url(RequestUrl.baseHttp1)
-					.post(formBody)
-					.build();
-			final Call call = httpClient.newCall(request);
-			mExecutorService.submit(new Runnable() {
-				@Override
-				public void run() {
-					call.enqueue(new Callback() {
-						@Override
-						public void onFailure(Request request, IOException e) {
-							if (listener != null) {
-								mDelivery.post(new Runnable() {
-									@Override
-									public void run() {
-										listener.onFailed();
-									}
-								});
-
-							}
-						}
-
-						@Override
-						public void onResponse(final Response response) throws IOException {
-							if (listener != null) {
-								mDelivery.post(new Runnable() {
-									@Override
-									public void run() {
-										try {
-											listener.onSuccess(response.body().string());
-										} catch (IOException e) {
-											e.printStackTrace();
-										}
-									}
-								});
-							}
-						}
-					});
-				}
-			});
-
+			post(json.toString(), listener);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -434,49 +206,7 @@ public class HttpManager {
 			if(peerId != null && !"".equals(peerId)) {
 				json.put("ToPeer", peerId);
 			}
-			RequestBody formBody = new FormEncodingBuilder()
-					.add("data", json.toString())
-					.build();
-			Request request = new Request.Builder()
-					.url(RequestUrl.baseHttp1)
-					.post(formBody)
-					.build();
-			final Call call = httpClient.newCall(request);
-			mExecutorService.submit(new Runnable() {
-				@Override
-				public void run() {
-					call.enqueue(new Callback() {
-						@Override
-						public void onFailure(Request request, IOException e) {
-							if (listener != null) {
-								mDelivery.post(new Runnable() {
-									@Override
-									public void run() {
-										listener.onFailed();
-									}
-								});
-
-							}
-						}
-
-						@Override
-						public void onResponse(final Response response) throws IOException {
-							if (listener != null) {
-								mDelivery.post(new Runnable() {
-									@Override
-									public void run() {
-										try {
-											listener.onSuccess(response.body().string());
-										} catch (IOException e) {
-											e.printStackTrace();
-										}
-									}
-								});
-							}
-						}
-					});
-				}
-			});
+			post(json.toString(), listener);
 
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
@@ -498,50 +228,7 @@ public class HttpManager {
 			if(peerId != null && !"".equals(peerId)) {
 				json.put("ToPeer", peerId);
 			}
-			RequestBody formBody = new FormEncodingBuilder()
-					.add("data", json.toString())
-					.build();
-			Request request = new Request.Builder()
-					.url(RequestUrl.baseHttp1)
-					.post(formBody)
-					.build();
-			final Call call = httpClient.newCall(request);
-			mExecutorService.submit(new Runnable() {
-				@Override
-				public void run() {
-					call.enqueue(new Callback() {
-						@Override
-						public void onFailure(Request request, IOException e) {
-							if (listener != null) {
-								mDelivery.post(new Runnable() {
-									@Override
-									public void run() {
-										listener.onFailed();
-									}
-								});
-
-							}
-						}
-
-						@Override
-						public void onResponse(final Response response) throws IOException {
-							if (listener != null) {
-								mDelivery.post(new Runnable() {
-									@Override
-									public void run() {
-										try {
-											listener.onSuccess(response.body().string());
-										} catch (IOException e) {
-											e.printStackTrace();
-										}
-									}
-								});
-							}
-						}
-					});
-				}
-			});
-
+			post(json.toString(), listener);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -557,50 +244,7 @@ public class HttpManager {
 		try {
 			json.put("ConnectionId", Utils.replaceBlank(connectionId));
 			json.put("Action", "sdkConvertManual");
-			RequestBody formBody = new FormEncodingBuilder()
-					.add("data", json.toString())
-					.build();
-			Request request = new Request.Builder()
-					.url(RequestUrl.baseHttp1)
-					.post(formBody)
-					.build();
-			final Call call = httpClient.newCall(request);
-			mExecutorService.submit(new Runnable() {
-				@Override
-				public void run() {
-					call.enqueue(new Callback() {
-						@Override
-						public void onFailure(Request request, IOException e) {
-							if (listener != null) {
-								mDelivery.post(new Runnable() {
-									@Override
-									public void run() {
-										listener.onFailed();
-									}
-								});
-
-							}
-						}
-
-						@Override
-						public void onResponse(final Response response) throws IOException {
-							if (listener != null) {
-								mDelivery.post(new Runnable() {
-									@Override
-									public void run() {
-										try {
-											listener.onSuccess(response.body().string());
-										} catch (IOException e) {
-											e.printStackTrace();
-										}
-									}
-								});
-							}
-						}
-					});
-				}
-			});
-
+			post(json.toString(), listener);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -616,49 +260,7 @@ public class HttpManager {
 		try {
 			json.put("ConnectionId", Utils.replaceBlank(connectionId));
 			json.put("Action", "sdkGetPeers");
-			RequestBody formBody = new FormEncodingBuilder()
-					.add("data", json.toString())
-					.build();
-			Request request = new Request.Builder()
-					.url(RequestUrl.baseHttp1)
-					.post(formBody)
-					.build();
-			final Call call = httpClient.newCall(request);
-			mExecutorService.submit(new Runnable() {
-				@Override
-				public void run() {
-					call.enqueue(new Callback() {
-						@Override
-						public void onFailure(Request request, IOException e) {
-							if (listener != null) {
-								mDelivery.post(new Runnable() {
-									@Override
-									public void run() {
-										listener.onFailed();
-									}
-								});
-
-							}
-						}
-
-						@Override
-						public void onResponse(final Response response) throws IOException {
-							if (listener != null) {
-								mDelivery.post(new Runnable() {
-									@Override
-									public void run() {
-										try {
-											listener.onSuccess(response.body().string());
-										} catch (IOException e) {
-											e.printStackTrace();
-										}
-									}
-								});
-							}
-						}
-					});
-				}
-			});
+			post(json.toString(), listener);
 
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
