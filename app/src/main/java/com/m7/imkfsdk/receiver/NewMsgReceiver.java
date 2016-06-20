@@ -25,11 +25,12 @@ public class NewMsgReceiver extends BroadcastReceiver{
         if(intent.getAction().equals(IMChatManager.NEW_MSG_ACTION)) {
 
             //看应用是否在前台
-            if(isAppForground(context)) {
-                context.sendBroadcast(new Intent("com.m7.imkfsdk.msgreceiver"));
-            }else {
-
-            }
+//            if(isAppForground(context)) {
+//                context.sendBroadcast(new Intent("com.m7.imkfsdk.msgreceiver"));
+//            }else {
+//
+//            }
+            context.sendBroadcast(new Intent("com.m7.imkfsdk.msgreceiver"));
 
         }
     }

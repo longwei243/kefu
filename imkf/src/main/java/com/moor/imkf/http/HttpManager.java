@@ -19,6 +19,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
@@ -90,7 +92,7 @@ public class HttpManager {
 				json.put("ContentType", "voice");
 			}
 
-			json.put("Message", fromToMessage.message);
+			json.put("Message", URLEncoder.encode(fromToMessage.message, "utf-8"));
 			json.put("VoiceSecond", fromToMessage.voiceSecond);
 			json.put("Action", "sdkNewMsg");
 			post(json.toString(), listener);
@@ -98,8 +100,10 @@ public class HttpManager {
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
 		}
-		
+
 	}
 
 	/**
